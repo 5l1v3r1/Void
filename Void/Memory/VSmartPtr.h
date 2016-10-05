@@ -6,13 +6,14 @@
 namespace Void
 {
 	// VSmartPtr
+	// new -> counter(1) -> counter(...) -> counter(0) -> delete
 	//----------------------------------------------------------------------------------------------------
 	template <typename _T>
 	class VSmartPtr
 	{
 	public:
 		//----------------------------------------------------------------------------------------------------
-		VSmartPtr(_T *_value = nullptr)
+		VSmartPtr(_T* _value = nullptr)
 			:
 			m_counter(new int(1)),
 			m_value(_value)
@@ -20,7 +21,7 @@ namespace Void
 		}
 
 		//----------------------------------------------------------------------------------------------------
-		VSmartPtr(const VSmartPtr &_smartPtr)
+		VSmartPtr(const VSmartPtr& _smartPtr)
 			:
 			m_counter(_smartPtr.m_counter),
 			m_value(_smartPtr.m_value)
@@ -35,7 +36,7 @@ namespace Void
 		}
 
 		//----------------------------------------------------------------------------------------------------
-		VSmartPtr& operator= (const VSmartPtr &_smartPtr)
+		VSmartPtr& operator= (const VSmartPtr& _smartPtr)
 		{
 			Decrease();
 
@@ -47,19 +48,19 @@ namespace Void
 		}
 
 		//----------------------------------------------------------------------------------------------------
-		bool operator== (const VSmartPtr &_smartPtr) const
+		bool operator== (const VSmartPtr& _smartPtr) const
 		{
 			return m_counter == _smartPtr.m_counter && m_value == _smartPtr.m_value;
 		}
 
 		//----------------------------------------------------------------------------------------------------
-		bool operator!= (const VSmartPtr &_smartPtr) const
+		bool operator!= (const VSmartPtr& _smartPtr) const
 		{
 			return !(*this == _smartPtr);
 		}
 
 		//----------------------------------------------------------------------------------------------------
-		bool operator< (const VSmartPtr &_smartPtr) const
+		bool operator< (const VSmartPtr& _smartPtr) const
 		{
 			return m_value < _smartPtr.m_value;
 		}
@@ -93,7 +94,7 @@ namespace Void
 
 	protected:
 		//----------------------------------------------------------------------------------------------------
-		void SetValue(_T *_value)
+		void SetValue(_T* _value)
 		{
 			Decrease();
 
