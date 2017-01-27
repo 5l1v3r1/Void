@@ -12,8 +12,8 @@ namespace Void
 {
 	// VStableMatching
 	// Propose-And-Reject (Gale-Shapley)
-	// gentlemen rank¡ý
-	// ladies rank¡ü
+	// gentlemen rank
+	// ladies rank
 	//----------------------------------------------------------------------------------------------------
 	template <typename _T>
 	class VStableMatching
@@ -23,17 +23,17 @@ namespace Void
 		static std::map<_T, _T> GaleShapley(std::map<_T, std::vector<_T>>& _gentlemen, std::map<_T, std::vector<_T>>& _ladies)
 		{
 			std::map<_T, _T> result;
-			std::list<_T> leftover; // why list? lovelorn man may immerse in the grief
+			std::list<_T> leftover; // Why list? Lovelorn man may immerse in the grief
 			std::map<_T, Mind> gentlemen;
 			std::map<_T, Mind> ladies;
 
 			// init leftover, gentlemen, ladies
-			for (std::map<_T, std::vector<_T>>::iterator it = _gentlemen.begin(); it != _gentlemen.end(); ++it)
+			for (typename std::map<_T, std::vector<_T>>::iterator it = _gentlemen.begin(); it != _gentlemen.end(); ++it)
 			{
 				leftover.push_back(it->first);
 				gentlemen.insert(std::pair<_T, Mind>(it->first, Mind(it->second)));
 			}
-			for (std::map<_T, std::vector<_T>>::iterator it = _ladies.begin(); it != _ladies.end(); ++it)
+			for (typename std::map<_T, std::vector<_T>>::iterator it = _ladies.begin(); it != _ladies.end(); ++it)
 			{
 				ladies.insert(std::pair<_T, Mind>(it->first, Mind(it->second)));
 			}
@@ -55,7 +55,7 @@ namespace Void
 					ladyMind.preferRank = rankInHerMind;
 					result[man] = lady;
 				}
-				else if (rankInHerMind < ladyMind.preferRank) // lady rank¡ü
+				else if (rankInHerMind < ladyMind.preferRank) // lady rank
 				{
 					leftover.pop_front();
 					leftover.push_back(ladyMind.preferences[ladyMind.preferRank]);
@@ -72,12 +72,12 @@ namespace Void
 		struct Mind
 		{
 		public:
-			std::vector<_T> &preferences;
+			std::vector<_T> preferences;
 			int preferRank;
 
 			Mind()
 				:
-				preferences(std::vector<_T>()),
+				preferences(),
 				preferRank(-1)
 			{
 				// Error

@@ -10,6 +10,7 @@ namespace Void
 	class VBase
 	{
 	public:
+        //----------------------------------------------------------------------------------------------------
 		VBase();
 		VBase(const VBase& _base);
 		virtual ~VBase();
