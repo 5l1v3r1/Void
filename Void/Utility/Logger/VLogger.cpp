@@ -30,7 +30,7 @@ namespace Void
             #else
             localtime_r(&currentTime, &currentTm);
             #endif
-            printf("[%d-%d-%d %d:%d:%d] ", currentTm.tm_year + 1900, currentTm.tm_mon + 1, currentTm.tm_mday, currentTm.tm_hour, currentTm.tm_min, currentTm.tm_sec);
+            printf("[%d-%d-%d %d:%d:%d INFO] ", currentTm.tm_year + 1900, currentTm.tm_mon + 1, currentTm.tm_mday, currentTm.tm_hour, currentTm.tm_min, currentTm.tm_sec);
             
             // va
             va_list ap;
