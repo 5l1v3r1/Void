@@ -7,10 +7,83 @@
 //----------------------------------------------------------------------------------------------------
 namespace Void
 {
+    // VVectorN
+    //----------------------------------------------------------------------------------------------------
+    template<typename _T, size_t _S>
+    class VVectorN
+    {
+    public:
+        //----------------------------------------------------------------------------------------------------
+        union
+        {
+            struct
+            {
+                _T x;
+            };
+            _T vector[_S];
+        };
+    };
+    
+    template<typename _T>
+    class VVectorN<_T, 0>
+    {
+    public:
+        //----------------------------------------------------------------------------------------------------
+        union
+        {
+            _T vector[0];
+        };
+    };
+    
+    template<typename _T>
+    class VVectorN<_T, 1>
+    {
+    public:
+        //----------------------------------------------------------------------------------------------------
+        union
+        {
+            struct
+            {
+                _T x;
+            };
+            _T vector[1];
+        };
+    };
+    
+    template<typename _T>
+    class VVectorN<_T, 2>
+    {
+    public:
+        //----------------------------------------------------------------------------------------------------
+        union
+        {
+            struct
+            {
+                _T x, y;
+            };
+            _T vector[1];
+        };
+    };
+    
+    template<typename _T>
+    class VVectorN<_T, 3>
+    {
+    public:
+        //----------------------------------------------------------------------------------------------------
+        union
+        {
+            struct
+            {
+                _T x, y, z;
+            };
+            _T vector[1];
+        };
+    };
+    
     // VVector
     //----------------------------------------------------------------------------------------------------
     template <typename _T, size_t _S>
-    class VVector
+    struct VVector : public VVectorN<_T, _S>
     {
     public:
         //----------------------------------------------------------------------------------------------------
@@ -18,15 +91,20 @@ namespace Void
         {
         }
         
-        inline VVector(const _T _x, const _T _y, const _T _z, const _T _w) : x(_x), y(_y), z(_z), w(_w)
+        inline VVector(const _T _x, const _T _y=0, const _T _z=0, const _T _w=0)
         {
+            _T tmp[4] = {_x, _y, _z, _w};
+            for (size_t i = 0; i < _S && i <= 4; ++i)
+            {
+                this->vector[i] = tmp[i];
+            }
         }
         
         inline VVector(const _T* _vector, const size_t _size)
         {
             for (size_t i = 0; i < _S && i < _size; ++i)
             {
-                vector[i] = _vector[i];
+                this->vector[i] = _vector[i];
             }
         }
         
@@ -34,11 +112,11 @@ namespace Void
         {
             for (size_t i = 0; i < _S; ++i)
             {
-                vector[i] = _vector[i];
+                this->vector[i] = _vector[i];
             }
         }
         
-        inline virtual ~VVector()
+        inline ~VVector()
         {
             
         }
@@ -47,22 +125,22 @@ namespace Void
         inline _T operator[] (const size_t i) const
         {
             if (i < _S)
-                return vector[i];
+                return this->vector[i];
             return 0;
         }
         
         inline _T& operator[] (const size_t i)
         {
             if (i < _S)
-                return vector[i];
-            return _S <= 0 ? w : vector[_S - 1];
+                return this->vector[i];
+            return this->vector[_S - 1];
         }
         
         inline VVector& operator= (const VVector& _vector)
         {
             for (size_t i = 0; i < _S; ++i)
             {
-                vector[i] = _vector[i];
+                this->vector[i] = _vector[i];
             }
             return *this;
         }
@@ -72,7 +150,7 @@ namespace Void
             VVector result;
             for (size_t i = 0; i < _S; ++i)
             {
-                result[i] = vector[i] + _vector[i];
+                result[i] = this->vector[i] + _vector[i];
             }
             return result;
         }
@@ -82,7 +160,7 @@ namespace Void
             VVector result;
             for (size_t i = 0; i < _S; ++i)
             {
-                result[i] = vector[i] - _vector[i];
+                result[i] = this->vector[i] - _vector[i];
             }
             return result;
         }
@@ -92,7 +170,7 @@ namespace Void
             VVector result;
             for (size_t i = 0; i < _S; ++i)
             {
-                result[i] = vector[i] - _t;
+                result[i] = this->vector[i] - _t;
             }
             return result;
         }
@@ -102,7 +180,7 @@ namespace Void
             VVector result;
             for (size_t i = 0; i < _S; ++i)
             {
-                result[i] = vector[i] * _vector[i];
+                result[i] = this->vector[i] * _vector[i];
             }
             return result;
         }
@@ -112,7 +190,7 @@ namespace Void
             VVector result;
             for (size_t i = 0; i < _S; ++i)
             {
-                result[i] = vector[i] * _t;
+                result[i] = this->vector[i] * _t;
             }
             return result;
         }
@@ -122,7 +200,7 @@ namespace Void
             VVector result;
             for (size_t i = 0; i < _S; ++i)
             {
-                result[i] = vector[i] / _vector[i]; // 0
+                result[i] = this->vector[i] / _vector[i]; // 0
             }
             return result;
         }
@@ -134,7 +212,7 @@ namespace Void
                 VVector result;
                 for (size_t i = 0; i < _S; ++i)
                 {
-                    result[i] = vector[i] / _t;
+                    result[i] = this->vector[i] / _t;
                 }
                 return result;
             }
@@ -147,22 +225,15 @@ namespace Void
             _T tmp = 0;
             for (size_t i = 0; i < _S; ++i)
             {
-                tmp += vector[i] * vector[i];
+                tmp += this->vector[i] * this->vector[i];
             }
             return sqrt(tmp);
         }
-        
-    public:
-        //----------------------------------------------------------------------------------------------------
-        union
-        {
-            struct
-            {
-                _T x, y, z, w;
-            };
-            _T vector[_S];
-        };
     };
+    
+    // Test
+    //----------------------------------------------------------------------------------------------------
+    void VVectorTest();
 }
 
 #endif
