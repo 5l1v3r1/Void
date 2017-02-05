@@ -7,6 +7,7 @@ int main(int _argc, char** _argv)
     //VWindowTest();
 	VStableMatchingTest();
     VImageTest();
+    VAnyTest();
     
     float array[5] = {1, 2, 3, 4, 5};
     VVector<float, 3> test(array, 1);
