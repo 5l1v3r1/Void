@@ -1,9 +1,8 @@
 #pragma once
-#ifndef _V_UTILITY_H_
-#define _V_UTILITY_H_
+#ifndef _V_OPENGL_H_
+#define _V_OPENGL_H_
 
 //----------------------------------------------------------------------------------------------------
-#include "Logger/VLogger.h"
-#include "OpenGL/VOpenGL.h"
+#include "Shader/VOpenGLShader.h"
 
 #endif

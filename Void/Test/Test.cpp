@@ -1,12 +1,12 @@
 #if true
 #include "../Void.h"
-#include <fstream>
-#include <unistd.h>
 
 //----------------------------------------------------------------------------------------------------
 int main(int _argc, char** _argv)
 {
+    //VWindowTest();
 	VStableMatchingTest();
+    VImageTest();
     
     float array[5] = {1, 2, 3, 4, 5};
     VVector<float, 3> test(array, 1);
@@ -18,6 +18,7 @@ int main(int _argc, char** _argv)
     color.x = 5;
     color = color + color;
     float length = color.Length();
+    ++length;
     
 	return 0;
 }
