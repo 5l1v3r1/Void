@@ -3,6 +3,7 @@
 #define _V_IMAGE_H_
 #include "../Color/VColor.h"
 #include "../Memory/SmartPtr/VSmartPtr.h"
+#include "../Structure/Any/VAny.h"
 #include <vector>
 
 //----------------------------------------------------------------------------------------------------
@@ -10,6 +11,7 @@ namespace Void
 {
     // VImageData
     //----------------------------------------------------------------------------------------------------
+    template<VColorFormat _F>
     class VImageData
     {
     public:
@@ -28,12 +30,12 @@ namespace Void
         //----------------------------------------------------------------------------------------------------
         int width;
         int height;
-        std::vector<std::vector<VColor>> data;
+        std::vector<std::vector<VColor<_F>>> data;
     };
     
     // VImage
     //----------------------------------------------------------------------------------------------------
-    class VImage : public VSmartPtr<VImageData>
+    class VImage
     {
     public:
         //----------------------------------------------------------------------------------------------------
@@ -43,7 +45,7 @@ namespace Void
         
     protected:
         //----------------------------------------------------------------------------------------------------
-        
+        VSmartPtr<VAny> data;
     };
     
     // Test

@@ -61,7 +61,7 @@ namespace Void
             {
                 _T x, y;
             };
-            _T vector[1];
+            _T vector[2];
         };
     };
     
@@ -76,7 +76,7 @@ namespace Void
             {
                 _T x, y, z;
             };
-            _T vector[1];
+            _T vector[3];
         };
     };
     
@@ -93,11 +93,7 @@ namespace Void
         
         inline VVector(const _T _x, const _T _y=0, const _T _z=0, const _T _w=0)
         {
-            _T tmp[4] = {_x, _y, _z, _w};
-            for (size_t i = 0; i < _S && i <= 4; ++i)
-            {
-                this->vector[i] = tmp[i];
-            }
+            SetValue(_x, _y, _z, _w);
         }
         
         inline VVector(const _T* _vector, const size_t _size)
@@ -220,6 +216,16 @@ namespace Void
         }
         
         //----------------------------------------------------------------------------------------------------
+        inline VVector& SetValue(const _T _x, const _T _y=0, const _T _z=0, const _T _w=0)
+        {
+            _T tmp[4] = {_x, _y, _z, _w};
+            for (size_t i = 0; i < _S && i <= 4; ++i)
+            {
+                this->vector[i] = tmp[i];
+            }
+            return *this;
+        }
+
         inline _T Length() const
         {
             _T tmp = 0;

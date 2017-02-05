@@ -3,33 +3,22 @@
 //----------------------------------------------------------------------------------------------------
 namespace Void
 {
+    // Test
     //----------------------------------------------------------------------------------------------------
-    VColor::VColor()
-        :
-        VVector(),
-        m_format(V_COLOR_FORMAT_FLOAT)
+    void VColorTest()
     {
-    }
-    
-    //----------------------------------------------------------------------------------------------------
-    VColor::VColor(const float _r, const float _g, const float _b, const float _a)
-        :
-        VVector(_r, _g, _b, _a),
-        m_format(V_COLOR_FORMAT_FLOAT)
-    {
+        VColor<V_COLOR_FORMAT_RGB_256> color;
+        int size = sizeof(color);
+        color.x = 5;
+        color.y = 1;
+        VColor<V_COLOR_FORMAT_RGB_256> color2(color);
+        unsigned char *test = (unsigned char *)&color2;
+        test[0] = 100;
+        VColor<V_COLOR_FORMAT_RGBA_FLOAT> color3;
+        color3.SetValue(1, 0.5f, 0.6f, 1.0f);
+        size = sizeof(color3);
+        size += 0;
         
-    }
-    
-    //----------------------------------------------------------------------------------------------------
-    VColor::VColor(const VColor& _color)
-        :
-        VVector(_color),
-        m_format(V_COLOR_FORMAT_FLOAT)
-    {
-    }
-    
-    //----------------------------------------------------------------------------------------------------
-    VColor::~VColor()
-    {
+        return;
     }
 }

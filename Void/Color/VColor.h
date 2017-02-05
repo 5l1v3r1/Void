@@ -42,45 +42,56 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     enum VColorFormat
     {
-        V_COLOR_FORMAT_FLOAT = 0,
-        V_COLOR_FORMAT_256 = 1,
+        V_COLOR_FORMAT_RGBA_FLOAT = 0,
+        V_COLOR_FORMAT_RGBA_256 = 1,
+        V_COLOR_FORMAT_RGB_256 = 2,
+    };
+    
+    // VColorData
+    //----------------------------------------------------------------------------------------------------
+    template <VColorFormat _F>
+    struct VColorData : VVector<float, 4>
+    {
+    };
+    
+    template<>
+    struct VColorData<V_COLOR_FORMAT_RGBA_256> : VVector<unsigned char, 4>
+    {
+    };
+    
+    template<>
+    struct VColorData<V_COLOR_FORMAT_RGB_256> : VVector<unsigned char, 3>
+    {
     };
     
     // VColor
     //----------------------------------------------------------------------------------------------------
-    class VColor : public VVector<float, 4>
+    template <VColorFormat _F>
+    struct VColor : VColorData<_F>
     {
     public:
         //----------------------------------------------------------------------------------------------------
-        VColor();
-        VColor(const float _r, const float _g=0.f, const float _b=0.f, const float _a=1.f);
-        VColor(const VColor& _color);
-        virtual ~VColor();
-        
-        //----------------------------------------------------------------------------------------------------
-        inline VColor& operator= (const VVector<float, 4>& _vector)
+        inline VColor()
+            :
+            VColorData<_F>()
         {
-            for (size_t i = 0; i < 4; ++i)
-            {
-                vector[i] = _vector.vector[i];
-            }
-            return *this;
         }
         
-        inline VColor& operator= (const VColor& _color)
+        inline VColor(const VColor& _color)
+            :
+            VColorData<_F>(_color)
         {
-            for (size_t i = 0; i < 4; ++i)
-            {
-                vector[i] = _color.vector[i];
-            }
-            m_format = _color.m_format;
-            return *this;
         }
         
-    protected:
-        //----------------------------------------------------------------------------------------------------
-        VColorFormat m_format;
+        inline ~VColor()
+        {
+            
+        }
     };
+    
+    // Test
+    //----------------------------------------------------------------------------------------------------
+    void VColorTest();
 }
 
 #endif
