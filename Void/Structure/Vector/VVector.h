@@ -18,7 +18,7 @@ namespace Void
         {
             struct
             {
-                _T x;
+                _T x, y, z, w;
             };
             _T vector[_S];
         };

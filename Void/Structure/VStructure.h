@@ -4,8 +4,10 @@
 
 //----------------------------------------------------------------------------------------------------
 #include "Vector/VVector.h"
+#include "Matrix/VMatrix.h"
+#include "Any/VAny.h"
 
 //----------------------------------------------------------------------------------------------------
-#include "Any/VAny.h"
+#include "Vector+Matrix/VVector+VMatrix.h"
 
 #endif
