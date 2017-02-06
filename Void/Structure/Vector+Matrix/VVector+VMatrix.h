@@ -10,7 +10,7 @@ namespace Void
     // VVector+VMatrix
     //----------------------------------------------------------------------------------------------------
     template<typename _T, size_t _N, size_t _M>
-    VVector<_T, _M> operator* (const VVector<_T, _N>& _vector, const VMatrix<_T, _N, _M>& _metrix)
+    VVector<_T, _M> operator*(const VVector<_T, _N>& _vector, const VMatrix<_T, _N, _M>& _metrix)
     {
         VVector<_T, _M> result;
         for (int i = 0; i < _M; ++i)
@@ -26,8 +26,9 @@ namespace Void
         return result;
     }
     
+    //----------------------------------------------------------------------------------------------------
     template<typename _T, size_t _S>
-    VVector<_T, _S>& operator*= (VVector<_T, _S>& _vector, const VMatrix<_T, _S, _S>& _metrix)
+    VVector<_T, _S>& operator*=(VVector<_T, _S>& _vector, const VMatrix<_T, _S, _S>& _metrix)
     {
         VVector<_T, _S> result;
         for (int i = 0; i < _S; ++i)
@@ -42,6 +43,26 @@ namespace Void
         _vector = result;
         
         return _vector;
+    }
+    
+    // Translation Matrix
+    /*
+     [1      ]
+     [  1    ]
+     [    1  ]
+     [X X X 1]
+    */
+    //----------------------------------------------------------------------------------------------------
+    template<typename _T, size_t _S>
+    VMatrix<_T, _S + 1, _S + 1> VMatrixTranslation(const VVector<_T, _S>& _vector)
+    {
+        VMatrix<_T, _S + 1, _S + 1> result = VMatrix<_T, _S + 1, _S + 1>::Identity();
+        for (int i = 0; i < _S; ++i)
+        {
+            result(_S, i) = _vector[i];
+        }
+        
+        return result;
     }
 
     // Test
