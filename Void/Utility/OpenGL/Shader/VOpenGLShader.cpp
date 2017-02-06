@@ -9,50 +9,53 @@ namespace Void
 {
     // VOpenGLShader
     //----------------------------------------------------------------------------------------------------
-    VOpenGLShader::VOpenGLShader(const std::string& shader, GLenum shaderType, bool isFromFile)
+    VOpenGLShader::VOpenGLShader(const std::string& _shader, GLenum _shaderType, bool _isFromFile)
         :
         VSmartPtr()
     {
-        GLuint program = glCreateShader(shaderType);
-        if(program != 0)
+        GLuint shader = glCreateShader(_shaderType);
+        if(shader != 0)
         {
             const char *code = nullptr;
-            if (isFromFile)
+            if (_isFromFile)
             {
-                std::ifstream fin(shader.c_str(), std::ios::in | std::ios::binary);
+                std::ifstream fin(_shader.c_str(), std::ios::in | std::ios::binary);
                 if(fin.is_open())
                 {
                     std::stringstream buffer;
                     buffer << fin.rdbuf();
-                    code = buffer.str().c_str();
                     fin.close();
+                    code = buffer.str().c_str();
+                    if (!code) { return; }
+                    glShaderSource(shader, 1, (const GLchar**)&code, nullptr);
+                    code = nullptr; // Wild pointer
                 }
             }
             else
             {
-                code = shader.c_str();
+                code = _shader.c_str();
+                if (!code) { return; }
+                glShaderSource(shader, 1, (const GLchar**)&code, nullptr);
             }
-            if (!code) { return; }
-            glShaderSource(program, 1, (const GLchar**)&code, nullptr);
-            glCompileShader(program);
+            glCompileShader(shader);
             
             GLint status;
-            glGetShaderiv(program, GL_COMPILE_STATUS, &status);
+            glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
             if (status == GL_FALSE)
             {
                 GLint infoLogLength;
-                glGetShaderiv(program, GL_INFO_LOG_LENGTH, &infoLogLength);
+                glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLength);
                 char *strInfoLog = new char[infoLogLength + 1];
-                glGetShaderInfoLog(program, infoLogLength, NULL, strInfoLog);
-                VLogger::Info("Compile failure in shader\n%s", strInfoLog);
+                glGetShaderInfoLog(shader, infoLogLength, NULL, strInfoLog);
+                VLogger::Info("Compile failure in shader: %s", strInfoLog);
                 delete[] strInfoLog;
                 
-                glDeleteShader(program);
-                program = 0;
+                glDeleteShader(shader);
+                shader = 0;
             }
             else
             {
-                VSmartPtr::SetValue(new VOpenGLShaderData(program));
+                VSmartPtr::SetValue(new VOpenGLShaderData(shader));
             }
         }
     }
@@ -71,11 +74,11 @@ namespace Void
     }
     
     //----------------------------------------------------------------------------------------------------
-    GLuint VOpenGLShader::Program()
+    GLuint VOpenGLShader::Shader()
     {
         if (m_value)
         {
-            return m_value->program;
+            return m_value->shader;
         }
         return 0;
     }

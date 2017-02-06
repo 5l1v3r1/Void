@@ -1,62 +1,66 @@
 #pragma once
 #ifndef _VOID_DISABLE_OPENGL_
-#ifndef _V_OPENGLSHADER_H_
-#define _V_OPENGLSHADER_H_
+#ifndef _V_OPENGLPROGRAM_H_
+#define _V_OPENGLPROGRAM_H_
+#include "../Shader/VOpenGLShader.h"
 #include "../../../Memory/SmartPtr/VSmartPtr.h"
 #define GLFW_INCLUDE_GLCOREARB
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdocumentation"
 #include <GLFW/glfw3.h>
 #pragma clang diagnostic pop
-#include <string>
+#include <vector>
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
 {
-    // VOpenGLShaderData
+    // VOpenGLProgramData
     //----------------------------------------------------------------------------------------------------
-    class VOpenGLShaderData
+    class VOpenGLProgramData
     {
     public:
         //----------------------------------------------------------------------------------------------------
-        inline VOpenGLShaderData()
+        inline VOpenGLProgramData()
             :
-            shader(0)
+            program(0)
         {
         }
         
-        inline VOpenGLShaderData(const GLuint& _shader)
+        inline VOpenGLProgramData(const GLuint& _program)
             :
-            shader(_shader)
+            program(_program)
         {
         }
         
-        virtual ~VOpenGLShaderData()
+        virtual ~VOpenGLProgramData()
         {
-            if (shader)
+            if (program)
             {
-                glDeleteShader(shader);
-                shader = 0;
+                glDeleteProgram(program);
+                program = 0;
             }
         }
         
     public:
         //----------------------------------------------------------------------------------------------------
-        GLuint shader;
+        GLuint program;
     };
     
-    // VOpenGLShader
+    // VOpenGLProgram
     //----------------------------------------------------------------------------------------------------
-    class VOpenGLShader : public VSmartPtr<VOpenGLShaderData>
+    class VOpenGLProgram : public VSmartPtr<VOpenGLProgramData>
     {
     public:
         //----------------------------------------------------------------------------------------------------
-        VOpenGLShader(const std::string& _shader, GLenum _shaderType, bool _isFromFile=false);
-        VOpenGLShader(const VOpenGLShader& _shader);
-        virtual ~VOpenGLShader();
+        VOpenGLProgram();
+        VOpenGLProgram(std::vector<VOpenGLShader>& _shaders);
+        VOpenGLProgram(const VOpenGLProgram& _program);
+        virtual ~VOpenGLProgram();
         
         //----------------------------------------------------------------------------------------------------
-        GLuint Shader();
+        GLuint Program();
+        GLuint Attrib(const GLchar* attribName);
+        GLuint Uniform(const GLchar* uniformName);
     };
 }
 
