@@ -19,7 +19,8 @@ namespace Void
         
         int size = sizeof(test);
         int size1 = sizeof(test2);
-        size += size1;
+        size += 0;
+        size1 += 0;
         
         return;
     }

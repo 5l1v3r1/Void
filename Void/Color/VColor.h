@@ -42,9 +42,12 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     enum VColorFormat
     {
-        V_COLOR_FORMAT_RGBA_FLOAT = 0,
-        V_COLOR_FORMAT_RGBA_256 = 1,
-        V_COLOR_FORMAT_RGB_256 = 2,
+        V_COLOR_FORMAT_NONE = 0,
+        V_COLOR_FORMAT_RGBA_FLOAT = 1,
+        V_COLOR_FORMAT_RGBA_256 = 2,
+        V_COLOR_FORMAT_BGRX_256 = 3,
+        V_COLOR_FORMAT_RGB_256 = 4,
+        V_COLOR_FORMAT_GRAY_256 = 5,
     };
     
     // VColorData
@@ -60,7 +63,17 @@ namespace Void
     };
     
     template<>
+    struct VColorData<V_COLOR_FORMAT_BGRX_256> : VVector<unsigned char, 4>
+    {
+    };
+    
+    template<>
     struct VColorData<V_COLOR_FORMAT_RGB_256> : VVector<unsigned char, 3>
+    {
+    };
+    
+    template<>
+    struct VColorData<V_COLOR_FORMAT_GRAY_256> : VVector<unsigned char, 1>
     {
     };
     

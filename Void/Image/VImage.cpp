@@ -6,11 +6,17 @@ namespace Void
 {
     //----------------------------------------------------------------------------------------------------
     VImage::VImage()
+        :
+        m_colorFormat(),
+        m_imageData(nullptr)
     {
     }
     
     //----------------------------------------------------------------------------------------------------
     VImage::VImage(const VImage& _image)
+        :
+        m_colorFormat(_image.m_colorFormat),
+        m_imageData(_image.m_imageData)
     {
     }
     

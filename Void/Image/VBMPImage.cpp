@@ -4,6 +4,8 @@
 //----------------------------------------------------------------------------------------------------
 namespace Void
 {
+    // VBMPImage
+    // Todo
     //----------------------------------------------------------------------------------------------------
     VImage VBMPImage::ReadFromFile(const char* fileName)
     {
@@ -21,14 +23,36 @@ namespace Void
                 
                 int width = infoHeader.width;
                 int height = infoHeader.height < 0 ? (-infoHeader.height) : infoHeader.height;
-                int bmpSize = width * height * 3;
-                unsigned char *buffer = new(std::nothrow) unsigned char[bmpSize];
-                if(buffer == nullptr) { break; }
-                fin.seekg(fileHeader.offBits, std::ios::beg);
+                int bytesPerColor = infoHeader.bitCount >> 3;
+                VImage image;
+                unsigned char *buffer = nullptr;
+                if (bytesPerColor == 1)
+                {
+                    image.SetData<V_COLOR_FORMAT_GRAY_256>(width, height);
+                    buffer = (unsigned char*)image.Data<V_COLOR_FORMAT_GRAY_256>()->data[0].data();
+                }
+                else if (bytesPerColor == 3)
+                {
+                    image.SetData<V_COLOR_FORMAT_RGB_256>(width, height);
+                    buffer = (unsigned char*)image.Data<V_COLOR_FORMAT_RGB_256>()->data[0].data();
+                }
                 
+                
+                fin.seekg(fileHeader.offBits, std::ios::beg);
+                if(infoHeader.height < 0)
+                {
+                    fin.read((char*)buffer, width * height * bytesPerColor);
+                }
+                else
+                {
+                    for(int i = 0; i < height; ++i)
+                    {
+                        fin.read((char*)buffer + (height - 1 - i) * width * bytesPerColor, width * bytesPerColor);
+                    }
+                }
                 
                 fin.close();
-                return VImage();
+                return image;
             } while(false);
         }
         
@@ -40,5 +64,6 @@ namespace Void
     void VBMPImageTest()
     {
         VImage image = VBMPImage::ReadFromFile("./Test/Data/lenna.bmp");
+        
     }
 }
