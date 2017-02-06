@@ -1,5 +1,6 @@
 #include "VWindow.h"
 #include "../../Utility/Logger/VLogger.h"
+#include "../../Geometry/VGeometry.h"
 #ifndef _VOID_DISABLE_OPENGL_
 #define GLFW_INCLUDE_GLCOREARB
 #pragma clang diagnostic push
@@ -7,10 +8,12 @@
 #include <GLFW/glfw3.h>
 #pragma clang diagnostic pop
 #endif
+#include <iostream>
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
 {
+    // VWindow
     //----------------------------------------------------------------------------------------------------
     
     // Test
@@ -21,42 +24,44 @@ namespace Void
         GLFWwindow *window;
         glfwSetErrorCallback([](int error, const char* description)
                              {
-                                 VLogger::Info("code %d", error);
-                                 VLogger::Info("%s", description);
+                                 VLogger::Info("Error code %d, %s", error, description);
                              });
         if (!glfwInit()) { return; }
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+        glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
         window = glfwCreateWindow(640, 480, "Void Test", NULL, NULL);
         if (!window)
         {
             glfwTerminate();
             return;
         }
-        
+
         glfwMakeContextCurrent(window);
         glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
                            {
                                if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) { glfwSetWindowShouldClose(window, GL_TRUE); }
                            });
         glfwSwapInterval(1);
+        VLogger::Info("OpenGL version: %s", glGetString(GL_VERSION));
+        VLogger::Info("GLSL version: %s", glGetString(GL_SHADING_LANGUAGE_VERSION));
+        VLogger::Info("Vendor: %s", glGetString(GL_VENDOR));
+        VLogger::Info("Renderer: %s", glGetString(GL_RENDERER));
+        
+        VPoints points;
+        VTriangle triangle;
         while (!glfwWindowShouldClose(window))
         {
-            float ratio;
-            int width, height;
-            glfwGetFramebufferSize(window, &width, &height);
-            ratio = width / (float) height;
-            glViewport(0, 0, width, height);
+            glfwPollEvents();
+            glClearColor(0, 0, 0, 1); // Black
             glClear(GL_COLOR_BUFFER_BIT);
             
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glDrawArrays(GL_TRIANGLES, 0, 3);
-            glFlush();
+            points.Process();
+            triangle.Process();
             
             glfwSwapBuffers(window);
-            glfwPollEvents();
         }
         
         glfwDestroyWindow(window);

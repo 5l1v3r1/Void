@@ -1,35 +1,31 @@
-#include "VImage.h"
-#include "BMPImage/VBMPImage.h"
-#include "JPEGImage/VJPEGImage.h"
+#include "VGeometryBase.h"
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
 {
+    // VGeometryBase
     //----------------------------------------------------------------------------------------------------
-    VImage::VImage()
-        :
-        m_colorFormat(),
-        m_imageData(nullptr)
+    VGeometryBase::VGeometryBase()
     {
     }
     
     //----------------------------------------------------------------------------------------------------
-    VImage::VImage(const VImage& _image)
-        :
-        m_colorFormat(_image.m_colorFormat),
-        m_imageData(_image.m_imageData)
+    VGeometryBase::VGeometryBase(const VGeometryBase& _geometry)
     {
     }
     
     //----------------------------------------------------------------------------------------------------
-    VImage::~VImage()
+    VGeometryBase::~VGeometryBase()
     {
     }
     
-    // Test
     //----------------------------------------------------------------------------------------------------
-    void VImageTest()
+    bool VGeometryBase::Process()
     {
-        VBMPImageTest();
+        bool result = false;
+        if (Update())
+            result = Render();
+        
+        return result;
     }
 }

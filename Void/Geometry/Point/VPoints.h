@@ -1,6 +1,6 @@
 #pragma once
-#ifndef _V_TRIANGLE_H_
-#define _V_TRIANGLE_H_
+#ifndef _V_POINTS_H_
+#define _V_POINTS_H_
 #include "../../Structure/Vector/VVector.h"
 #include "../../Utility/OpenGL/VOpenGL.h"
 #include "../VGeometryBase.h"
@@ -9,15 +9,15 @@
 //----------------------------------------------------------------------------------------------------
 namespace Void
 {
-    // VTriangleVertex
+    // VPointVertex
     //----------------------------------------------------------------------------------------------------
-    struct VTriangleVertex : public VVector<float, 3>
+    struct VPointVertex : public VVector<float, 3>
     {
     };
     
-    // VTriangle
+    // VPoints
     //----------------------------------------------------------------------------------------------------
-    class VTriangle : public VGeometryBase
+    class VPoints : public VGeometryBase
     {
     protected:
         //----------------------------------------------------------------------------------------------------
@@ -30,9 +30,9 @@ namespace Void
         
     public:
         //----------------------------------------------------------------------------------------------------
-        VTriangle();
-        VTriangle(const VTriangle& _triangle);
-        virtual ~VTriangle();
+        VPoints();
+        VPoints(const VPoints& _points);
+        virtual ~VPoints();
         
         //----------------------------------------------------------------------------------------------------
         virtual bool Update();
@@ -40,13 +40,12 @@ namespace Void
         
     protected:
         //----------------------------------------------------------------------------------------------------
-        bool m_isTriangleDirty;
-        std::vector<VTriangleVertex> m_triangle;
+        bool m_isPointsDirty;
+        std::vector<VPointVertex> m_points;
         
         GLuint m_vertexArray;
         GLuint m_vertexBuffer;
     };
-
 }
 
 #endif

@@ -1,7 +1,7 @@
 #pragma once
 #ifndef _V_BMPIMAGE_H_
 #define _V_BMPIMAGE_H_
-#include "./VImage.h"
+#include "../VImage.h"
 
 //----------------------------------------------------------------------------------------------------
 namespace Void

@@ -1,4 +1,4 @@
-#include "VTriangle.h"
+#include "VPoints.h"
 #ifndef _VOID_DISABLE_OPENGL_
 #define GLFW_INCLUDE_GLCOREARB
 #pragma clang diagnostic push
@@ -6,21 +6,20 @@
 #include <GLFW/glfw3.h>
 #pragma clang diagnostic pop
 #endif
-#include <vector>
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
 {
-    // VTriangle
+    // VPoint
     //----------------------------------------------------------------------------------------------------
-    bool VTriangle::Initialize()
+    bool VPoints::Initialize()
     {
         if (!s_isInitialized)
         {
             s_isInitialized = true;
             std::vector<VOpenGLShader> shaders;
-            shaders.push_back(VOpenGLShader("Geometry/Triangle/Shader/VVertex.glsl", GL_VERTEX_SHADER, true));
-            shaders.push_back(VOpenGLShader("Geometry/Triangle/Shader/VFragment.glsl", GL_FRAGMENT_SHADER, true));
+            shaders.push_back(VOpenGLShader("Geometry/Point/Shader/VVertex.glsl", GL_VERTEX_SHADER, true));
+            shaders.push_back(VOpenGLShader("Geometry/Point/Shader/VFragment.glsl", GL_FRAGMENT_SHADER, true));
             s_program = VOpenGLProgram(shaders);
             return true;
         }
@@ -29,39 +28,39 @@ namespace Void
     }
     
     //----------------------------------------------------------------------------------------------------
-    bool VTriangle::s_isInitialized(false);
-    VOpenGLProgram VTriangle::s_program;
+    bool VPoints::s_isInitialized(false);
+    VOpenGLProgram VPoints::s_program;
     
     //----------------------------------------------------------------------------------------------------
-    VTriangle::VTriangle()
-    :
-    m_vertexArray(0),
-    m_vertexBuffer(0)
+    VPoints::VPoints()
+        :
+        m_vertexArray(0),
+        m_vertexBuffer(0)
     {
-        VTriangle::Initialize();
+        VPoints::Initialize();
     }
     
     //----------------------------------------------------------------------------------------------------
-    VTriangle::VTriangle(const VTriangle& _triangle)
+    VPoints::VPoints(const VPoints& _points)
     {
-        VTriangle::Initialize();
+        VPoints::Initialize();
     }
     
     //----------------------------------------------------------------------------------------------------
-    VTriangle::~VTriangle()
+    VPoints::~VPoints()
     {
     }
     
     //----------------------------------------------------------------------------------------------------
-    bool VTriangle::Update()
+    bool VPoints::Update()
     {
         if (m_vertexArray == 0 || m_vertexBuffer == 0)
         {
             const GLfloat vertexBufferData[] =
             {
-                0.0f, 0.8f, 0.0f,
-                -0.8f, -0.8f, 0.0f,
-                0.8f, -0.8f, 0.0f,
+                0.0f, 0.9f, 0.0f,
+                -0.9f, -0.9f, 0.0f,
+                0.9f, -0.9f, 0.0f,
             };
             
             glGenVertexArrays(1, &m_vertexArray);
@@ -83,13 +82,13 @@ namespace Void
     }
     
     //----------------------------------------------------------------------------------------------------
-    bool VTriangle::Render()
+    bool VPoints::Render()
     {
         glUseProgram(s_program.Program());
         glBindVertexArray(m_vertexArray);
         
         // Draw
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_POINTS, 0, 3);
         
         glBindVertexArray(0);
         glUseProgram(0);

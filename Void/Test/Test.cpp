@@ -4,12 +4,14 @@
 //----------------------------------------------------------------------------------------------------
 int main(int _argc, char** _argv)
 {
-    //VWindowTest();
+    VWindowTest();
 	VStableMatchingTest();
     VImageTest();
     VAnyTest();
     VColorTest();
     VVectorTest();
+    VMatrixTest();
+    VVectorVMatrixTest();
     
 	return 0;
 }
