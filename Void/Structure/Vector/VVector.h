@@ -118,21 +118,21 @@ namespace Void
         }
         
         //----------------------------------------------------------------------------------------------------
-        inline _T operator[] (const size_t i) const
+        inline _T operator[](const size_t i) const
         {
             if (i < _S)
                 return this->vector[i];
             return 0;
         }
         
-        inline _T& operator[] (const size_t i)
+        inline _T& operator[](const size_t i)
         {
             if (i < _S)
                 return this->vector[i];
             return this->vector[_S - 1];
         }
         
-        inline VVector& operator= (const VVector& _vector)
+        inline VVector& operator=(const VVector& _vector)
         {
             for (size_t i = 0; i < _S; ++i)
             {
@@ -141,7 +141,7 @@ namespace Void
             return *this;
         }
         
-        inline VVector operator+ (const VVector& _vector) const
+        inline VVector operator+(const VVector& _vector) const
         {
             VVector result;
             for (size_t i = 0; i < _S; ++i)
@@ -151,7 +151,7 @@ namespace Void
             return result;
         }
         
-        inline VVector operator- (const VVector& _vector) const
+        inline VVector operator-(const VVector& _vector) const
         {
             VVector result;
             for (size_t i = 0; i < _S; ++i)
@@ -161,7 +161,7 @@ namespace Void
             return result;
         }
         
-        inline VVector operator- (const _T& _t) const
+        inline VVector operator-(const _T& _t) const
         {
             VVector result;
             for (size_t i = 0; i < _S; ++i)
@@ -171,7 +171,7 @@ namespace Void
             return result;
         }
         
-        inline VVector operator* (const VVector& _vector) const
+        inline VVector operator*(const VVector& _vector) const
         {
             VVector result;
             for (size_t i = 0; i < _S; ++i)
@@ -181,7 +181,7 @@ namespace Void
             return result;
         }
         
-        inline VVector operator* (const _T& _t) const
+        inline VVector operator*(const _T& _t) const
         {
             VVector result;
             for (size_t i = 0; i < _S; ++i)
@@ -191,7 +191,7 @@ namespace Void
             return result;
         }
         
-        inline VVector operator/ (const VVector& _vector) const
+        inline VVector operator/(const VVector& _vector) const
         {
             VVector result;
             for (size_t i = 0; i < _S; ++i)
@@ -201,7 +201,7 @@ namespace Void
             return result;
         }
         
-        inline VVector operator/ (const _T& _t) const
+        inline VVector operator/(const _T& _t) const
         {
             if (_t)
             {

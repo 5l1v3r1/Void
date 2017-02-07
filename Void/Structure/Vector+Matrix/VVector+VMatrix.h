@@ -50,7 +50,7 @@ namespace Void
      [1      ]
      [  1    ]
      [    1  ]
-     [X X X 1]
+     [x y z 1]
     */
     //----------------------------------------------------------------------------------------------------
     template<typename _T, size_t _S>
@@ -60,6 +60,26 @@ namespace Void
         for (int i = 0; i < _S; ++i)
         {
             result(_S, i) = _vector[i];
+        }
+        
+        return result;
+    }
+    
+    // Scaling Matrix
+    /*
+     [x      ]
+     [  y    ]
+     [    z  ]
+     [      1]
+    */
+    //----------------------------------------------------------------------------------------------------
+    template<typename _T, size_t _S>
+    VMatrix<_T, _S, _S> VMatrixScaling(const VVector<_T, _S>& _vector)
+    {
+        VMatrix<_T, _S, _S> result = VMatrix<_T, _S, _S>::Zero();
+        for (int i = 0; i < _S; ++i)
+        {
+            result(i, i) = _vector[i];
         }
         
         return result;

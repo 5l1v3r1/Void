@@ -70,13 +70,13 @@ namespace Void
         }
         
         //----------------------------------------------------------------------------------------------------
-        VAny& operator= (const VAny& _any)
+        VAny& operator=(const VAny& _any)
         {
             VAny(_any).Swap(*this);
             return *this;
         }
         
-        VAny& operator= (VAny&& _any)
+        VAny& operator=(VAny&& _any)
         {
             _any.Swap(*this);
             VAny().Swap(_any);
@@ -84,7 +84,7 @@ namespace Void
         }
         
         template <class _T>
-        VAny& operator= (_T&& _t)
+        VAny& operator=(_T&& _t)
         {
             VAny(static_cast<_T&&>(_t)).Swap(*this);
             return *this;

@@ -175,6 +175,88 @@ namespace Void
         
     };
     
+    // Orthogonal Matrix (Left-Hand, DirectX)
+    /*
+     [2x/w                 ]
+     [     -2y/h           ]
+     [            z/(f-n)  ]
+     [  -1     1 -n/(f-n) 1]
+     
+     +----x         y z(0.f~1.f)
+     |\       ==>   |/
+     | z(n~f)     --+--x
+     y              |
+    */
+    //----------------------------------------------------------------------------------------------------
+    template<typename _T>
+    VMatrix<_T, 4, 4> VMatrixOrthogonalLH(_T _width, _T _height, _T _nearZ=0.f, _T _farZ=1.f)
+    {
+        VMatrix<_T, 4, 4> result = VMatrix<_T, 4, 4>::Zero();
+        float range = 1.f / (_farZ - _nearZ);
+        result(0, 0) = 2.f / _width;
+        result(1, 1) = -2.f / _height;
+        result(2, 2) = range;
+        result(3, 0) = -1.f; result(3, 1) = 1.f; result(3, 2) = -_nearZ * range; result(3, 3) = 1.f;
+        
+        return result;
+    }
+    
+    // Orthogonal Matrix (Right-Hand, OpenGL)
+    /*
+     [2x/w                    ]
+     [     -2y/h              ]
+     [              2z/(f-n)  ]
+     [  -1     1 -2n/(f-n)-1 1]
+     
+     +----x         y
+     |\       ==>   |
+     | z(n~f)     --+--x
+     y             /|
+                  z(1.f~-1.f)
+    */
+    //----------------------------------------------------------------------------------------------------
+    template<typename _T>
+    VMatrix<_T, 4, 4> VMatrixOrthogonalRH(_T _width, _T _height, _T _nearZ=0.f, _T _farZ=1.f)
+    {
+        VMatrix<_T, 4, 4> result = VMatrix<_T, 4, 4>::Zero();
+        float range = 2.f / (_farZ - _nearZ);
+        result(0, 0) = 2.f / _width;
+        result(1, 1) = -2.f / _height;
+        result(2, 2) = range;
+        result(3, 0) = -1.f; result(3, 1) = 1.f; result(3, 2) = -_nearZ * range - 1; result(3, 3) = 1.f;
+        
+        return result;
+    }
+    
+    // Perspective Matrix (Left-Hand, DirectX)
+    // y field of view: (0°~180°)
+    // aspect ratio: width / height
+    // multiply result: (homogeneous)
+    /*
+     [xcot(0.5f)/a                      ]
+     [             ycot(0.5v)           ]
+     [                         f/(f-n) 1]
+     [                        nf/(f-n)  ]
+     
+       y z(n~f, frustum)       y z(0.f~1.f)
+       |/                ==>   |/
+     --+--x                  --+--x
+       |                       |
+     */
+    //----------------------------------------------------------------------------------------------------
+    template<typename _T>
+    VMatrix<_T, 4, 4> VMatrixPerspectiveLH(_T _yFOV, _T _aspectRatio, _T _nearZ=0.f, _T _farZ=1.f)
+    {
+        VMatrix<_T, 4, 4> result = VMatrix<_T, 4, 4>::Zero();
+        float range = 1.f / (_farZ - _nearZ);
+        result(0, 0) = 1 / (tan(_yFOV * 0.5f) *_aspectRatio);
+        result(1, 1) = 1 / tan(_yFOV * 0.5f);
+        result(2, 2) = _farZ * range; result.m(2, 3) = 1.0f;
+        result(3, 2) = (_nearZ * _farZ) * range;
+        
+        return result;
+    }
+    
     // Test
     //----------------------------------------------------------------------------------------------------
     void VMatrixTest();
