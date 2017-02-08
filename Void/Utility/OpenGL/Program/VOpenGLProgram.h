@@ -2,6 +2,8 @@
 #ifndef _VOID_DISABLE_OPENGL_
 #ifndef _V_OPENGLPROGRAM_H_
 #define _V_OPENGLPROGRAM_H_
+#include "../../../Structure/Vector/VVector.h"
+#include "../../../Structure/Matrix/VMatrix.h"
 #include "../Shader/VOpenGLShader.h"
 #include "../../../Memory/SmartPtr/VSmartPtr.h"
 #define GLFW_INCLUDE_GLCOREARB
@@ -61,6 +63,46 @@ namespace Void
         GLuint Program();
         GLuint Attrib(const GLchar* attribName);
         GLuint Uniform(const GLchar* uniformName);
+        
+        //----------------------------------------------------------------------------------------------------
+        template <size_t _S>
+        bool BindUniform(const GLchar* uniformName, const VVector<float, _S>& _vector)
+        {
+            switch (_S)
+            {
+                case 1:
+                    glUniform1f(Uniform(uniformName), _vector[0]);
+                    return true;
+                case 2:
+                    glUniform2f(Uniform(uniformName), _vector[0], _vector[1]);
+                    return true;
+                case 3:
+                    glUniform3f(Uniform(uniformName), _vector[0], _vector[1], _vector[2]);
+                    return true;
+                case 4:
+                    glUniform4f(Uniform(uniformName), _vector[0], _vector[1], _vector[2], _vector[3]);
+                    return true;
+            }
+            return false;
+        }
+        
+        template <size_t _S>
+        bool BindUniform(const GLchar* uniformName, const VMatrix<float, _S, _S>& _matrix)
+        {
+            switch (_S)
+            {
+                case 2:
+                    glUniformMatrix2fv(Uniform(uniformName), 1, GL_FALSE,  (const GLfloat*)&_matrix);
+                    return true;
+                case 3:
+                    glUniformMatrix3fv(Uniform(uniformName), 1, GL_FALSE,  (const GLfloat*)&_matrix);
+                    return true;
+                case 4:
+                    glUniformMatrix4fv(Uniform(uniformName), 1, GL_FALSE,  (const GLfloat*)&_matrix);
+                    return true;
+            }
+            return false;
+        }
     };
 }
 

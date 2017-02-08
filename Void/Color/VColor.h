@@ -79,7 +79,7 @@ namespace Void
     
     // VColor
     //----------------------------------------------------------------------------------------------------
-    template <VColorFormat _F>
+    template <VColorFormat _F=V_COLOR_FORMAT_RGBA_FLOAT>
     struct VColor : VColorData<_F>
     {
     public:
@@ -88,6 +88,12 @@ namespace Void
             :
             VColorData<_F>()
         {
+        }
+        
+        template <typename _T>
+        inline VColor(const _T _x, const _T _y=0, const _T _z=0, const _T _w=0)
+        {
+            this->SetValue(_x, _y, _z, _w);
         }
         
         inline VColor(const VColor& _color)

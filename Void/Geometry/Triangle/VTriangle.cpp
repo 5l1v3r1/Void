@@ -87,6 +87,10 @@ namespace Void
     {
         glUseProgram(s_program.Program());
         glBindVertexArray(m_vertexArray);
+        if (m_color)
+        {
+            s_program.BindUniform("color", *m_color);
+        }
         
         // Draw
         glDrawArrays(GL_TRIANGLES, 0, 3);

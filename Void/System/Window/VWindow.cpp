@@ -1,6 +1,7 @@
 #include "VWindow.h"
 #include "../../Utility/Logger/VLogger.h"
 #include "../../Geometry/VGeometry.h"
+#include "../../Camera/VCamera.h"
 #ifndef _VOID_DISABLE_OPENGL_
 #define GLFW_INCLUDE_GLCOREARB
 #pragma clang diagnostic push
@@ -50,8 +51,15 @@ namespace Void
         VLogger::Info("Vendor: %s", glGetString(GL_VENDOR));
         VLogger::Info("Renderer: %s", glGetString(GL_RENDERER));
         
+        VCamera camera;
+        camera.SetOrthogonaLens(640, 480, 0, 100.f, false);
         VPoints points;
+        points.SetCamera(camera);
+        points.SetColor(VColor<>(0.5, 0.5, 1.0, 1.0));
+        points.AddPoint(VPointVertex(100, 100, 0));
+        points.AddPoints(VPointsEllipse(VVector<float, 2>(100.f, 200.f), 100.f, 50.f));
         VTriangle triangle;
+        triangle.SetColor(VColor<>(0.5, 0.5, 1.0, 1.0));
         while (!glfwWindowShouldClose(window))
         {
             glfwPollEvents();
@@ -59,7 +67,7 @@ namespace Void
             glClear(GL_COLOR_BUFFER_BIT);
             
             points.Process();
-            triangle.Process();
+            //triangle.Process();
             
             glfwSwapBuffers(window);
         }

@@ -9,7 +9,7 @@ namespace Void
 {
     // VVectorN
     //----------------------------------------------------------------------------------------------------
-    template<typename _T, size_t _S>
+    template<typename _T=float, size_t _S=4>
     class VVectorN
     {
     public:
@@ -82,7 +82,7 @@ namespace Void
     
     // VVector
     //----------------------------------------------------------------------------------------------------
-    template <typename _T, size_t _S>
+    template <typename _T=float, size_t _S=4>
     struct VVector : public VVectorN<_T, _S>
     {
     public:
@@ -91,7 +91,7 @@ namespace Void
         {
         }
         
-        inline VVector(const _T _x, const _T _y=0, const _T _z=0, const _T _w=0)
+        inline VVector(const _T& _x, const _T& _y=0, const _T& _z=0, const _T& _w=0)
         {
             SetValue(_x, _y, _z, _w);
         }
@@ -106,10 +106,7 @@ namespace Void
         
         inline VVector(const VVector& _vector)
         {
-            for (size_t i = 0; i < _S; ++i)
-            {
-                this->vector[i] = _vector[i];
-            }
+            SetValue(_vector);
         }
         
         inline ~VVector()
@@ -222,6 +219,15 @@ namespace Void
             for (size_t i = 0; i < _S && i <= 4; ++i)
             {
                 this->vector[i] = tmp[i];
+            }
+            return *this;
+        }
+        
+        inline VVector& SetValue(const VVector& _vector)
+        {
+            for (size_t i = 0; i < _S; ++i)
+            {
+                this->vector[i] = _vector[i];
             }
             return *this;
         }

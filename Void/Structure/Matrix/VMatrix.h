@@ -19,7 +19,7 @@ namespace Void
      +-----+
      */
     //----------------------------------------------------------------------------------------------------
-    template<typename _T, size_t _N, size_t _M>
+    template<typename _T=float, size_t _N=4, size_t _M=4>
     class VMatrixNM
     {
     public:
@@ -109,7 +109,7 @@ namespace Void
 
     // VMatrix
     //----------------------------------------------------------------------------------------------------
-    template<typename _T, size_t _N, size_t _M>
+    template<typename _T=float, size_t _N=4, size_t _M=4>
     struct VMatrix : public VMatrixNM<_T, _N, _M>
     {
     public:

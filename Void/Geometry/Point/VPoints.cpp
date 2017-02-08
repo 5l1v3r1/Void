@@ -54,20 +54,15 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     bool VPoints::Update()
     {
-        if (m_vertexArray == 0 || m_vertexBuffer == 0)
+        if (m_isPointsDirty == true || m_vertexArray == 0 || m_vertexBuffer == 0)
         {
-            const GLfloat vertexBufferData[] =
-            {
-                0.0f, 0.9f, 0.0f,
-                -0.9f, -0.9f, 0.0f,
-                0.9f, -0.9f, 0.0f,
-            };
+            m_isPointsDirty = false;
             
             glGenVertexArrays(1, &m_vertexArray);
             glBindVertexArray(m_vertexArray);
             glGenBuffers(1, &m_vertexBuffer);
             glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
-            glBufferData(GL_ARRAY_BUFFER, sizeof(vertexBufferData), vertexBufferData, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(VPointVertex) * m_points.size(), m_points.data(), GL_STATIC_DRAW);
             
             GLuint position = s_program.Attrib("position");
             glEnableVertexAttribArray(position);
@@ -86,12 +81,46 @@ namespace Void
     {
         glUseProgram(s_program.Program());
         glBindVertexArray(m_vertexArray);
+        s_program.BindUniform("projection", m_camera.Projection());
+        if (m_color)
+        {
+            s_program.BindUniform("color", *m_color);
+        }
         
         // Draw
-        glDrawArrays(GL_POINTS, 0, 3);
+        glDrawArrays(GL_POINTS, 0, (GLsizei)m_points.size());
         
         glBindVertexArray(0);
         glUseProgram(0);
         return true;
+    }
+    
+    //----------------------------------------------------------------------------------------------------
+    void VPoints::AddPoint(const VPointVertex& _point)
+    {
+        m_points.push_back(_point);
+    }
+    
+    //----------------------------------------------------------------------------------------------------
+    void VPoints::AddPoints(const std::vector<VPointVertex>& _points)
+    {
+        m_points.insert(m_points.end(), _points.begin(), _points.end());
+    }
+    
+    
+    // x = a * cost, y = b * sint
+    //----------------------------------------------------------------------------------------------------
+    std::vector<VPointVertex> VPointsEllipse(const VVector<float, 2>& _position, float _a, float _b, float _start, float _end)
+    {
+        float delta = V_ANGLE_PI / 360.f;
+        std::vector<VPointVertex> result;
+        while (_start <= _end)
+        {
+            VVector<float, 2> position = _position + VVector<float, 2>(_a * cos(_start), _b * sin(_start));
+            result.push_back(VPointVertex(position[0], position[1], 0));
+            _start += delta;
+        }
+        
+        return result;
     }
 }

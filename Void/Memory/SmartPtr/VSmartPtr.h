@@ -1,6 +1,11 @@
 #pragma once
 #ifndef _V_SMARTPTR_H_
 #define _V_SMARTPTR_H_
+#include "../../VDefine.h"
+#ifdef _VOID_ENABLE_DEBUG_
+#include "../../Utility/Logger/VLogger.h"
+#include <typeinfo>
+#endif
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
@@ -15,9 +20,10 @@ namespace Void
 		//----------------------------------------------------------------------------------------------------
 		VSmartPtr(_T* _value = nullptr)
 			:
-			m_counter(new int(1)),
+			m_counter(new int(0)),
 			m_value(_value)
 		{
+            Increase();
 		}
 
 		//----------------------------------------------------------------------------------------------------
@@ -97,8 +103,9 @@ namespace Void
 		{
 			Decrease();
 
-			m_counter = new int(1);
+			m_counter = new int(0);
 			m_value = _value;
+            Increase();
 		}
 
     protected:
@@ -106,11 +113,17 @@ namespace Void
 		void Increase()
 		{
 			++*m_counter;
+            #ifdef _VOID_ENABLE_DEBUG_
+            VLogger::Print("SMARTPTR", "Increase: %s %x %d", typeid(*this).name(), m_counter, *m_counter);
+            #endif
 		}
 
 		//----------------------------------------------------------------------------------------------------
 		void Decrease()
 		{
+            #ifdef _VOID_ENABLE_DEBUG_
+            VLogger::Print("SMARTPTR", "Decrease: %s %x %d", typeid(*this).name(), m_counter, *m_counter - 1);
+            #endif
 			if (--*m_counter == 0)
 			{
 				delete m_counter;
