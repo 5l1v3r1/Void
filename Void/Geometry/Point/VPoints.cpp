@@ -62,11 +62,11 @@ namespace Void
             glBindVertexArray(m_vertexArray);
             glGenBuffers(1, &m_vertexBuffer);
             glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
-            glBufferData(GL_ARRAY_BUFFER, sizeof(VPointVertex) * m_points.size(), m_points.data(), GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(VVertexPosition) * m_points.size(), m_points.data(), GL_STATIC_DRAW);
             
             GLuint position = s_program.Attrib("position");
             glEnableVertexAttribArray(position);
-            glVertexAttribPointer(position, 3, GL_FLOAT, GL_FALSE, sizeof(VPointVertex), (const GLvoid*)0);
+            glVertexAttribPointer(position, 3, GL_FLOAT, GL_FALSE, sizeof(VVertexPosition), (const GLvoid*)0);
             
             glBindBuffer(GL_ARRAY_BUFFER, 0);
             glBindVertexArray(0);
@@ -95,13 +95,13 @@ namespace Void
     }
     
     //----------------------------------------------------------------------------------------------------
-    void VPoints::AddPoint(const VPointVertex& _point)
+    void VPoints::AddPoint(const VVertexPosition& _point)
     {
         m_points.push_back(_point);
     }
     
     //----------------------------------------------------------------------------------------------------
-    void VPoints::AddPoints(const std::vector<VPointVertex>& _points)
+    void VPoints::AddPoints(const std::vector<VVertexPosition>& _points)
     {
         m_points.insert(m_points.end(), _points.begin(), _points.end());
     }
@@ -109,14 +109,14 @@ namespace Void
     
     // x = a * cost, y = b * sint
     //----------------------------------------------------------------------------------------------------
-    std::vector<VPointVertex> VPointsEllipse(const VVector<float, 2>& _position, float _a, float _b, float _start, float _end)
+    std::vector<VVertexPosition> VPointsEllipse(const VVector<float, 2>& _position, float _a, float _b, float _start, float _end)
     {
         float delta = V_ANGLE_PI / 360.f;
-        std::vector<VPointVertex> result;
+        std::vector<VVertexPosition> result;
         while (_start <= _end)
         {
             VVector<float, 2> position = _position + VVector<float, 2>(_a * cos(_start), _b * sin(_start));
-            result.push_back(VPointVertex(position[0], position[1], 0));
+            result.push_back(VVertexPosition(position[0], position[1], 0));
             _start += delta;
         }
         

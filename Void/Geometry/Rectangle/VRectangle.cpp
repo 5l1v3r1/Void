@@ -68,27 +68,43 @@ namespace Void
         {
             m_isRectangleDirty = false;
             
-            float halfWidth = m_width / 2;
-            float halfHeight = m_height / 2;
-            m_rectangle[0].postion = VVector<float, 3>(m_position.x + halfWidth, m_position.y - halfHeight, m_position.z);
-            m_rectangle[0].texCoord = VVector<float, 2>(1.f, 1.f);
-            m_rectangle[1].postion = VVector<float, 3>(m_position.x - halfWidth, m_position.y - halfHeight, m_position.z);
-            m_rectangle[1].texCoord = VVector<float, 2>(0.f, 1.f);
-            m_rectangle[2].postion = VVector<float, 3>(m_position.x + halfWidth, m_position.y + halfHeight, m_position.z);
-            m_rectangle[2].texCoord = VVector<float, 2>(1.f, 0.f);
-            m_rectangle[3].postion = VVector<float, 3>(m_position.x - halfWidth, m_position.y + halfHeight, m_position.z);
-            m_rectangle[3].texCoord = VVector<float, 2>(0.f, 0.f);
-
             glGenVertexArrays(1, &m_vertexArray);
             glBindVertexArray(m_vertexArray);
             glGenBuffers(1, &m_vertexBuffer);
             glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
-            glBufferData(GL_ARRAY_BUFFER, sizeof(m_rectangle), m_rectangle, GL_STATIC_DRAW);
             
+            size_t vertexSize = 0;
+            size_t bufferSize = 0;
+            m_vertexData.clear();
+            
+            // position
+            float halfWidth = m_width / 2;
+            float halfHeight = m_height / 2;
+            m_rectangle[0].postion = VVector<float, 3>(m_position.x + halfWidth, m_position.y - halfHeight, m_position.z);
+            m_rectangle[1].postion = VVector<float, 3>(m_position.x - halfWidth, m_position.y - halfHeight, m_position.z);
+            m_rectangle[2].postion = VVector<float, 3>(m_position.x + halfWidth, m_position.y + halfHeight, m_position.z);
+            m_rectangle[3].postion = VVector<float, 3>(m_position.x - halfWidth, m_position.y + halfHeight, m_position.z);
             GLuint position = s_program.Attrib("position");
             glEnableVertexAttribArray(position);
-            glVertexAttribPointer(position, 3, GL_FLOAT, GL_FALSE, sizeof(VRectangleVertex), (const GLvoid*)0);
+            glVertexAttribPointer(position, 3, GL_FLOAT, GL_FALSE, (GLsizei)sizeof(VVertexPosition), (const GLvoid*)bufferSize);
+            vertexSize += sizeof(VVertexPosition);
+            bufferSize += sizeof(VVertexPosition) * 4;
+            m_vertexData.insert(m_vertexData.end(), (unsigned char*)m_rectangle, (unsigned char*)(m_rectangle + 4));
             
+            // textureCoord
+            m_textureCoord.SetValue(new std::vector<VVertexTextureCoord>(4));
+            (*m_textureCoord)[0].textureCoord = VVector<float, 2>(1.f, 1.f);
+            (*m_textureCoord)[1].textureCoord = VVector<float, 2>(0.f, 1.f);
+            (*m_textureCoord)[2].textureCoord = VVector<float, 2>(1.f, 0.f);
+            (*m_textureCoord)[3].textureCoord = VVector<float, 2>(0.f, 0.f);
+            GLuint textureCoord = s_program.Attrib("textureCoord");
+            glEnableVertexAttribArray(textureCoord);
+            glVertexAttribPointer(textureCoord, 2, GL_FLOAT, GL_TRUE, (GLsizei)sizeof(VVertexTextureCoord), (const GLvoid*)bufferSize);
+            vertexSize += sizeof(VVertexTextureCoord);
+            bufferSize += sizeof(VVertexTextureCoord) * m_textureCoord->size();
+            m_vertexData.insert(m_vertexData.end(), (unsigned char*)(*m_textureCoord).data(), (unsigned char*)((*m_textureCoord).data() + 4));
+            
+            glBufferData(GL_ARRAY_BUFFER, m_vertexData.size(), m_vertexData.data(), GL_STATIC_DRAW);
             glBindBuffer(GL_ARRAY_BUFFER, 0);
             glBindVertexArray(0);
         }

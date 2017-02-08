@@ -59,9 +59,9 @@ namespace Void
         {
             const GLfloat vertexBufferData[] =
             {
-                0.0f, 0.8f, 0.0f,
-                -0.8f, -0.8f, 0.0f,
-                0.8f, -0.8f, 0.0f,
+                0.0f, 0.2f, 0.0f,
+                -0.2f, -0.2f, 0.0f,
+                0.2f, -0.2f, 0.0f,
             };
             
             glGenVertexArrays(1, &m_vertexArray);

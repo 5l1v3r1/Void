@@ -2,6 +2,7 @@
 
 uniform mat4 projection;
 layout(location = 0) in vec3 position;
+in vec2 textureCoord;
 
 void main()
 {

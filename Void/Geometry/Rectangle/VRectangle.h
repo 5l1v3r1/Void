@@ -10,16 +10,6 @@
 //----------------------------------------------------------------------------------------------------
 namespace Void
 {
-    // VRectangleVertex
-    //----------------------------------------------------------------------------------------------------
-    struct VRectangleVertex
-    {
-    public:
-        //----------------------------------------------------------------------------------------------------
-        VVector<float, 3> postion;
-        VVector<float, 2> texCoord;
-    };
-    
     // VRectangle
     //----------------------------------------------------------------------------------------------------
     class VRectangle : public VGeometryBase
@@ -50,8 +40,10 @@ namespace Void
         VVector<float, 3> m_position;
         float m_width;
         float m_height;
-        VRectangleVertex m_rectangle[4];
+        VVertexPosition m_rectangle[4];
+        VSmartPtr<std::vector<VVertexTextureCoord>> m_textureCoord;
         
+        std::vector<unsigned char> m_vertexData;
         GLuint m_vertexArray;
         GLuint m_vertexBuffer;
     };

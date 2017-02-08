@@ -9,30 +9,7 @@
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
-{
-    // VPointVertex
-    //----------------------------------------------------------------------------------------------------
-    struct VPointVertex
-    {
-    public:
-        //----------------------------------------------------------------------------------------------------
-        inline VPointVertex(const VVector<float, 3>& _position)
-            :
-            position(_position)
-        {
-        }
-        
-        inline VPointVertex(float _x, float _y=0, float _z=0)
-            :
-            position(_x, _y, _z)
-        {
-        }
-        
-    public:
-        //----------------------------------------------------------------------------------------------------
-        VVector<float, 3> position;
-    };
-    
+{    
     // VPoints
     //----------------------------------------------------------------------------------------------------
     class VPoints : public VGeometryBase
@@ -57,20 +34,20 @@ namespace Void
         virtual bool Render();
         
         //----------------------------------------------------------------------------------------------------
-        void AddPoint(const VPointVertex& _point);
-        void AddPoints(const std::vector<VPointVertex>& _points);
+        void AddPoint(const VVertexPosition& _point);
+        void AddPoints(const std::vector<VVertexPosition>& _points);
         
     protected:
         //----------------------------------------------------------------------------------------------------
         bool m_isPointsDirty;
-        std::vector<VPointVertex> m_points;
+        std::vector<VVertexPosition> m_points;
         
         GLuint m_vertexArray;
         GLuint m_vertexBuffer;
     };
     
     //----------------------------------------------------------------------------------------------------
-    std::vector<VPointVertex> VPointsEllipse(const VVector<float, 2>& _position, float _a, float _b, float _start=0.f, float _end=V_ANGLE_2PI);
+    std::vector<VVertexPosition> VPointsEllipse(const VVector<float, 2>& _position, float _a, float _b, float _start=0.f, float _end=V_ANGLE_2PI);
 }
 
 #endif
