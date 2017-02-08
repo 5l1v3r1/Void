@@ -52,14 +52,17 @@ namespace Void
         VLogger::Info("Renderer: %s", glGetString(GL_RENDERER));
         
         VCamera camera;
-        camera.SetOrthogonaLens(640, 480, 0, 100.f, false);
+        camera.SetOrthogonaLens(640.f, 480.f, 0, 100.f, false);
         VPoints points;
         points.SetCamera(camera);
-        points.SetColor(VColor<>(0.5, 0.5, 1.0, 1.0));
-        points.AddPoint(VPointVertex(100, 100, 0));
+        points.SetColor(VColor<>(1.f, 1.f, 1.f, 1.f));
+        points.AddPoint(VPointVertex(100, 200, 0));
         points.AddPoints(VPointsEllipse(VVector<float, 2>(100.f, 200.f), 100.f, 50.f));
         VTriangle triangle;
         triangle.SetColor(VColor<>(0.5, 0.5, 1.0, 1.0));
+        VRectangle rectangle(VVector<float, 3>(300.f, 200.f, 0), 100.f, 100.f);
+        rectangle.SetCamera(camera);
+        rectangle.SetColor(VColor<>(1.f, 1.f, 1.f, 1.f));
         while (!glfwWindowShouldClose(window))
         {
             glfwPollEvents();
@@ -68,6 +71,7 @@ namespace Void
             
             points.Process();
             //triangle.Process();
+            rectangle.Process();
             
             glfwSwapBuffers(window);
         }

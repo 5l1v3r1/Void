@@ -1,6 +1,6 @@
 #pragma once
-#ifndef _V_POINTS_H_
-#define _V_POINTS_H_
+#ifndef _V_RECTANGLE_H_
+#define _V_RECTANGLE_H_
 #include "../../Structure/Angle/VAngle.h"
 #include "../../Structure/Vector/VVector.h"
 #include "../../Utility/OpenGL/VOpenGL.h"
@@ -10,32 +10,19 @@
 //----------------------------------------------------------------------------------------------------
 namespace Void
 {
-    // VPointVertex
+    // VRectangleVertex
     //----------------------------------------------------------------------------------------------------
-    struct VPointVertex
+    struct VRectangleVertex
     {
     public:
         //----------------------------------------------------------------------------------------------------
-        inline VPointVertex(const VVector<float, 3>& _position)
-            :
-            position(_position)
-        {
-        }
-        
-        inline VPointVertex(float _x, float _y=0, float _z=0)
-            :
-            position(_x, _y, _z)
-        {
-        }
-        
-    public:
-        //----------------------------------------------------------------------------------------------------
-        VVector<float, 3> position;
+        VVector<float, 3> postion;
+        VVector<float, 2> texCoord;
     };
     
-    // VPoints
+    // VRectangle
     //----------------------------------------------------------------------------------------------------
-    class VPoints : public VGeometryBase
+    class VRectangle : public VGeometryBase
     {
     protected:
         //----------------------------------------------------------------------------------------------------
@@ -48,29 +35,26 @@ namespace Void
         
     public:
         //----------------------------------------------------------------------------------------------------
-        VPoints();
-        VPoints(const VPoints& _points);
-        virtual ~VPoints();
+        VRectangle();
+        VRectangle(const VVector<float, 3>& _position, float _width, float _height);
+        VRectangle(const VRectangle& _rectangle);
+        virtual ~VRectangle();
         
         //----------------------------------------------------------------------------------------------------
         virtual bool Update();
         virtual bool Render();
         
-        //----------------------------------------------------------------------------------------------------
-        void AddPoint(const VPointVertex& _point);
-        void AddPoints(const std::vector<VPointVertex>& _points);
-        
     protected:
         //----------------------------------------------------------------------------------------------------
-        bool m_isPointsDirty;
-        std::vector<VPointVertex> m_points;
+        bool m_isRectangleDirty;
+        VVector<float, 3> m_position;
+        float m_width;
+        float m_height;
+        VRectangleVertex m_rectangle[4];
         
         GLuint m_vertexArray;
         GLuint m_vertexBuffer;
     };
-    
-    //----------------------------------------------------------------------------------------------------
-    std::vector<VPointVertex> VPointsEllipse(const VVector<float, 2>& _position, float _a, float _b, float _start=0.f, float _end=V_ANGLE_2PI);
 }
 
 #endif

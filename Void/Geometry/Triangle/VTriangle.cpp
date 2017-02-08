@@ -72,8 +72,7 @@ namespace Void
             
             GLuint position = s_program.Attrib("position");
             glEnableVertexAttribArray(position);
-            glBindBuffer(GL_ARRAY_BUFFER, m_vertexBuffer);
-            glVertexAttribPointer(position, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+            glVertexAttribPointer(position, 3, GL_FLOAT, GL_FALSE, sizeof(VTriangleVertex), (const GLvoid*)0);
             
             glBindBuffer(GL_ARRAY_BUFFER, 0);
             glBindVertexArray(0);
@@ -87,6 +86,7 @@ namespace Void
     {
         glUseProgram(s_program.Program());
         glBindVertexArray(m_vertexArray);
+        s_program.BindUniform("projection", m_camera.Projection());
         if (m_color)
         {
             s_program.BindUniform("color", *m_color);

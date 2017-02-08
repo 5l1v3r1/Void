@@ -5,5 +5,6 @@
 //----------------------------------------------------------------------------------------------------
 #include "Point/VPoints.h"
 #include "Triangle/VTriangle.h"
+#include "Rectangle/VRectangle.h"
 
 #endif
