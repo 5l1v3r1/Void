@@ -28,14 +28,13 @@ namespace Void
                 unsigned char *buffer = nullptr;
                 if (bytesPerColor == 1)
                 {
-                    image.SetData<V_COLOR_FORMAT_GRAY_256>(width, height);
-                    buffer = (unsigned char*)image.Data<V_COLOR_FORMAT_GRAY_256>()->data[0].data();
+                    image.SetData(width, height, V_COLOR_FORMAT_GRAY_256);
                 }
                 else if (bytesPerColor == 3)
                 {
-                    image.SetData<V_COLOR_FORMAT_RGB_256>(width, height);
-                    buffer = (unsigned char*)image.Data<V_COLOR_FORMAT_RGB_256>()->data[0].data();
+                    image.SetData(width, height, V_COLOR_FORMAT_RGB_256);
                 }
+                buffer = image.Data();
                 
                 
                 fin.seekg(fileHeader.offBits, std::ios::beg);

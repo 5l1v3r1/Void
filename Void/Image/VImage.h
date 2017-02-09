@@ -11,7 +11,6 @@ namespace Void
 {
     // VImageData
     //----------------------------------------------------------------------------------------------------
-    template<VColorFormat _F>
     class VImageData
     {
     public:
@@ -24,30 +23,48 @@ namespace Void
         {
         }
         
-        inline VImageData(unsigned int _width, unsigned int _height)
+        inline VImageData(unsigned int _width, unsigned int _height, VColorFormat _format=V_COLOR_FORMAT_RGBA_256)
             :
             width(_width),
             height(_height),
             data()
         {
-            data.push_back(std::vector<VColor<_F>>(_width * _height, VColor<_F>()));
+            colorFormat = _format;
+            switch (_format)
+            {
+                case V_COLOR_FORMAT_NONE:
+                    break;
+                case V_COLOR_FORMAT_RGBA_FLOAT:
+                    data.push_back(std::vector<unsigned char>(_width * _height * 16));
+                    break;
+                case V_COLOR_FORMAT_RGBA_256:
+                case V_COLOR_FORMAT_BGRX_256:
+                    data.push_back(std::vector<unsigned char>(_width * _height * 4));
+                    break;
+                case V_COLOR_FORMAT_RGB_256:
+                    data.push_back(std::vector<unsigned char>(_width * _height * 3));
+                    break;
+                case V_COLOR_FORMAT_GRAY_256:
+                    data.push_back(std::vector<unsigned char>(_width * _height * 1));
+                    break;
+            }
         }
         
         virtual ~VImageData()
         {
-            
         }
         
     public:
         //----------------------------------------------------------------------------------------------------
         unsigned int width;
         unsigned int height;
-        std::vector<std::vector<VColor<_F>>> data;
+        VColorFormat colorFormat;
+        std::vector<std::vector<unsigned char>> data;
     };
     
     // VImage
     //----------------------------------------------------------------------------------------------------
-    class VImage
+    class VImage : protected VSmartPtr<VImageData>
     {
     public:
         //----------------------------------------------------------------------------------------------------
@@ -56,35 +73,12 @@ namespace Void
         virtual ~VImage();
         
         //----------------------------------------------------------------------------------------------------
-        template <VColorFormat _F>
-        inline bool SetData(unsigned int _width, unsigned int _height)
-        {
-            m_colorFormat = _F;
-            m_imageData.SetValue(new VAny(VImageData<_F>(_width, _height)));
-            return true;
-        }
-        
-        template <VColorFormat _F=V_COLOR_FORMAT_NONE>
-        inline VImageData<_F>* Data()
-        {
-            if (m_imageData)
-            {
-                if (_F != V_COLOR_FORMAT_NONE)
-                {
-                    return VAnyCast<VImageData<_F>>(&(*m_imageData));
-                }
-                else
-                {
-                    // Todo
-                }
-            }
-            return nullptr;
-        }
-        
-    protected:
-        //----------------------------------------------------------------------------------------------------
-        VColorFormat m_colorFormat;
-        VSmartPtr<VAny> m_imageData;
+        unsigned int Width() const;
+        unsigned int Height() const;
+        VColorFormat ColorFormat() const;
+        unsigned char* Data(size_t index=0);
+        const unsigned char* Data(size_t index=0) const;
+        bool SetData(unsigned int _width, unsigned int _height, VColorFormat _format=V_COLOR_FORMAT_RGBA_256);
     };
     
     // Test

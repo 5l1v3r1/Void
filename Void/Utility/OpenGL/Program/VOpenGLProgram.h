@@ -50,7 +50,7 @@ namespace Void
     
     // VOpenGLProgram
     //----------------------------------------------------------------------------------------------------
-    class VOpenGLProgram : public VSmartPtr<VOpenGLProgramData>
+    class VOpenGLProgram : protected VSmartPtr<VOpenGLProgramData>
     {
     public:
         //----------------------------------------------------------------------------------------------------

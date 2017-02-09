@@ -41,8 +41,9 @@ namespace Void
     protected:
         //----------------------------------------------------------------------------------------------------
         bool m_isTriangleDirty;
-        std::vector<VTriangleVertex> m_triangle;
+        VVertexPosition m_rectangle[3];
         
+        std::vector<unsigned char> m_vertexData;
         GLuint m_vertexArray;
         GLuint m_vertexBuffer;
     };

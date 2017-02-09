@@ -5,5 +5,6 @@
 //----------------------------------------------------------------------------------------------------
 #include "Shader/VOpenGLShader.h"
 #include "Program/VOpenGLProgram.h"
+#include "Texture/VOpenGLTexture.h"
 
 #endif
