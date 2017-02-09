@@ -51,6 +51,7 @@ namespace Void
         VLogger::Info("Vendor: %s", glGetString(GL_VENDOR));
         VLogger::Info("Renderer: %s", glGetString(GL_RENDERER));
         
+        VImage image = VImage::ReadFromBMPFile("./Test/Data/lenna.bmp");
         VCamera camera;
         camera.SetOrthogonaLens(640.f, 480.f, 0, 100.f, false);
         VPoints points;
@@ -63,6 +64,7 @@ namespace Void
         VRectangle rectangle(VVector<float, 3>(400.f, 200.f, 0), 100.f, 100.f);
         rectangle.SetCamera(camera);
         rectangle.SetColor(VColor<>(1.f, 1.f, 1.f, 1.f));
+        rectangle.SetImage(image);
         while (!glfwWindowShouldClose(window))
         {
             glfwPollEvents();

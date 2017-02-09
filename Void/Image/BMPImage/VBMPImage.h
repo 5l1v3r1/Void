@@ -39,6 +39,7 @@ namespace Void
     class VBMPImage
     {
     public:
+        //----------------------------------------------------------------------------------------------------
         static VImage ReadFromFile(const char* fileName);
     };
     

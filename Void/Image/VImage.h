@@ -3,7 +3,6 @@
 #define _V_IMAGE_H_
 #include "../Color/VColor.h"
 #include "../Memory/SmartPtr/VSmartPtr.h"
-#include "../Structure/Any/VAny.h"
 #include <vector>
 
 //----------------------------------------------------------------------------------------------------
@@ -66,6 +65,10 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     class VImage : protected VSmartPtr<VImageData>
     {
+    public:
+        //----------------------------------------------------------------------------------------------------
+        static VImage ReadFromBMPFile(const char* _fileName);
+        
     public:
         //----------------------------------------------------------------------------------------------------
         VImage();

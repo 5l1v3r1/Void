@@ -38,7 +38,7 @@ namespace Void
                 
                 
                 fin.seekg(fileHeader.offBits, std::ios::beg);
-                if(infoHeader.height < 0)
+                if(infoHeader.height > 0)
                 {
                     fin.read((char*)buffer, width * height * bytesPerColor);
                 }

@@ -44,6 +44,7 @@ namespace Void
         VSmartPtr<std::vector<VVertexTextureCoord>> m_textureCoord;
         
         std::vector<unsigned char> m_vertexData;
+        VOpenGLTexture m_texture;
         GLuint m_vertexArray;
         GLuint m_vertexBuffer;
     };

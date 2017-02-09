@@ -54,4 +54,17 @@ namespace Void
         m_color.SetValue(new VColor<V_COLOR_FORMAT_RGBA_FLOAT>(_color));
         return true;
     }
+    
+    //----------------------------------------------------------------------------------------------------
+    VImage VGeometryBase::Image()
+    {
+        return m_image;
+    }
+    
+    //----------------------------------------------------------------------------------------------------
+    bool VGeometryBase::SetImage(VImage& _image)
+    {
+        m_image = _image;
+        return true;
+    }
 }

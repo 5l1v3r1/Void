@@ -66,6 +66,27 @@ namespace Void
         
         //----------------------------------------------------------------------------------------------------
         template <size_t _S>
+        bool BindUniform(const GLchar* uniformName, const VVector<int, _S>& _vector)
+        {
+            switch (_S)
+            {
+                case 1:
+                    glUniform1i(Uniform(uniformName), _vector[0]);
+                    return true;
+                case 2:
+                    glUniform2i(Uniform(uniformName), _vector[0], _vector[1]);
+                    return true;
+                case 3:
+                    glUniform3i(Uniform(uniformName), _vector[0], _vector[1], _vector[2]);
+                    return true;
+                case 4:
+                    glUniform4i(Uniform(uniformName), _vector[0], _vector[1], _vector[2], _vector[3]);
+                    return true;
+            }
+            return false;
+        }
+        
+        template <size_t _S>
         bool BindUniform(const GLchar* uniformName, const VVector<float, _S>& _vector)
         {
             switch (_S)

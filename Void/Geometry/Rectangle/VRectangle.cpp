@@ -77,7 +77,7 @@ namespace Void
             size_t bufferSize = 0;
             m_vertexData.clear();
             
-            // position
+            // Position
             float halfWidth = m_width / 2;
             float halfHeight = m_height / 2;
             m_rectangle[0].postion = VVector<float, 3>(m_position.x + halfWidth, m_position.y - halfHeight, m_position.z);
@@ -91,7 +91,7 @@ namespace Void
             bufferSize += sizeof(VVertexPosition) * 4;
             m_vertexData.insert(m_vertexData.end(), (unsigned char*)m_rectangle, (unsigned char*)(m_rectangle + 4));
             
-            // textureCoord
+            // TextureCoord
             m_textureCoord.SetValue(new std::vector<VVertexTextureCoord>(4));
             (*m_textureCoord)[0].textureCoord = VVector<float, 2>(1.f, 1.f);
             (*m_textureCoord)[1].textureCoord = VVector<float, 2>(0.f, 1.f);
@@ -103,6 +103,12 @@ namespace Void
             vertexSize += sizeof(VVertexTextureCoord);
             bufferSize += sizeof(VVertexTextureCoord) * m_textureCoord->size();
             m_vertexData.insert(m_vertexData.end(), (unsigned char*)(*m_textureCoord).data(), (unsigned char*)((*m_textureCoord).data() + 4));
+            
+            // Image
+            if (m_image.Data())
+            {
+                m_texture.SetTexture(m_image);
+            }
             
             glBufferData(GL_ARRAY_BUFFER, m_vertexData.size(), m_vertexData.data(), GL_STATIC_DRAW);
             glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -121,6 +127,12 @@ namespace Void
         if (m_color)
         {
             s_program.BindUniform("color", *m_color);
+        }
+        if (m_texture.Texture())
+        {
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, m_texture.Texture());
+            s_program.BindUniform("image", VVector<int, 1>(0));
         }
         
         // Draw

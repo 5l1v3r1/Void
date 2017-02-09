@@ -5,6 +5,7 @@
 #include "../Color/VColor.h"
 #include "../Camera/VCamera.h"
 #include "../Structure/Vector/VVector.h"
+#include "../Image/VImage.h"
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
@@ -65,11 +66,14 @@ namespace Void
         bool SetCamera(VCamera& camera);
         VColor<V_COLOR_FORMAT_RGBA_FLOAT>* Color();
         bool SetColor(const VColor<V_COLOR_FORMAT_RGBA_FLOAT>& _color);
+        VImage Image();
+        bool SetImage(VImage& _image);
         
     protected:
         //----------------------------------------------------------------------------------------------------
         VCamera m_camera;
         VSmartPtr<VColor<V_COLOR_FORMAT_RGBA_FLOAT>> m_color;
+        VImage m_image;
     };
 }
 
