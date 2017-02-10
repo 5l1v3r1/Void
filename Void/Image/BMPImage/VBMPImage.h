@@ -21,7 +21,7 @@ namespace Void
     struct VBMPInfoHeader
     {
         unsigned int size;
-        int width;
+        int width; // (size == 12) => unsigned short
         int height;
         unsigned short planes;
         unsigned short bitCount;

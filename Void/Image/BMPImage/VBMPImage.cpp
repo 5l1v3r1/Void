@@ -17,13 +17,15 @@ namespace Void
                 VBMPFileHeader fileHeader;
                 VBMPInfoHeader infoHeader;
                 fin.read((char*)&fileHeader, sizeof(fileHeader));
-                if(fileHeader.type != 0x4D42) { break; }
+                if(fileHeader.type != 0x4D42) { break; } // BM
                 fin.read((char*)&infoHeader, sizeof(infoHeader));
-                if(infoHeader.bitCount != 24 || infoHeader.compression != 0) { break; }
+                if(infoHeader.size == 12 || infoHeader.planes != 1 || infoHeader.bitCount == 1 || infoHeader.compression != 0) { break; }
                 
                 int width = infoHeader.width;
-                int height = infoHeader.height < 0 ? (-infoHeader.height) : infoHeader.height;
+                int height = abs(infoHeader.height);
                 int bytesPerColor = infoHeader.bitCount >> 3;
+                //int padding = 0;
+                //int rowSize = 0;
                 VImage image;
                 unsigned char *buffer = nullptr;
                 if (bytesPerColor == 1)
@@ -34,13 +36,24 @@ namespace Void
                 {
                     image.SetData(width, height, V_COLOR_FORMAT_RGB_256);
                 }
+                else
+                {
+                    break;
+                }
                 buffer = image.Data();
                 
                 
                 fin.seekg(fileHeader.offBits, std::ios::beg);
-                if(infoHeader.height > 0)
+                if (0 < infoHeader.height) // flip vertically
                 {
-                    fin.read((char*)buffer, width * height * bytesPerColor);
+                    char pixel[3];
+                    for (int i = 0; i < infoHeader.sizeImage; i += bytesPerColor)
+                    {
+                        fin.read(pixel, 3);
+                        buffer[i + 2] = pixel[0];
+                        buffer[i + 1] = pixel[1];
+                        buffer[i + 0] = pixel[2];
+                    }
                 }
                 else
                 {

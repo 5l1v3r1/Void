@@ -48,6 +48,7 @@ namespace Void
         V_COLOR_FORMAT_BGRX_256 = 3,
         V_COLOR_FORMAT_RGB_256 = 4,
         V_COLOR_FORMAT_GRAY_256 = 5,
+        V_COLOR_FORMAT_GRAYALPHA_256 = 6,
     };
     
     // VColorData
