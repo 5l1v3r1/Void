@@ -40,7 +40,7 @@ namespace Void
     {
     public:
         //----------------------------------------------------------------------------------------------------
-        static VImage ReadFromFile(const char* fileName);
+        static VImage ReadFromFile(const char* _fileName);
     };
     
     // Test

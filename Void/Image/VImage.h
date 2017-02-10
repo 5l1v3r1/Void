@@ -46,6 +46,9 @@ namespace Void
                 case V_COLOR_FORMAT_GRAY_256:
                     data.push_back(std::vector<unsigned char>(_width * _height * 1));
                     break;
+                case V_COLOR_FORMAT_GRAYALPHA_256:
+                    data.push_back(std::vector<unsigned char>(_width * _height * 2));
+                    break;
             }
         }
         

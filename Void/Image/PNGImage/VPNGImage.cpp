@@ -1,12 +1,12 @@
-#include "VJPEGImage.h"
+#include "VPNGImage.h"
 #include <fstream>
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
 {
-    // VJPEGImage
+    // VPNGImage
     //----------------------------------------------------------------------------------------------------
-    VImage VJPEGImage::ReadFromFile(const char* _fileName)
+    VImage VPNGImage::ReadFromFile(const char* _fileName)
     {
         std::ifstream fin(_fileName);
         if (fin.is_open())
@@ -23,9 +23,9 @@ namespace Void
     
     // Test
     //----------------------------------------------------------------------------------------------------
-    void VJPEGImageTest()
+    void VPNGImageTest()
     {
-        //VImage image = VJPEGImage::ReadFromFile("./Test/Data/lenna.jpg");
+        //VImage image = VPNGImage::ReadFromFile("./Test/Data/lenna.png");
         
     }
 }

@@ -1,14 +1,14 @@
 #pragma once
-#ifndef _V_JPEGIMAGE_H_
-#define _V_JPEGIMAGE_H_
+#ifndef _V_PNGIMAGE_H_
+#define _V_PNGIMAGE_H_
 #include "../VImage.h"
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
 {
-    // VJPEGImage
+    // VPNGImage
     //----------------------------------------------------------------------------------------------------
-    class VJPEGImage
+    class VPNGImage
     {
     public:
         //----------------------------------------------------------------------------------------------------
@@ -17,7 +17,7 @@ namespace Void
     
     // Test
     //----------------------------------------------------------------------------------------------------
-    void VJPEGImageTest();
+    void VPNGImageTest();
 }
 
 #endif

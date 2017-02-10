@@ -7,9 +7,9 @@ namespace Void
     // VBMPImage
     // Todo
     //----------------------------------------------------------------------------------------------------
-    VImage VBMPImage::ReadFromFile(const char* fileName)
+    VImage VBMPImage::ReadFromFile(const char* _fileName)
     {
-        std::ifstream fin(fileName);
+        std::ifstream fin(_fileName);
         if (fin.is_open())
         {
             do
@@ -42,9 +42,8 @@ namespace Void
                 }
                 buffer = image.Data();
                 
-                
                 fin.seekg(fileHeader.offBits, std::ios::beg);
-                if (0 < infoHeader.height) // flip vertically
+                if (0 < infoHeader.height)
                 {
                     char pixel[3];
                     for (int i = 0; i < infoHeader.sizeImage; i += bytesPerColor)
@@ -59,13 +58,14 @@ namespace Void
                 {
                     for(int i = 0; i < height; ++i)
                     {
-                        fin.read((char*)buffer + (height - 1 - i) * width * bytesPerColor, width * bytesPerColor);
+                        fin.read((char*)buffer + (height - 1 - i) * width * bytesPerColor, width * bytesPerColor); // Todo
                     }
                 }
                 
                 fin.close();
                 return image;
             } while(false);
+            fin.close();
         }
         
         return VImage();

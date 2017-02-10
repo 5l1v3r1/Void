@@ -1,6 +1,7 @@
 #include "VImage.h"
 #include "BMPImage/VBMPImage.h"
 #include "JPEGImage/VJPEGImage.h"
+#include "PNGImage/VPNGImage.h"
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
@@ -94,5 +95,7 @@ namespace Void
     void VImageTest()
     {
         VBMPImageTest();
+        VJPEGImageTest();
+        VPNGImageTest();
     }
 }
