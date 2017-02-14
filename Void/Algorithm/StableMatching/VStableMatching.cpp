@@ -1,5 +1,5 @@
 #include "VStableMatching.h"
-#include "../../Utility/VUtility.h"
+#include "../../Utility/Logger/VLogger.h"
 
 //----------------------------------------------------------------------------------------------------
 namespace Void

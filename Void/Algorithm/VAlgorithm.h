@@ -4,5 +4,6 @@
 
 //----------------------------------------------------------------------------------------------------
 #include "StableMatching/VStableMatching.h"
+#include "RedBlackTree/VRedBlackTree.h"
 
 #endif
