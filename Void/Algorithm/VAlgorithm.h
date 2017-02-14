@@ -5,5 +5,6 @@
 //----------------------------------------------------------------------------------------------------
 #include "StableMatching/VStableMatching.h"
 #include "RedBlackTree/VRedBlackTree.h"
+#include "RouletteWheel/VRouletteWheel.h"
 
 #endif

@@ -25,13 +25,7 @@ namespace Void
         //----------------------------------------------------------------------------------------------------
         struct Node
         {
-            Node *parent;
-            Node *left;
-            Node *right;
-            NodeColor color;
-            float key;
-            _T data;
-            
+        public:
             //----------------------------------------------------------------------------------------------------
             inline Node(float _key, const _T& _data)
                 :
@@ -91,15 +85,21 @@ namespace Void
             {
                 // Nothing
             }
+            
+        public:
+            //----------------------------------------------------------------------------------------------------
+            Node *parent;
+            Node *left;
+            Node *right;
+            NodeColor color;
+            float key;
+            _T data;
         };
         
         // NodeIterator
         //----------------------------------------------------------------------------------------------------
         struct NodeIterator
         {
-        protected:
-            Node *node;
-            
         public:
             //----------------------------------------------------------------------------------------------------
             inline NodeIterator(Node *_node)
@@ -147,6 +147,10 @@ namespace Void
             {
                 return node->data;
             }
+            
+        protected:
+            //----------------------------------------------------------------------------------------------------
+            Node *node;
         };
         
     public:

@@ -7,6 +7,7 @@ int main(int _argc, char** _argv)
     VWindowTest();
 	VStableMatchingTest();
     VRedBlackTreeTest();
+    VRouletteWheelTest();
     VImageTest();
     VAnyTest();
     VColorTest();
