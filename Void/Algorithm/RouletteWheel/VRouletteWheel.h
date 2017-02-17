@@ -2,10 +2,10 @@
 #ifndef _V_ROULETTEWHEEL_H_
 #define _V_ROULETTEWHEEL_H_
 
+#include "../RedBlackTree/VRedBlackTree.h"
 #include <vector>
 #include <iterator>
 #include <cstdlib>
-#include "../RedBlackTree/VRedBlackTree.h"
 
 
 //----------------------------------------------------------------------------------------------------

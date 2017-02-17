@@ -6,5 +6,6 @@
 #include "StableMatching/VStableMatching.h"
 #include "RedBlackTree/VRedBlackTree.h"
 #include "RouletteWheel/VRouletteWheel.h"
+#include "GeneticAlgorithm/VGeneticAlgorithm.h"
 
 #endif
