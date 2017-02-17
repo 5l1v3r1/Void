@@ -5,5 +5,6 @@
 //----------------------------------------------------------------------------------------------------
 #include "Logger/VLogger.h"
 #include "OpenGL/VOpenGL.h"
+#include "String/VString.h"
 
 #endif
