@@ -18,12 +18,12 @@ namespace Void
     }
     
     //----------------------------------------------------------------------------------------------------
-    std::vector<std::string> Split(std::string& _str, const std::string& _delimiter)
+    std::vector<std::string> Split(const std::string& _str, const std::string& _delimiter)
     {
         std::vector<std::string> result;
         if (_delimiter.empty())
         {
-            for (char& ch : _str )
+            for (const char& ch : _str )
             {
                 result.push_back(std::string(1, ch));
             }
@@ -47,7 +47,7 @@ namespace Void
     }
     
     //----------------------------------------------------------------------------------------------------
-    std::vector<std::string> Match(std::string& _str, const std::regex& _pattern)
+    std::vector<std::string> Match(const std::string& _str, const std::regex& _pattern)
     {
         std::vector<std::string> result;
         for (std::sregex_iterator it(_str.begin(), _str.end(), _pattern), end; it != end; ++it)

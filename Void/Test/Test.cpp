@@ -8,13 +8,16 @@ int main(int _argc, char** _argv)
 	VStableMatchingTest();
     VRedBlackTreeTest();
     VRouletteWheelTest();
-    VGeneticAlgorithmTest();
+    //VGeneticAlgorithmTest();
+    VJenkinsHashTest();
+    VSimHashTest();
     VImageTest();
     VAnyTest();
     VColorTest();
     VVectorTest();
     VMatrixTest();
     VVectorVMatrixTest();
+    VStringTest();
     
 	return 0;
 }

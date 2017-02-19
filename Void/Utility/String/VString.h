@@ -12,8 +12,8 @@ namespace Void
     // VString
     //----------------------------------------------------------------------------------------------------
     std::string& Trim(std::string& _str);
-    std::vector<std::string> Split(std::string& _str, const std::string& _delimiter);
-    std::vector<std::string> Match(std::string& _str, const std::regex& _pattern);
+    std::vector<std::string> Split(const std::string& _str, const std::string& _delimiter);
+    std::vector<std::string> Match(const std::string& _str, const std::regex& _pattern);
     
     // Test
     //----------------------------------------------------------------------------------------------------
