@@ -46,13 +46,26 @@ namespace Void
         return result;
     }
     
+    //----------------------------------------------------------------------------------------------------
+    std::vector<std::string> Match(std::string& _str, const std::regex& _pattern)
+    {
+        std::vector<std::string> result;
+        for (std::sregex_iterator it(_str.begin(), _str.end(), _pattern), end; it != end; ++it)
+        {
+            result.push_back(it->str());
+        }
+        
+        return result;
+    }
+    
     // Test
     //----------------------------------------------------------------------------------------------------
     void VStringTest()
     {
-        std::string test(" 1234  5  6   ");
+        std::string test(" 1234   5  6   ");
         Trim(test);
         auto result = Split(test, std::string(""));
+        result = Match(test, std::regex("[\\w\u4e00-\u9fcc]+"));
         
         return;
     }

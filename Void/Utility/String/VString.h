@@ -4,6 +4,7 @@
 
 #include <string>
 #include <vector>
+#include <regex>
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
@@ -11,7 +12,8 @@ namespace Void
     // VString
     //----------------------------------------------------------------------------------------------------
     std::string& Trim(std::string& _str);
-    std::vector<std::string> Split(std::string& _str, std::string& _delimiter);
+    std::vector<std::string> Split(std::string& _str, const std::string& _delimiter);
+    std::vector<std::string> Match(std::string& _str, const std::regex& _pattern);
     
     // Test
     //----------------------------------------------------------------------------------------------------
