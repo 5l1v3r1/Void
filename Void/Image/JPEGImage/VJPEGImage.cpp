@@ -13,7 +13,11 @@ namespace Void
         {
             do
             {
+                VJPEGHeader header;
+                fin.read((char*)&header, sizeof(header));
                 
+                VImage image;
+                return image;
             } while(false);
             fin.close();
         }
@@ -25,7 +29,7 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     void VJPEGImageTest()
     {
-        //VImage image = VJPEGImage::ReadFromFile("./Test/Data/lenna.jpg");
+        VImage image = VJPEGImage::ReadFromFile("./Test/Data/lenna.jpg");
         
     }
 }
