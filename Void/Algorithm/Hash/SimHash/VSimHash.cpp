@@ -39,7 +39,7 @@ namespace Void
         }
         for (auto feature : features)
         {
-            uint64_t featureHash = (uint64_t)VJenkinsHash::OneAtATimeHash(feature.first.c_str(), feature.first.size());
+            uint64_t featureHash = (uint64_t)VJenkinsHash::OneAtATimeHash(feature.first.c_str(), feature.first.size()); // Todo: hash function
             for (int i = 0; i < 64; ++i)
             {
                 sums[i] += featureHash & masks[i] ? feature.second : -feature.second;
