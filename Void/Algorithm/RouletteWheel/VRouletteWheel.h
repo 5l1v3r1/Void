@@ -15,27 +15,27 @@ namespace Void
     // Todo: size
     //----------------------------------------------------------------------------------------------------
     template <typename _T>
-    class VRouletteWheel : protected VRedBlackTree<_T>
+    class VRouletteWheel : protected VRedBlackTree<float, _T>
     {
     protected:
         // Section
         // Key: range
         //----------------------------------------------------------------------------------------------------
-        struct Section : public VRedBlackTree<_T>::Node
+        struct Section : public VRedBlackTree<float, _T>::Node
         {
         public:
             //----------------------------------------------------------------------------------------------------
             inline Section(float _range, const _T& _data)
                 :
-                VRedBlackTree<_T>::Node(_range, _data),
+                VRedBlackTree<float, _T>::Node(_range, _data),
                 totalRange(_range)
             {
             }
             
             //----------------------------------------------------------------------------------------------------
-            inline virtual bool AssignData(typename VRedBlackTree<_T>::Node* _node)
+            inline virtual bool AssignData(typename VRedBlackTree<float, _T>::Node* _node)
             {
-                if (VRedBlackTree<_T>::Node::AssignData(_node))
+                if (VRedBlackTree<float, _T>::Node::AssignData(_node))
                 {
                     Calculate();
                 }
@@ -56,7 +56,7 @@ namespace Void
             }
             
             //----------------------------------------------------------------------------------------------------
-            inline virtual void HandleInsert(typename VRedBlackTree<_T>::Node* _node)
+            inline virtual void HandleInsert(typename VRedBlackTree<float, _T>::Node* _node)
             {
                 if (_node)
                 {
@@ -81,55 +81,55 @@ namespace Void
         }
         
         //----------------------------------------------------------------------------------------------------
-        inline typename VRedBlackTree<_T>::NodeIterator begin()
+        inline typename VRedBlackTree<float, _T>::NodeIterator begin()
         {
-            return VRedBlackTree<_T>::begin();
+            return VRedBlackTree<float, _T>::begin();
         }
         
         //----------------------------------------------------------------------------------------------------
-        inline typename VRedBlackTree<_T>::NodeIterator end()
+        inline typename VRedBlackTree<float, _T>::NodeIterator end()
         {
-            return VRedBlackTree<_T>::end();
+            return VRedBlackTree<float, _T>::end();
         }
         
         //----------------------------------------------------------------------------------------------------
         inline _T& Front()
         {
-            return VRedBlackTree<_T>::Front();
+            return VRedBlackTree<float, _T>::Front();
         }
         
         //----------------------------------------------------------------------------------------------------
         inline _T& Back()
         {
-            return VRedBlackTree<_T>::Back();
+            return VRedBlackTree<float, _T>::Back();
         }
         
         //----------------------------------------------------------------------------------------------------
         inline void PopFront()
         {
-            return VRedBlackTree<_T>::PopFront();
+            return VRedBlackTree<float, _T>::PopFront();
         }
         
         //----------------------------------------------------------------------------------------------------
         inline unsigned int Size()
         {
-            return VRedBlackTree<_T>::Size();
+            return VRedBlackTree<float, _T>::Size();
         }
         
         //----------------------------------------------------------------------------------------------------
         inline void Insert(float _range, const _T& _data)
         {
-            VRedBlackTree<_T>::Insert(CreateNode(_range, _data));
+            VRedBlackTree<float, _T>::Insert(CreateNode(_range, _data));
         }
         
         //----------------------------------------------------------------------------------------------------
         inline bool Delete(float _range, const _T& _data)
         {
             Section section(_range, _data);
-            typename VRedBlackTree<_T>::Node *target = VRedBlackTree<_T>::FindNode(this->m_root, &section);
+            typename VRedBlackTree<float, _T>::Node *target = VRedBlackTree<float, _T>::FindNode(this->m_root, &section);
             if (target)
             {
-                VRedBlackTree<_T>::Delete(target);
+                VRedBlackTree<float, _T>::Delete(target);
                 return true;
             }
             return false;
@@ -162,13 +162,13 @@ namespace Void
         
     protected:
         //----------------------------------------------------------------------------------------------------
-        inline virtual typename VRedBlackTree<_T>::Node* CreateNode(float _range, const _T& _data)
+        inline virtual typename VRedBlackTree<float, _T>::Node* CreateNode(float _range, const _T& _data)
         {
             return new Section(_range, _data);
         }
         
         //----------------------------------------------------------------------------------------------------
-        inline bool Select(typename VRedBlackTree<_T>::Node* _node, float _pos, _T& _result)
+        inline bool Select(typename VRedBlackTree<float, _T>::Node* _node, float _pos, _T& _result)
         {
             if (_node)
             {

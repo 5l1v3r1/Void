@@ -9,7 +9,7 @@ namespace Void
 {
     // VRedBlackTree
     //----------------------------------------------------------------------------------------------------
-    template <typename _T>
+    template <typename _K, typename _T>
     class VRedBlackTree
     {
     protected:
@@ -27,7 +27,7 @@ namespace Void
         {
         public:
             //----------------------------------------------------------------------------------------------------
-            inline Node(float _key, const _T& _data)
+            inline Node(_K _key, const _T& _data)
                 :
                 parent(nullptr),
                 left(nullptr),
@@ -92,7 +92,7 @@ namespace Void
             Node *left;
             Node *right;
             NodeColor color;
-            float key;
+            _K key;
             _T data;
         };
         
@@ -205,7 +205,7 @@ namespace Void
         }
         
         //----------------------------------------------------------------------------------------------------
-        inline _T* Find(float _key)
+        inline _T* Find(_K _key)
         {
             Node index = Node(_key, _T());
             Node *target = FindNode(m_root, &index, true);
@@ -217,13 +217,13 @@ namespace Void
         }
         
         //----------------------------------------------------------------------------------------------------
-        inline void Insert(float _key, const _T& _data)
+        inline void Insert(_K _key, const _T& _data)
         {
             Insert(CreateNode(_key, _data));
         }
         
         //----------------------------------------------------------------------------------------------------
-        inline bool Delete(float _key, const _T& _data)
+        inline bool Delete(_K _key, const _T& _data)
         {
             Node index = Node(_key, _data);
             Node *target = FindNode(m_root, &index);
@@ -244,7 +244,7 @@ namespace Void
         
     protected:
         //----------------------------------------------------------------------------------------------------
-        inline virtual Node* CreateNode(float _key, const _T& _data)
+        inline virtual Node* CreateNode(_K _key, const _T& _data)
         {
             return new Node(_key, _data);
         }
@@ -605,8 +605,9 @@ namespace Void
             return nullptr;
         }
         
+        // isKeyOnly: only compare key
         //----------------------------------------------------------------------------------------------------
-        inline Node* FindNode(Node* _node, Node* _refer, bool isKeyOnly=false) // Index by key
+        inline Node* FindNode(Node* _node, Node* _refer, bool isKeyOnly=false)
         {
             if (_node && _refer)
             {
