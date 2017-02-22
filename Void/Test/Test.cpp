@@ -4,11 +4,14 @@
 //----------------------------------------------------------------------------------------------------
 int main(int _argc, char** _argv)
 {
-    VWindowTest();
+    //VWindowTest();
 	VStableMatchingTest();
     VRedBlackTreeTest();
     VRouletteWheelTest();
+    VHuffmanTreeTest();
     //VGeneticAlgorithmTest();
+    VMinHeapTest();
+    VMaxHeapTest();
     VJenkinsHashTest();
     VSimHashTest();
     VImageTest();
