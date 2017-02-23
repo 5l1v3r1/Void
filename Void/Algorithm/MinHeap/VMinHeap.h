@@ -114,7 +114,7 @@ namespace Void
         }
         
         //----------------------------------------------------------------------------------------------------
-        inline unsigned int Size()
+        inline unsigned long Size()
         {
             return m_heap.size() - 1;
         }
