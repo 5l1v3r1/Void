@@ -125,7 +125,6 @@ namespace Void
             Insert(CreateNode(_key, _data));
         }
         
-        
     protected:
         //----------------------------------------------------------------------------------------------------
         inline virtual Node* CreateNode(_K _key, const _T& _data)
@@ -161,6 +160,10 @@ namespace Void
             delete m_heap[_index];
             m_heap[_index] = m_heap[m_heap.size() - 1];
             m_heap.pop_back();
+            if (_index == m_heap.size())
+            {
+                return;
+            }
             while ((_index << 1) < m_heap.size())
             {
                 int newIndex = _index;
