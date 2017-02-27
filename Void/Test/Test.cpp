@@ -12,6 +12,7 @@ int main(int _argc, char** _argv)
     //VGeneticAlgorithmTest();
     VMinHeapTest();
     VMaxHeapTest();
+    VMinMaxHeapTest();
     VJenkinsHashTest();
     VSimHashTest();
     VImageTest();
