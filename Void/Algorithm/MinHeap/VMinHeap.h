@@ -132,57 +132,70 @@ namespace Void
             return new Node(_key, _data);
         }
         
-        // Bubble up
         //----------------------------------------------------------------------------------------------------
         inline void Insert(Node *_node)
         {
             m_heap.push_back(_node);
             unsigned long position = m_heap.size() - 1;
-            while(1 < position && m_heap[position]->IsKeyLess(m_heap[position / 2]))
+            BubbleUp(position);
+        }
+        
+        //----------------------------------------------------------------------------------------------------
+        inline void Delete(unsigned long _position)
+        {
+            if (_position <= 0 || m_heap.size() <= _position)
             {
-                //m_heap[position]->HandleBubbleUp(m_heap[position / 2]);
-                Node* tmp = m_heap[position];
-                m_heap[position] = m_heap[position / 2];
-                m_heap[position / 2] = tmp;
-                position = position / 2;
+                return;
+            }
+            
+            delete m_heap[_position];
+            m_heap[_position] = m_heap[m_heap.size() - 1];
+            m_heap.pop_back();
+            if (_position == m_heap.size())
+            {
+                return;
+            }
+            BubbleUp(_position);
+            SinkDown(_position);
+        }
+        
+        // Bubble up
+        //----------------------------------------------------------------------------------------------------
+        inline void BubbleUp(unsigned long _position)
+        {
+            while(1 < _position && m_heap[_position]->IsKeyLess(m_heap[_position / 2]))
+            {
+                //m_heap[_position]->HandleBubbleUp(m_heap[_position / 2]);
+                Node* tmp = m_heap[_position];
+                m_heap[_position] = m_heap[_position / 2];
+                m_heap[_position / 2] = tmp;
+                _position = _position / 2;
             }
         }
         
         // Sink down
         //----------------------------------------------------------------------------------------------------
-        inline void Delete(int _index)
+        inline void SinkDown(unsigned long _position)
         {
-            if (_index <= 0 || m_heap.size() <= _index)
+            while ((_position << 1) < m_heap.size())
             {
-                return;
-            }
-            
-            delete m_heap[_index];
-            m_heap[_index] = m_heap[m_heap.size() - 1];
-            m_heap.pop_back();
-            if (_index == m_heap.size())
-            {
-                return;
-            }
-            while ((_index << 1) < m_heap.size())
-            {
-                int newIndex = _index;
-                if (m_heap[_index << 1]->IsKeyLess(m_heap[_index]))
+                unsigned long newPosition = _position;
+                if (m_heap[_position << 1]->IsKeyLess(m_heap[_position]))
                 {
-                    newIndex = _index << 1;
+                    newPosition = _position << 1;
                 }
-                if ((_index << 1) + 1 < m_heap.size() && m_heap[(_index << 1) + 1]->IsKeyLess(m_heap[newIndex]))
+                if ((_position << 1) + 1 < m_heap.size() && m_heap[(_position << 1) + 1]->IsKeyLess(m_heap[newPosition]))
                 {
-                    newIndex = (_index << 1) + 1;
+                    newPosition = (_position << 1) + 1;
                 }
                 
-                if (newIndex != _index)
+                if (newPosition != _position)
                 {
-                    //m_heap[_index]->HandleSinkDown(m_heap[newIndex]);
-                    Node* tmp = m_heap[_index];
-                    m_heap[_index] = m_heap[newIndex];
-                    m_heap[newIndex] = tmp;
-                    _index = newIndex;
+                    //m_heap[_position]->HandleSinkDown(m_heap[newPosition]);
+                    Node* tmp = m_heap[_position];
+                    m_heap[_position] = m_heap[newPosition];
+                    m_heap[newPosition] = tmp;
+                    _position = newPosition;
                 }
                 else
                 {

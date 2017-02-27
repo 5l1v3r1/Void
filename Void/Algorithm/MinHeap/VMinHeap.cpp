@@ -17,6 +17,7 @@ namespace Void
         heap.Insert(5, '0');
         heap.Insert(1, '0');
         heap.PopFront();
+        heap.PopFront();
         
         return;
     }
