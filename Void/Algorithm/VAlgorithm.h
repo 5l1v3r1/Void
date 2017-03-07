@@ -12,5 +12,6 @@
 #include "MinMaxHeap/VMinMaxHeap.h"
 #include "HuffmanTree/VHuffmanTree.h"
 #include "Hash/VHash.h"
+#include "ViterbiAlgorithm/VViterbiAlgorithm.h"
 
 #endif

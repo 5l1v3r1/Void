@@ -22,6 +22,7 @@ int main(int _argc, char** _argv)
     VMatrixTest();
     VVectorVMatrixTest();
     VStringTest();
+    VViterbiAlgorithmTest();
     
 	return 0;
 }
