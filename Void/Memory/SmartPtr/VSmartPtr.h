@@ -1,6 +1,7 @@
 #pragma once
 #ifndef _V_SMARTPTR_H_
 #define _V_SMARTPTR_H_
+
 #include "../../VDefine.h"
 #ifdef _VOID_ENABLE_DEBUG_
 #include "../../Utility/Logger/VLogger.h"
