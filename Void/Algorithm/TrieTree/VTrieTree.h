@@ -35,11 +35,7 @@ namespace Void
             }
             
             //----------------------------------------------------------------------------------------------------
-            inline Node(const Node& _node)
-                :
-                prefix(_node.prefix),
-                isWhole(_node.isWhole),
-                children(_node.children)
+            inline virtual ~Node()
             {
             }
             
@@ -47,20 +43,14 @@ namespace Void
             //----------------------------------------------------------------------------------------------------
             _T prefix;
             bool isWhole;
-            std::map<typename _T::value_type, Node> children;
+            std::map<typename _T::value_type, Node*> children;
         };
         
     public:
         //----------------------------------------------------------------------------------------------------
         inline VTrieTree()
-        {
-            
-        }
-        
-        //----------------------------------------------------------------------------------------------------
-        inline VTrieTree(const VTrieTree& _trie)
             :
-            m_root(_trie)
+            m_root(CreateNode(_T()))
         {
             
         }
@@ -68,13 +58,15 @@ namespace Void
         //----------------------------------------------------------------------------------------------------
         inline virtual ~VTrieTree()
         {
+            Delete(m_root);
             
+            return;
         }
         
         //----------------------------------------------------------------------------------------------------
         void Insert(const _T& _collection)
         {
-            Node* node = &m_root;
+            Node* node = m_root;
             for(auto& element : _collection)
             {
                 auto it = node->children.find(element);
@@ -82,9 +74,9 @@ namespace Void
                 {
                     auto prefix = node->prefix;
                     std::back_inserter(prefix) = element;
-                    node->children[element] = Node(prefix);
+                    node->children[element] = CreateNode(prefix);
                 }
-                node = &(node->children[element]);
+                node = node->children[element];
             }
             node->isWhole = true;
         }
@@ -92,7 +84,7 @@ namespace Void
         //----------------------------------------------------------------------------------------------------
         bool Has(const _T& _collection)
         {
-            Node* node = &m_root;
+            Node* node = m_root;
             for(auto& element : _collection)
             {
                 auto it = node->children.find(element);
@@ -100,7 +92,7 @@ namespace Void
                 {
                     return false;
                 }
-                node = &(node->children[element]);
+                node = node->children[element];
             }
             if (node->isWhole)
             {
@@ -112,7 +104,7 @@ namespace Void
         //----------------------------------------------------------------------------------------------------
         std::vector<const _T*> AutoComplete(const _T& _prefix)
         {
-            Node* node = &m_root;
+            Node* node = m_root;
             for(auto& element : _prefix)
             {
                 auto it = node->children.find(element);
@@ -120,7 +112,7 @@ namespace Void
                 {
                     return std::vector<const _T*>();
                 }
-               node = &(node->children[element]);
+               node = node->children[element];
             }
             std::vector<const _T*> result;
             List(result, node);
@@ -131,7 +123,7 @@ namespace Void
         std::vector<const _T*> List()
         {
             std::vector<const _T*> result;
-            List(result, &m_root);
+            List(result, m_root);
             return result;
         }
         
@@ -143,6 +135,30 @@ namespace Void
         
     protected:
         //----------------------------------------------------------------------------------------------------
+        inline virtual Node* CreateNode(const _T& _prefix, bool _isWhole=false)
+        {
+            return new Node(_prefix, _isWhole);
+        }
+        
+        //----------------------------------------------------------------------------------------------------
+        inline void Delete(Node*& _node)
+        {
+            if (_node)
+            {
+                // Delete children
+                for(auto& pair : _node->children)
+                {
+                    Delete(pair.second);
+                }
+                _node->children.clear();
+                
+                // Delete self
+                delete _node;
+                _node = nullptr;
+            }
+        }
+        
+        //----------------------------------------------------------------------------------------------------
         void List(std::vector<const _T*>& _result, Node* _node)
         {
             if (_node)
@@ -151,16 +167,16 @@ namespace Void
                 {
                     _result.push_back(&_node->prefix);
                 }
-                for(auto& it : _node->children)
+                for(auto& pair : _node->children)
                 {
-                    List(_result, &it.second);
+                    List(_result, pair.second);
                 }
             }
         }
         
     protected:
         //----------------------------------------------------------------------------------------------------
-        Node m_root;
+        Node* m_root;
     };
     
     // Test
