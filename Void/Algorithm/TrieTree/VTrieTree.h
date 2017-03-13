@@ -50,9 +50,8 @@ namespace Void
         //----------------------------------------------------------------------------------------------------
         inline VTrieTree()
             :
-            m_root(CreateNode(_T()))
+            m_root(nullptr)
         {
-            
         }
         
         //----------------------------------------------------------------------------------------------------
@@ -66,6 +65,10 @@ namespace Void
         //----------------------------------------------------------------------------------------------------
         void Insert(const _T& _collection)
         {
+            if (!m_root)
+            {
+                m_root = CreateNode(_T());
+            }
             Node* node = m_root;
             for(auto& element : _collection)
             {
@@ -79,24 +82,28 @@ namespace Void
                 node = node->children[element];
             }
             node->isWhole = true;
+            AfterInserted(node);
         }
         
         //----------------------------------------------------------------------------------------------------
         bool Has(const _T& _collection)
         {
-            Node* node = m_root;
-            for(auto& element : _collection)
+            if (m_root)
             {
-                auto it = node->children.find(element);
-                if(it == node->children.end())
+                Node *node = m_root;
+                for(auto& element : _collection)
                 {
-                    return false;
+                    auto it = node->children.find(element);
+                    if(it == node->children.end())
+                    {
+                        return false;
+                    }
+                    node = it->second;
                 }
-                node = node->children[element];
-            }
-            if (node->isWhole)
-            {
-                return true;
+                if (node->isWhole)
+                {
+                    return true;
+                }
             }
             return false;
         }
@@ -104,19 +111,23 @@ namespace Void
         //----------------------------------------------------------------------------------------------------
         std::vector<const _T*> AutoComplete(const _T& _prefix)
         {
-            Node* node = m_root;
-            for(auto& element : _prefix)
+            if (m_root)
             {
-                auto it = node->children.find(element);
-                if(it == node->children.end())
+                Node *node = m_root;
+                for(auto& element : _prefix)
                 {
-                    return std::vector<const _T*>();
+                    auto it = node->children.find(element);
+                    if(it == node->children.end())
+                    {
+                        return std::vector<const _T*>();
+                    }
+                    node = it->second;
                 }
-               node = node->children[element];
+                std::vector<const _T*> result;
+                List(result, node);
+                return result;
             }
-            std::vector<const _T*> result;
-            List(result, node);
-            return result;
+            return std::vector<const _T*>();
         }
         
         //----------------------------------------------------------------------------------------------------
@@ -138,6 +149,11 @@ namespace Void
         inline virtual Node* CreateNode(const _T& _prefix, bool _isWhole=false)
         {
             return new Node(_prefix, _isWhole);
+        }
+        
+        //----------------------------------------------------------------------------------------------------
+        inline virtual void AfterInserted(Node* _node)
+        {
         }
         
         //----------------------------------------------------------------------------------------------------

@@ -6,6 +6,7 @@
 //----------------------------------------------------------------------------------------------------
 //#define _VOID_DISABLE_OPENGL_
 //#define _VOID_ENABLE_DEBUG_
+#define _VOID_ENABLE_MEMORYLEAKDETECTOR_
 
 
 #endif
