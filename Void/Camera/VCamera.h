@@ -29,7 +29,7 @@ namespace Void
     
     // VCamera
     //----------------------------------------------------------------------------------------------------
-    struct VCamera : protected VSmartPtr<VCameraData>
+    class VCamera : protected VSmartPtr<VCameraData>
     {
     public:
         //----------------------------------------------------------------------------------------------------
