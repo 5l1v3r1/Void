@@ -72,7 +72,9 @@ namespace Void
         if (!kFactors.empty())
         {
             _player.kFactor = kFactors[0];
-        } else {
+        }
+        else
+        {
             _player.kFactor = defaultKFactor;
         }
     }
