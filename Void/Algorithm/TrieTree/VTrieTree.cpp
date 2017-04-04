@@ -8,21 +8,34 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     void VTrieTreeTest()
     {
-        VTrieTree<std::string> trie;
-        trie.Insert("Hi");
-        trie.Insert("Hit");
-        trie.Insert("Hint");
-        trie.Insert("Hello");
-        trie.Insert("Hit");
-        trie.Insert("Heat");
+        VTrieTree<std::string> trie0;
+        trie0.Insert("Hi");
+        trie0.Insert("Hit");
+        trie0.Insert("Hint");
+        trie0.Insert("Hello");
+        trie0.Insert("Hit");
+        trie0.Insert("Heat");
         
-        auto result = trie.List();
-        result = trie.AutoComplete("Hi");
-        bool has = trie.Has("Hi");
-        has = trie.Has("Hi2");
-        has = trie.Has("Hint");
-        has = trie.Has("Heata");
-        has = trie.Has("Hea");
+        auto result = trie0.List();
+        result = trie0.List("Hi");
+        bool has = trie0.Has("Hi");
+        has = trie0.Has("Hi2");
+        has = trie0.Has("Hint");
+        has = trie0.Has("Heata");
+        has = trie0.Has("Hea");
+        
+        VTrieTree<std::vector<std::string>> trie1;
+        std::vector<std::string> greetings;
+        greetings.push_back("Hi");
+        greetings.push_back("Hello");
+        trie1.MultipleInsert(std::vector<std::string>(), greetings);
+        std::vector<std::string> names;
+        names.push_back("Mike");
+        names.push_back("Maria");
+        names.push_back("Maria");
+        names.push_back("Maria");
+        trie1.MultipleInsert(std::vector<std::string>(1, "Hi"), names);
+        auto list1 = trie1.List();
         
         return;
     }

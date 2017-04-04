@@ -22,6 +22,7 @@ namespace Void
             //----------------------------------------------------------------------------------------------------
             inline Node()
                 :
+                size(0),
                 isWhole(false)
             {
             }
@@ -29,6 +30,7 @@ namespace Void
             //----------------------------------------------------------------------------------------------------
             inline Node(const _T& _prefix, bool _isWhole=false)
                 :
+                size(0),
                 prefix(_prefix),
                 isWhole(_isWhole)
             {
@@ -39,9 +41,19 @@ namespace Void
             {
             }
             
+            //----------------------------------------------------------------------------------------------------
+            inline virtual void HandleInsert(Node* _node) // Dirction: ↑
+            {
+                if (_node)
+                {
+                    size += 1;
+                }
+            }
+            
         public:
             //----------------------------------------------------------------------------------------------------
-            _T prefix;
+            unsigned int size;
+            _T prefix; // Todo: optional
             bool isWhole;
             std::map<typename _T::value_type, Node*> children;
         };
@@ -65,12 +77,24 @@ namespace Void
         //----------------------------------------------------------------------------------------------------
         void Insert(const _T& _collection)
         {
-            if (!m_root)
+            std::vector<Node*> prefixNodes;
+            Node* node = FindOrCreate(_collection, true, &prefixNodes);
+            if (node->isWhole == false)
             {
-                m_root = CreateNode(_T());
+                AfterInserted(node);
+                for (auto& prefixNode : prefixNodes)
+                {
+                    prefixNode->HandleInsert(node);
+                }
             }
-            Node* node = m_root;
-            for(auto& element : _collection)
+        }
+        
+        //----------------------------------------------------------------------------------------------------
+        void MultipleInsert(const _T& _prefix, const std::vector<typename _T::value_type>& _elements)
+        {
+            std::vector<Node*> prefixNodes;
+            Node* node = FindOrCreate(_prefix, true, &prefixNodes);
+            for(auto& element : _elements)
             {
                 auto it = node->children.find(element);
                 if(it == node->children.end())
@@ -78,70 +102,49 @@ namespace Void
                     auto prefix = node->prefix;
                     std::back_inserter(prefix) = element;
                     node->children[element] = CreateNode(prefix);
+                    
+                    Node* newNode = node->children[element];
+                    AfterInserted(newNode);
+                    for (auto& prefixNode : prefixNodes)
+                    {
+                        prefixNode->HandleInsert(newNode);
+                    }
                 }
-                node = node->children[element];
             }
-            node->isWhole = true;
-            AfterInserted(node);
         }
         
         //----------------------------------------------------------------------------------------------------
         bool Has(const _T& _collection)
         {
-            if (m_root)
+            Node* node = FindOrCreate(_collection, false);
+            if (node && node->isWhole)
             {
-                Node *node = m_root;
-                for(auto& element : _collection)
-                {
-                    auto it = node->children.find(element);
-                    if(it == node->children.end())
-                    {
-                        return false;
-                    }
-                    node = it->second;
-                }
-                if (node->isWhole)
-                {
-                    return true;
-                }
+                return true;
             }
             return false;
         }
         
         //----------------------------------------------------------------------------------------------------
-        std::vector<const _T*> AutoComplete(const _T& _prefix)
+        std::vector<const _T*> List(const _T& _prefix=_T())
         {
-            if (m_root)
-            {
-                Node *node = m_root;
-                for(auto& element : _prefix)
-                {
-                    auto it = node->children.find(element);
-                    if(it == node->children.end())
-                    {
-                        return std::vector<const _T*>();
-                    }
-                    node = it->second;
-                }
-                std::vector<const _T*> result;
-                List(result, node);
-                return result;
-            }
-            return std::vector<const _T*>();
-        }
-        
-        //----------------------------------------------------------------------------------------------------
-        std::vector<const _T*> List()
-        {
+            Node* node = FindOrCreate(_prefix, false);
             std::vector<const _T*> result;
-            List(result, m_root);
+            if (node)
+            {
+                List(result, node);
+            }
             return result;
         }
         
         //----------------------------------------------------------------------------------------------------
-        unsigned long Size()
+        unsigned long Size(const _T& _prefix=_T())
         {
-            return List().size();
+            Node* node = FindOrCreate(_prefix, false);
+            if (node)
+            {
+                return m_root->size;
+            }
+            return 0;
         }
         
     protected:
@@ -154,6 +157,10 @@ namespace Void
         //----------------------------------------------------------------------------------------------------
         inline virtual void AfterInserted(Node* _node)
         {
+            if (_node)
+            {
+                _node->isWhole = true;
+            }
         }
         
         //----------------------------------------------------------------------------------------------------
@@ -183,11 +190,57 @@ namespace Void
                 {
                     _result.push_back(&_node->prefix);
                 }
-                for(auto& pair : _node->children)
+                for (auto& pair : _node->children)
                 {
                     List(_result, pair.second);
                 }
             }
+        }
+        
+        //----------------------------------------------------------------------------------------------------
+        Node* FindOrCreate(const _T& _prefix, bool _isCreating=false, std::vector<Node*>* _prefixNodes=nullptr)
+        {
+            if (!m_root)
+            {
+                if (_isCreating)
+                {
+                    m_root = CreateNode(_T());
+                }
+                else
+                {
+                    return nullptr;
+                }
+            }
+            
+            Node* node = m_root;
+            if (_prefixNodes)
+            {
+                _prefixNodes->push_back(node);
+            }
+            for(auto& element : _prefix)
+            {
+                auto it = node->children.find(element);
+                if(it == node->children.end())
+                {
+                    if (_isCreating)
+                    {
+                        auto prefix = node->prefix;
+                        std::back_inserter(prefix) = element;
+                        node->children[element] = CreateNode(prefix);
+                    }
+                    else
+                    {
+                        return nullptr;
+                    }
+                }
+                node = node->children[element];
+                if (_prefixNodes)
+                {
+                    _prefixNodes->push_back(node);
+                }
+            }
+            
+            return node;
         }
         
     protected:
