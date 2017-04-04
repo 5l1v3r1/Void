@@ -58,11 +58,17 @@ namespace Void
         return result;
     }
     
+    //----------------------------------------------------------------------------------------------------
+    std::string Replace(const std::string& _str, const std::regex& _pattern, const std::string& _new)
+    {
+        return std::regex_replace(_str, _pattern, _new);
+    }
+    
     // Test
     //----------------------------------------------------------------------------------------------------
     void VStringTest()
     {
-        std::string test(" 1234   5  6   ");
+        std::string test("  1234   5  6   ");
         Trim(test);
         auto result = Split(test, std::string(""));
         result = Match(test, std::regex("[\\w\u4e00-\u9fcc]+"));
