@@ -90,6 +90,28 @@ namespace Void
         }
         
         //----------------------------------------------------------------------------------------------------
+        void Insert(const _T& _prefix, const typename _T::value_type& _element)
+        {
+            std::vector<Node*> prefixNodes;
+            Node* node = FindOrCreate(_prefix, true, &prefixNodes);
+            
+            auto it = node->children.find(_element);
+            if(it == node->children.end())
+            {
+                auto prefix = node->prefix;
+                std::back_inserter(prefix) = _element;
+                node->children[_element] = CreateNode(prefix);
+                
+                Node* newNode = node->children[_element];
+                AfterInserted(newNode);
+                for (auto& prefixNode : prefixNodes)
+                {
+                    prefixNode->HandleInsert(newNode);
+                }
+            }
+        }
+        
+        //----------------------------------------------------------------------------------------------------
         void MultipleInsert(const _T& _prefix, const std::vector<typename _T::value_type>& _elements)
         {
             std::vector<Node*> prefixNodes;
@@ -163,6 +185,7 @@ namespace Void
             }
         }
         
+        // Todo: decrease size
         //----------------------------------------------------------------------------------------------------
         inline void Delete(Node*& _node)
         {

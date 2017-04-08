@@ -35,6 +35,7 @@ namespace Void
         names.push_back("Maria");
         names.push_back("Maria");
         trie1.MultipleInsert(std::vector<std::string>(1, "Hi"), names);
+        trie1.Insert(std::vector<std::string>(1, "Hi"), "Jack");
         auto list1 = trie1.List();
         
         return;
