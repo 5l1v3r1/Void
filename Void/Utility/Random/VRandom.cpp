@@ -1,4 +1,5 @@
 #include "VRandom.h"
+#include <map>
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
@@ -30,6 +31,45 @@ namespace Void
         return distribution(mEngine);
     }
     
+    //----------------------------------------------------------------------------------------------------
+    std::vector<int> VRandom::MultipleRand(unsigned long _count, int _min, int _max)
+    {
+        std::vector<int> result;
+        result.reserve(_count);
+        std::uniform_int_distribution<int> distribution(_min, _max);
+        for (unsigned long i = 0; i < _count; ++i)
+        {
+            result.push_back(distribution(mEngine));
+        }
+        return result;
+    }
+    
+    // Optimize: 1 / 2 reverse
+    //----------------------------------------------------------------------------------------------------
+    std::vector<int> VRandom::MultipleUniqueRand(unsigned int _count, int _min, int _max)
+    {
+        if (_max - _min + 1 < _count)
+        {
+            _count = _max - _min + 1;
+        }
+        
+        std::vector<int> result;
+        result.reserve(_count);
+        std::map<int, int> replaceTable;
+        for (unsigned int i = 0; i < _count; ++i)
+        {
+            std::uniform_int_distribution<int> distribution(_min, _max - i);
+            int rand = distribution(mEngine);
+            // find real rand
+            std::map<int, int>::iterator it = replaceTable.find(rand);
+            it == replaceTable.end() ? result.push_back(rand) : result.push_back(it->second);
+            // replace rand
+            it = replaceTable.find(_max - i);
+            it == replaceTable.end() ? replaceTable[rand] = _max - i : replaceTable[rand] = it->second;
+        }
+        return result;
+    }
+    
     // Test
     //----------------------------------------------------------------------------------------------------
     void VRandomTest()
@@ -42,11 +82,14 @@ namespace Void
         result = random1.Rand(5, 10);
         
         VRandom random2;
-        result = random2.Rand(5, 10);
-        result = random2.Rand(5, 10);
-        result = random2.Rand(5, 10);
-        result = random2.Rand(5, 10);
-        result = random2.Rand(5, 10);
+        result = random2.Rand(5, 5);
+        result = random2.Rand(5, 6);
+        result = random2.Rand(5, 7);
+        result = random2.Rand(5, 8);
+        result = random2.Rand(5, 100);
+        auto mutipleResult = random2.MultipleRand(100, 5, 100);
+        mutipleResult = random2.MultipleUniqueRand(10, 5, 10);
+        mutipleResult = random2.MultipleUniqueRand(10, 5, 50);
         
         return;
     }
