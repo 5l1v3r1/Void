@@ -6,5 +6,8 @@
 #include "Logger/VLogger.h"
 #include "OpenGL/VOpenGL.h"
 #include "String/VString.h"
+#include "Time/VTime.h"
+#include "Timer/VTimer.h"
+#include "Random/VRandom.h"
 
 #endif
