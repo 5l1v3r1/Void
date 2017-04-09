@@ -25,7 +25,7 @@ namespace Void
         
     protected:
         //----------------------------------------------------------------------------------------------------
-        bool LoadFromFile(const std::string& _fileName="./NaturalLanguageProcessing/Corpus/CorpusGameSkill/GameSkill.vd");
+        bool LoadFromFile(const std::string& _fileName="./NaturalLanguageProcessing/Corpus/CorpusGameSkill/VGameSkill.vd");
         
     protected:
         //----------------------------------------------------------------------------------------------------
