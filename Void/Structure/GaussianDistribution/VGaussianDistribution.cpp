@@ -12,7 +12,19 @@ namespace Void
     }
     
     //----------------------------------------------------------------------------------------------------
+    VGaussianDistribution::VGaussianDistribution(float _mean, float _standardDeviation)
+        :
+        mean(_mean),
+        standardDeviation(_standardDeviation)
+    {
+        
+    }
+    
+    //----------------------------------------------------------------------------------------------------
     VGaussianDistribution::VGaussianDistribution(const VGaussianDistribution& _distribution)
+        :
+        mean(_distribution.mean),
+        standardDeviation(_distribution.standardDeviation)
     {
     }
     

@@ -17,6 +17,7 @@ namespace Void
     public:
         //----------------------------------------------------------------------------------------------------
         VGaussianDistribution();
+        VGaussianDistribution(float _mean, float _standardDeviation);
         VGaussianDistribution(const VGaussianDistribution& _distribution);
         ~VGaussianDistribution();
         
