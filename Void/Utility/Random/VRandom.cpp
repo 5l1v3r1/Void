@@ -70,6 +70,19 @@ namespace Void
         return result;
     }
     
+    //----------------------------------------------------------------------------------------------------
+    std::vector<float> VRandom::NormalMultipleRand(unsigned long _count, float _mean, float _stddev)
+    {
+        std::vector<float> result;
+        result.reserve(_count);
+        std::normal_distribution<float> distribution(_mean, _stddev);
+        for (unsigned long i = 0; i < _count; ++i)
+        {
+            result.push_back(distribution(mEngine));
+        }
+        return result;
+    }
+    
     // Test
     //----------------------------------------------------------------------------------------------------
     void VRandomTest()
@@ -90,6 +103,7 @@ namespace Void
         auto mutipleResult = random2.MultipleRand(100, 5, 100);
         mutipleResult = random2.MultipleUniqueRand(10, 5, 10);
         mutipleResult = random2.MultipleUniqueRand(10, 5, 50);
+        auto mutipleNormalResult = random2.NormalMultipleRand(20, 0, 1);
         
         return;
     }

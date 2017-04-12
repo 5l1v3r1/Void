@@ -29,7 +29,7 @@ namespace Void
     public:
         //----------------------------------------------------------------------------------------------------
         float mean;
-        float standardDeviation; // square root of variance
+        float standardDeviation; // square root of variance, sigma
     };
     
     // Test
