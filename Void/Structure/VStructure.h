@@ -8,6 +8,7 @@
 #include "Quaternion/VQuaternion.h"
 #include "Any/VAny.h"
 #include "GaussianDistribution/VGaussianDistribution.h"
+#include "BinomialDistribution/VBinomialDistribution.h"
 
 //----------------------------------------------------------------------------------------------------
 #include "Vector+Matrix/VVector+VMatrix.h"
