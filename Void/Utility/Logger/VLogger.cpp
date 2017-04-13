@@ -1,12 +1,6 @@
 #include "VLogger.h"
+#include "../Time/VTime.h"
 #include <stdio.h>
-#include <time.h>
-#if defined(WIN32) || defined(WIN64) || defined(_WIN32_WCE)
-#include <windows.h>
-#else
-#include <errno.h>
-#endif
-
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
@@ -21,15 +15,8 @@ namespace Void
         if (s_isEnabled)
         {
             // time
-            time_t currentTime;
-            struct tm currentTm;
-            time(&currentTime);
-            #if defined(WIN32) || defined(WIN64) || defined(_WIN32_WCE)
-            localtime_s(&currentTm, &currentTime);
-            #else
-            localtime_r(&currentTime, &currentTm);
-            #endif
-            printf("[%d-%d-%d %d:%d:%d %s] ", currentTm.tm_year + 1900, currentTm.tm_mon + 1, currentTm.tm_mday, currentTm.tm_hour, currentTm.tm_min, currentTm.tm_sec, _tag);
+            VTime time = VTime::Now();
+            printf("[%s %s] ", time.String().c_str(), _tag);
             
             // va
             vprintf(_fmt, _vp);
