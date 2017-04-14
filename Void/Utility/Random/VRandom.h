@@ -20,8 +20,10 @@ namespace Void
         
         //----------------------------------------------------------------------------------------------------
         int Rand(int _min, int _max);
+        float Rand(float _min, float _max);
         std::vector<int> MultipleRand(unsigned long _count, int _min, int _max);
         std::vector<int> MultipleUniqueRand(unsigned int _count, int _min, int _max);
+        std::vector<float> MultipleRand(unsigned long _count, float _min, float _max);
         std::vector<float> NormalMultipleRand(unsigned long _count, float _mean, float _stddev);
         
     protected:
