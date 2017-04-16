@@ -148,6 +148,26 @@ namespace Void
             return result;
         }
         
+        inline VVector& operator+=(const VVector& _vector)
+        {
+            VVector result;
+            for (size_t i = 0; i < _S; ++i)
+            {
+                this->vector[i] += _vector[i];
+            }
+            return *this;
+        }
+        
+        inline VVector operator+(const _T& _t) const
+        {
+            VVector result;
+            for (size_t i = 0; i < _S; ++i)
+            {
+                result[i] = this->vector[i] + _t;
+            }
+            return result;
+        }
+        
         inline VVector operator-(const VVector& _vector) const
         {
             VVector result;
