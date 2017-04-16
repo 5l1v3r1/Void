@@ -7,6 +7,7 @@
 #include "Matrix/VMatrix.h"
 #include "Quaternion/VQuaternion.h"
 #include "Any/VAny.h"
+#include "DualNumber/VDualNumber.h"
 #include "GaussianDistribution/VGaussianDistribution.h"
 #include "BinomialDistribution/VBinomialDistribution.h"
 
