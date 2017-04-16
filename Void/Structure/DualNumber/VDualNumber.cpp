@@ -1,5 +1,5 @@
 #include "VDualNumber.h"
-#include "math.h"
+#include "cmath"
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
@@ -117,25 +117,25 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     VDualNumber VDualNumber::Sin()
     {
-        return VDualNumber(::sin(this->real), this->dual * ::cos(this->real));
+        return VDualNumber(std::sin(this->real), this->dual * std::cos(this->real));
     }
     
     //----------------------------------------------------------------------------------------------------
     VDualNumber VDualNumber::Cos()
     {
-        return VDualNumber(::cos(this->real), -this->dual * ::sin(this->real));
+        return VDualNumber(std::cos(this->real), -this->dual * std::sin(this->real));
     }
     
     //----------------------------------------------------------------------------------------------------
     VDualNumber VDualNumber::Pow(double _n)
     {
-        return VDualNumber(::pow(this->real, _n), this->dual * _n * ::pow(this->real, _n - 1));
+        return VDualNumber(std::pow(this->real, _n), this->dual * _n * std::pow(this->real, _n - 1));
     }
     
     //----------------------------------------------------------------------------------------------------
     VDualNumber VDualNumber::Exp()
     {
-        return VDualNumber(::exp(this->real), this->dual * ::exp(this->real));
+        return VDualNumber(std::exp(this->real), this->dual * std::exp(this->real));
     }
     
     //----------------------------------------------------------------------------------------------------
@@ -145,7 +145,7 @@ namespace Void
         {
             return VDualNumber();
         }
-        return VDualNumber(::log(this->real), this->dual / this->real);
+        return VDualNumber(std::log(this->real), this->dual / this->real);
     }
 
     // Test
