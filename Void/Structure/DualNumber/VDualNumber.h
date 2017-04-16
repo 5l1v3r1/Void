@@ -23,13 +23,20 @@ namespace Void
         //----------------------------------------------------------------------------------------------------
         VDualNumber& operator=(const VDualNumber& _number);
         VDualNumber operator+(const VDualNumber& _number) const;
-        VDualNumber operator+=(const VDualNumber& _number);
+        VDualNumber& operator+=(const VDualNumber& _number);
         VDualNumber operator-(const VDualNumber& _number) const;
-        VDualNumber operator-=(const VDualNumber& _number);
+        VDualNumber& operator-=(const VDualNumber& _number);
         VDualNumber operator*(const VDualNumber& _number) const;
-        VDualNumber operator*=(const VDualNumber& _number);
+        VDualNumber& operator*=(const VDualNumber& _number);
         VDualNumber operator/(const VDualNumber& _number) const;
-        VDualNumber operator/=(const VDualNumber& _number);
+        VDualNumber& operator/=(const VDualNumber& _number);
+        
+        //----------------------------------------------------------------------------------------------------
+        VDualNumber Sin();
+        VDualNumber Cos();
+        VDualNumber Pow(double _n);
+        VDualNumber Exp();
+        VDualNumber Log();
         
     public:
         //----------------------------------------------------------------------------------------------------
