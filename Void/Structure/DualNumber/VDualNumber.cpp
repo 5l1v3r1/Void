@@ -65,6 +65,25 @@ namespace Void
     }
     
     //----------------------------------------------------------------------------------------------------
+    VDualNumber VDualNumber::operator+(double _scalar)
+    {
+        return VDualNumber(this->real + _scalar, this->dual);
+    }
+    
+    //----------------------------------------------------------------------------------------------------
+    VDualNumber& VDualNumber::operator+=(double _scalar)
+    {
+        this->real += _scalar;
+        return *this;
+    }
+    
+    //----------------------------------------------------------------------------------------------------
+    VDualNumber operator+(double _scalar, const VDualNumber& _number)
+    {
+        return VDualNumber(_scalar + _number.real, _number.dual);
+    }
+    
+    //----------------------------------------------------------------------------------------------------
     VDualNumber VDualNumber::operator-(const VDualNumber& _number) const
     {
         return VDualNumber(this->real - _number.real, this->dual - _number.dual);
@@ -76,6 +95,25 @@ namespace Void
         this->real -= _number.real;
         this->dual -= _number.dual;
         return *this;
+    }
+    
+    //----------------------------------------------------------------------------------------------------
+    VDualNumber VDualNumber::operator-(double _scalar)
+    {
+         return VDualNumber(this->real - _scalar, this->dual);
+    }
+    
+    //----------------------------------------------------------------------------------------------------
+    VDualNumber& VDualNumber::operator-=(double _scalar)
+    {
+        this->real -= _scalar;
+        return *this;
+    }
+    
+    //----------------------------------------------------------------------------------------------------
+    VDualNumber operator-(double _scalar, const VDualNumber& _number)
+    {
+        return VDualNumber(_scalar - _number.real, -_number.dual);
     }
     
     //----------------------------------------------------------------------------------------------------
@@ -93,13 +131,33 @@ namespace Void
     }
     
     //----------------------------------------------------------------------------------------------------
+    VDualNumber VDualNumber::operator*(double _scalar)
+    {
+        return VDualNumber(this->real * _scalar, this->dual * _scalar);
+    }
+    
+    //----------------------------------------------------------------------------------------------------
+    VDualNumber& VDualNumber::operator*=(double _scalar)
+    {
+        this->real *= _scalar;
+        this->dual *= _scalar;
+        return *this;
+    }
+    
+    //----------------------------------------------------------------------------------------------------
+    VDualNumber operator*(double _scalar, const VDualNumber& _number)
+    {
+        return VDualNumber(_number.real * _scalar, _number.dual * _scalar);
+    }
+    
+    //----------------------------------------------------------------------------------------------------
     VDualNumber VDualNumber::operator/(const VDualNumber& _number) const
     {
         if (_number.real == 0) // Error: |_number| = 0
         {
             return VDualNumber();
         }
-        return VDualNumber(this->real / _number.real, this->real * _number.dual + this->dual * _number.real);
+        return VDualNumber(this->real / _number.real, (this->dual - (this->real / _number.real) * _number.dual) / _number.real);
     }
     
     //----------------------------------------------------------------------------------------------------
@@ -112,6 +170,38 @@ namespace Void
         this->real /= _number.real;
         this->dual = (this->dual - (this->real / _number.real) * _number.dual) / _number.real;
         return *this;
+    }
+    
+    //----------------------------------------------------------------------------------------------------
+    VDualNumber VDualNumber::operator/(double _scalar)
+    {
+        if (_scalar == 0) // Error
+        {
+            return VDualNumber();
+        }
+        return VDualNumber(this->real / _scalar, this->dual / _scalar);
+    }
+    
+    //----------------------------------------------------------------------------------------------------
+    VDualNumber& VDualNumber::operator/=(double _scalar)
+    {
+        if (this->real == 0) // Error
+        {
+            return *this;
+        }
+        this->real /= _scalar;
+        this->dual /= _scalar;
+        return *this;
+    }
+    
+    //----------------------------------------------------------------------------------------------------
+    VDualNumber operator/(double _scalar, const VDualNumber& _number)
+    {
+        if (_number.real == 0) // Error
+        {
+            return VDualNumber();
+        }
+        return VDualNumber(_scalar / _number.real, -(_scalar / _number.real) * _number.dual / _number.real);
     }
     
     //----------------------------------------------------------------------------------------------------
