@@ -33,6 +33,9 @@
 #include "Algorithm/VAlgorithm.h"
 
 //----------------------------------------------------------------------------------------------------
+#include "NaturalLanguageProcessing/VNaturalLanguageProcessing.h"
+
+//----------------------------------------------------------------------------------------------------
 using namespace Void;
 
 #endif
