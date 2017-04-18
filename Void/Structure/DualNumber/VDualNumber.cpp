@@ -242,12 +242,26 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     void VDualNumberTest()
     {
-        VDualNumber number0(5, 1);
-        number0 *= number0;
-        number0 = number0.Log();
+        // y = 3x
+        VDualNumber var0(5, 1);
+        auto result = 3 * var0;
         
-        VDualNumber number1;
-        number1 = number1.Pow(2);
+        // y = (2x + 1)^2
+        var0 = VDualNumber(5, 1);
+        result = (2 * var0 + 1).Pow(2);
+        
+        // y = 2 / x
+        var0 = VDualNumber(5, 1);
+        result = 2 / var0;
+        
+        // z = 5 * x + y
+        var0 = VDualNumber(5, 1);
+        VDualNumber const0(5, 0);
+        result = 5 * var0 + const0;
+        
+        // y = (2x + 1)^2 / e^x
+        var0 = VDualNumber(5, 1);
+        result = (2 * var0 + 1).Pow(2) / var0.Exp();
         
         return;
     }
