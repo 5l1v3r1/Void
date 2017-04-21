@@ -108,6 +108,7 @@ namespace Void
     };
 
     // VMatrix
+    // Compile-time
     //----------------------------------------------------------------------------------------------------
     template<typename _T=float, size_t _N=4, size_t _M=4>
     struct VMatrix : public VMatrixNM<_T, _N, _M>

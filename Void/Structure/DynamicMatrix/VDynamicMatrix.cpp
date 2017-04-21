@@ -1,13 +1,14 @@
-#include "VCorpusPartOfSpeech.h"
+#include "VDynamicMatrix.h"
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
 {
     // Test
     //----------------------------------------------------------------------------------------------------
-    void VCorpusPartOfSpeechTest()
+    void VDynamicMatrixTest()
     {
+        VDynamicMatrix<double> matrix(5, 6);
         
+        return;
     }
-    
 }
