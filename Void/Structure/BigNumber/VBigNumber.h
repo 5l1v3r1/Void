@@ -20,19 +20,23 @@ namespace Void
         ~VBigNumber();
         
         //----------------------------------------------------------------------------------------------------
-        VBigNumber& operator=(const long long& _number);
+        VBigNumber& operator=(const long long& _integer);
         VBigNumber& operator=(const std::string& _number);
         VBigNumber& operator=(const VBigNumber& _number);
         VBigNumber operator+(const VBigNumber& _number) const;
         VBigNumber& operator+=(const VBigNumber& _number);
         VBigNumber operator+(long long _integer) const;
         VBigNumber& operator+=(long long _integer);
+        VBigNumber& operator++();
+        VBigNumber operator++(int);
         friend VBigNumber operator+(long long _integer, const VBigNumber& _number);
         VBigNumber operator-() const;
         VBigNumber operator-(const VBigNumber& _number) const;
         VBigNumber& operator-=(const VBigNumber& _number);
         VBigNumber operator-(long long _integer) const;
         VBigNumber& operator-=(long long _integer);
+        VBigNumber& operator--();
+        VBigNumber operator--(int);
         friend VBigNumber operator-(long long _integer, const VBigNumber& _number);
         VBigNumber operator*(const VBigNumber& _number) const;
         VBigNumber& operator*=(const VBigNumber& _number);
@@ -48,15 +52,19 @@ namespace Void
         //----------------------------------------------------------------------------------------------------
         bool operator==(const VBigNumber& _number) const;
         bool operator>(const VBigNumber& _number) const;
+        bool operator>=(const VBigNumber& _number) const;
         bool operator<(const VBigNumber& _number) const;
+        bool operator<=(const VBigNumber& _number) const;
         
         //----------------------------------------------------------------------------------------------------
         bool IsNegative() const;
         VBigNumber Absolute() const;
+        VBigNumber Shift(const long long int& _n) const;
         
     protected:
         //----------------------------------------------------------------------------------------------------
-        void Fix();
+        VBigNumber& Fix();
+        VBigNumber KaratsubaMultiply(const VBigNumber& _first, const VBigNumber& _second);
         
     protected:
         //----------------------------------------------------------------------------------------------------
