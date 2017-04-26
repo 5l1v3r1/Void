@@ -167,14 +167,14 @@ namespace Void
     void VConsoleTest()
     {
         VConsole console;
-        console.SetColor(VConsoleColor::RED);
+        // console.SetColor(VConsoleColor::RED);
         // console.SetBackgroundColor(VConsoleBackgroundColor::DARK_GREEN);
         // console.Clear();
         // console.Goto(1, 1);
         VLogger::Info("Console width: %u", console.Width());
         VLogger::Info("Console height: %u", console.Height());
-        console.SetColor();
-        console.SetBackgroundColor();
+        // console.SetColor();
+        // console.SetBackgroundColor();
         
         return;
     }
