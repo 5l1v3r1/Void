@@ -201,14 +201,26 @@ namespace Void
         //----------------------------------------------------------------------------------------------------
         VDynamicMatrix Copy() const
         {
-            unsigned long rows = this->Rows();
-            unsigned long columns =  this->Columns();
-            VDynamicMatrix matrix(rows, columns);
-            for (unsigned long row = 0; row < rows; ++row)
+            VDynamicMatrix matrix(mRows, mColumns);
+            for (unsigned long row = 0; row < mRows; ++row)
             {
-                for (unsigned long column = 0; column < columns; ++column)
+                for (unsigned long column = 0; column < mColumns; ++column)
                 {
                     matrix(row, column) = (*this)(row, column);
+                }
+            }
+            return matrix;
+        }
+        
+        //----------------------------------------------------------------------------------------------------
+        VDynamicMatrix Transpose() const
+        {
+            VDynamicMatrix matrix(mColumns, mRows);
+            for (unsigned long row = 0; row < mRows; ++row)
+            {
+                for (unsigned long column = 0; column < mColumns; ++column)
+                {
+                    matrix(column, row) = (*this)(row, column);
                 }
             }
             return matrix;
@@ -252,8 +264,26 @@ namespace Void
             return result;
         }
         
-    protected:
         //----------------------------------------------------------------------------------------------------
+        _T DotProduct(const VDynamicMatrix _matrix) const
+        {
+            _T result = static_cast<_T>(0);
+            if (mRows == _matrix.mRows && mColumns == _matrix.mColumns)
+            {
+                for (unsigned long row = 0; row < mRows; ++row)
+                {
+                    for (unsigned long column = 0; column < mColumns; ++column)
+                    {
+                        result += (*this)(row, column) * _matrix(row, column);
+                    }
+                }
+            }
+            else
+            {
+                // Error
+            }
+            return result;
+        }
         
     protected:
         //----------------------------------------------------------------------------------------------------
