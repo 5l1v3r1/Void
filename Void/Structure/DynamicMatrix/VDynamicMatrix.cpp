@@ -1,4 +1,5 @@
 #include "VDynamicMatrix.h"
+#include "../../Utility/Logger/VLogger.h"
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
@@ -11,12 +12,28 @@ namespace Void
         auto matrix1 = matrix0.SubMatrix(2, 2); // 4 * 4
         auto matrix2 = matrix1.SubMatrix(1, 1); // 3 * 3
         auto matrix3 = matrix2.Copy(); // 3 * 3
+        matrix3(1, 1) = 100;
         // matrix3(3, 3); // Throw
         
-        double values[] = {1, 2, 3, 4, 4, 4, 5, 5, 6};
+        double values[] = {1, 2.2, 333, 4, -5555, 6, 77.77, 88, 9999};
         VDynamicMatrix<double> matrix4(3, 3, values, 9); // 3 * 3
         double value = matrix4.Determinant();
+        VLogger::Info("Matrix \n%s", matrix4.String().c_str());
         value = matrix3.DotProduct(matrix4);
+        auto matrix5 = matrix4.Concatenate(matrix3); // 3 * 6
+        matrix5 = matrix4;
+        VLogger::Info("Matrix \n%s", matrix5.String().c_str());
+        matrix5.RowSwitch(1, 2);
+        VLogger::Info("Matrix \n%s", matrix5.String().c_str());
+        matrix5.RowMultiply(1, 0.5);
+        VLogger::Info("Matrix \n%s", matrix5.String().c_str());
+        matrix5.RowAdd(0, 1, 2);
+        VLogger::Info("Matrix \n%s", matrix5.String().c_str());
+        matrix5.LUDecomposition(matrix0, matrix1);
+        VLogger::Info("Matrix \n%s", matrix0.String().c_str());
+        VLogger::Info("Matrix \n%s", matrix1.String().c_str());
+        matrix5 = matrix0 * matrix1;
+        VLogger::Info("Matrix \n%s", matrix5.String().c_str());
         
         return;
     }
