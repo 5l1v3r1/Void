@@ -117,13 +117,13 @@ namespace Void
     }
     
     //----------------------------------------------------------------------------------------------------
-    VBigNumber VBigNumber::operator+(long long _integer) const
+    VBigNumber VBigNumber::operator+(const long long& _integer) const
     {
         return *this + VBigNumber(_integer);
     }
     
     //----------------------------------------------------------------------------------------------------
-    VBigNumber& VBigNumber::operator+=(long long _integer)
+    VBigNumber& VBigNumber::operator+=(const long long& _integer)
     {
         *this = *this + _integer;
         return *this;
@@ -145,7 +145,7 @@ namespace Void
     }
     
     //----------------------------------------------------------------------------------------------------
-    VBigNumber operator+(long long _integer, const VBigNumber& _number)
+    VBigNumber operator+(const long long& _integer, const VBigNumber& _number)
     {
         return VBigNumber(_integer) + _number;
     }
@@ -225,13 +225,13 @@ namespace Void
     }
     
     //----------------------------------------------------------------------------------------------------
-    VBigNumber VBigNumber::operator-(long long _integer) const
+    VBigNumber VBigNumber::operator-(const long long& _integer) const
     {
         return *this - VBigNumber(_integer);
     }
     
     //----------------------------------------------------------------------------------------------------
-    VBigNumber& VBigNumber::operator-=(long long _integer)
+    VBigNumber& VBigNumber::operator-=(const long long& _integer)
     {
         *this = *this - _integer;
         return *this;
@@ -253,7 +253,7 @@ namespace Void
     }
     
     //----------------------------------------------------------------------------------------------------
-    VBigNumber operator-(long long _integer, const VBigNumber& _number)
+    VBigNumber operator-(const long long& _integer, const VBigNumber& _number)
     {
         return VBigNumber(_integer) - _number;
     }
@@ -334,20 +334,20 @@ namespace Void
     }
     
     //----------------------------------------------------------------------------------------------------
-    VBigNumber VBigNumber::operator*(long long _integer) const
+    VBigNumber VBigNumber::operator*(const long long& _integer) const
     {
         return *this * VBigNumber(_integer);
     }
     
     //----------------------------------------------------------------------------------------------------
-    VBigNumber& VBigNumber::operator*=(long long _integer)
+    VBigNumber& VBigNumber::operator*=(const long long& _integer)
     {
         *this = *this * _integer;
         return *this;
     }
     
     //----------------------------------------------------------------------------------------------------
-    VBigNumber operator*(long long _integer, const VBigNumber& _number)
+    VBigNumber operator*(const long long& _integer, const VBigNumber& _number)
     {
         return VBigNumber(_integer) * _number;
     }
@@ -414,20 +414,20 @@ namespace Void
     }
     
     //----------------------------------------------------------------------------------------------------
-    VBigNumber VBigNumber::operator/(long long _integer) const
+    VBigNumber VBigNumber::operator/(const long long& _integer) const
     {
         return *this / VBigNumber(_integer);
     }
     
     //----------------------------------------------------------------------------------------------------
-    VBigNumber& VBigNumber::operator/=(long long _integer)
+    VBigNumber& VBigNumber::operator/=(const long long& _integer)
     {
         *this = *this / _integer;
         return *this;
     }
     
     //----------------------------------------------------------------------------------------------------
-    VBigNumber operator/(long long _integer, const VBigNumber& _number)
+    VBigNumber operator/(const long long& _integer, const VBigNumber& _number)
     {
         return VBigNumber(_integer) / _number;
     }
