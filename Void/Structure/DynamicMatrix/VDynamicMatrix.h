@@ -13,10 +13,24 @@ namespace Void
 {
     // VDynamicMatrix
     // Runtime
+    // Memo: float rounding
     //----------------------------------------------------------------------------------------------------
     template<typename _T=float>
     class VDynamicMatrix
     {
+    public:
+        //----------------------------------------------------------------------------------------------------
+        static VDynamicMatrix Identity(const unsigned long& _rows, const unsigned long& _columns)
+        {
+            VDynamicMatrix matrix(_rows, _columns);
+            unsigned long rank = _rows < _columns ? _rows : _columns;
+            for (unsigned long index = 0; index < rank; ++index)
+            {
+                matrix(index, index) = 1;
+            }
+            return matrix;
+        }
+
     public:
         //----------------------------------------------------------------------------------------------------
         inline VDynamicMatrix()
@@ -292,17 +306,106 @@ namespace Void
         }
         
         //----------------------------------------------------------------------------------------------------
-        VDynamicMatrix operator+(const VDynamicMatrix& _matrix) const;
-        VDynamicMatrix& operator+=(const VDynamicMatrix& _matrix);
-        VDynamicMatrix operator+(const _T& _scale) const;
-        VDynamicMatrix& operator+=(const _T& _scale);
-        friend VDynamicMatrix operator+(const _T& _scale, const VDynamicMatrix& _matrix);
-        VDynamicMatrix operator-() const;
-        VDynamicMatrix operator-(const VDynamicMatrix& _matrix) const;
-        VDynamicMatrix& operator-=(const VDynamicMatrix& _matrix);
-        VDynamicMatrix operator-(const _T& _scale) const;
-        VDynamicMatrix& operator-=(const _T& _scale);
-        friend VDynamicMatrix operator-(const _T& _scale, const VDynamicMatrix& _matrix);
+        VDynamicMatrix operator+(const VDynamicMatrix& _matrix) const
+        {
+            if (mRows != _matrix.mRows || mColumns != _matrix.mColumns)
+            {
+                throw "VDynamicMatrix: invalid addition";;
+            }
+            
+            VDynamicMatrix result = this->Copy();
+            for (unsigned long row = 0; row < mRows; ++row)
+            {
+                for (unsigned long column = 0; column < mColumns; ++column)
+                {
+                    result(row, column) += _matrix(row, column);
+                }
+            }
+            return result;
+        }
+        
+        VDynamicMatrix& operator+=(const VDynamicMatrix& _matrix)
+        {
+            *this = *this + _matrix;
+            return *this;
+        }
+        
+        VDynamicMatrix operator+(const _T& _scale) const
+        {
+            VDynamicMatrix result = this->Copy();
+            for (unsigned long row = 0; row < mRows; ++row)
+            {
+                for (unsigned long column = 0; column < mColumns; ++column)
+                {
+                    result(row, column) += _scale;
+                }
+            }
+            return result;
+        }
+        
+        VDynamicMatrix& operator+=(const _T& _scale)
+        {
+            *this = *this + _scale;
+            return *this;
+        }
+        
+        //----------------------------------------------------------------------------------------------------
+        VDynamicMatrix operator-() const
+        {
+            VDynamicMatrix result = this->Copy();
+            for (unsigned long row = 0; row < mRows; ++row)
+            {
+                for (unsigned long column = 0; column < mColumns; ++column)
+                {
+                    _T& value = result(row, column);
+                    value = -value;
+                }
+            }
+            return result;
+        }
+        
+        VDynamicMatrix operator-(const VDynamicMatrix& _matrix) const
+        {
+            if (mRows != _matrix.mRows || mColumns != _matrix.mColumns)
+            {
+                throw "VDynamicMatrix: invalid subtraction";;
+            }
+            
+            VDynamicMatrix result = this->Copy();
+            for (unsigned long row = 0; row < mRows; ++row)
+            {
+                for (unsigned long column = 0; column < mColumns; ++column)
+                {
+                    result(row, column) -= _matrix(row, column);
+                }
+            }
+            return result;
+        }
+        
+        VDynamicMatrix& operator-=(const VDynamicMatrix& _matrix)
+        {
+            *this = *this - _matrix;
+            return *this;
+        }
+        
+        VDynamicMatrix operator-(const _T& _scale) const
+        {
+            VDynamicMatrix result = this->Copy();
+            for (unsigned long row = 0; row < mRows; ++row)
+            {
+                for (unsigned long column = 0; column < mColumns; ++column)
+                {
+                    result(row, column) -= _scale;
+                }
+            }
+            return result;
+        }
+        
+        VDynamicMatrix& operator-=(const _T& _scale)
+        {
+            *this = *this - _scale;
+            return *this;
+        }
         
         //----------------------------------------------------------------------------------------------------
         VDynamicMatrix operator*(const VDynamicMatrix& _matrix) const
@@ -353,7 +456,6 @@ namespace Void
         }
         
         //----------------------------------------------------------------------------------------------------
-        friend VDynamicMatrix operator*(const _T& _scale, const VDynamicMatrix& _matrix);
         VDynamicMatrix operator/(const VDynamicMatrix& _matrix) const;
         VDynamicMatrix& operator/=(const VDynamicMatrix& _matrix);
         VDynamicMatrix operator/(const _T& _scale) const;
@@ -389,7 +491,7 @@ namespace Void
         
         void RowMultiply(const unsigned long& _row, const _T& _factor)
         {
-            if (_row < mRows)
+            if (_row < mRows && _factor != 0)
             {
                 for (unsigned long column = 0; column < mColumns; ++column)
                 {
@@ -400,7 +502,7 @@ namespace Void
         
         void RowDivide(const unsigned long& _row, const _T& _factor)
         {
-            if (_row < mRows)
+            if (_row < mRows && _factor != 0)
             {
                 for (unsigned long column = 0; column < mColumns; ++column)
                 {
@@ -411,7 +513,7 @@ namespace Void
         
         void RowAdd(const unsigned long& _iRow, const unsigned long& _jRow, const _T& _factor)
         {
-            if (_iRow < mRows && _jRow < mRows)
+            if (_iRow < mRows && _jRow < mRows && _iRow != _jRow)
             {
                 for (unsigned long column = 0; column < mColumns; ++column)
                 {
@@ -448,11 +550,37 @@ namespace Void
             return subMatrix;
         }
         
+        VDynamicMatrix SubMatrix(const unsigned long& _fromRow, const unsigned long& _toRow, const unsigned long& _fromColumn, const unsigned long& _toColumn)
+        {
+            if (!(_fromRow < _toRow && _toRow < mRows && _fromColumn < _toColumn && _toColumn < mColumns))
+            {
+                return VDynamicMatrix();
+            }
+            
+            VDynamicMatrix subMatrix(*this);
+            subMatrix.mRows = _toRow - _fromRow + 1;
+            subMatrix.mColumns = _toColumn - _fromColumn + 1;
+            // Shift routes
+            auto& rowRoutes = subMatrix.mRowRoutes;
+            auto& columnRoutes = subMatrix.mColumnRoutes;
+            for (unsigned long row = 0; row < subMatrix.mRows; ++row)
+            {
+                auto route = rowRoutes.find(_fromRow + row);
+                route != rowRoutes.end() ? rowRoutes[row] = route->second : rowRoutes[row] = _fromRow + row;
+            }
+            for (unsigned long column = 0; column < mColumns; ++column)
+            {
+                auto route = columnRoutes.find(_fromColumn + column);
+                route != columnRoutes.end() ? columnRoutes[column] = route->second : columnRoutes[column] = _fromColumn + column;
+            }
+            return subMatrix;
+        }
+        
         // Reconstruct a same matrix with empty routes
         //----------------------------------------------------------------------------------------------------
         VDynamicMatrix Copy() const
         {
-            VDynamicMatrix matrix(mRows, mColumns);
+            VDynamicMatrix matrix(mRows, mColumns, 0);
             // (*matrix.mMatrix) = *mMatrix;
             for (unsigned long row = 0; row < mRows; ++row)
             {
@@ -467,7 +595,7 @@ namespace Void
         //----------------------------------------------------------------------------------------------------
         VDynamicMatrix Transpose() const
         {
-            VDynamicMatrix matrix(mColumns, mRows);
+            VDynamicMatrix matrix(mColumns, mRows, 0);
             for (unsigned long row = 0; row < mRows; ++row)
             {
                 for (unsigned long column = 0; column < mColumns; ++column)
@@ -517,6 +645,15 @@ namespace Void
         }
         
         //----------------------------------------------------------------------------------------------------
+        VDynamicMatrix Inverse() const
+        {
+            VDynamicMatrix matrix = this->Concatenate(VDynamicMatrix::Identity(mRows, mColumns));
+            matrix = matrix.ReducedRowEchelonForm();
+            return matrix.SubMatrix(0, mRows - 1, mColumns, mColumns + mColumns - 1);
+        }
+        
+        // Inner product
+        //----------------------------------------------------------------------------------------------------
         _T DotProduct(const VDynamicMatrix& _matrix) const
         {
             _T result = static_cast<_T>(0);
@@ -541,7 +678,7 @@ namespace Void
         //----------------------------------------------------------------------------------------------------
         VDynamicMatrix Concatenate(const VDynamicMatrix& _matrix) const
         {
-            VDynamicMatrix result(mRows < _matrix.mRows ? _matrix.mRows : mRows, mColumns + _matrix.mColumns);
+            VDynamicMatrix result(mRows < _matrix.mRows ? _matrix.mRows : mRows, mColumns + _matrix.mColumns, 0);
             for (unsigned long row = 0; row < mRows; ++row)
             {
                 for (unsigned long column = 0; column < mColumns; ++column)
@@ -560,11 +697,71 @@ namespace Void
             return result;
         }
         
+        // Row canonical form
+        //----------------------------------------------------------------------------------------------------
+        VDynamicMatrix ReducedRowEchelonForm() const
+        {
+            if (mRows == 0)
+            {
+                return VDynamicMatrix();
+            }
+            
+            VDynamicMatrix matrix = this->Copy();
+            // Reduce rows
+            for (unsigned long reducedRow = 0; reducedRow < mRows; ++reducedRow)
+            {
+                // Order by first none-zero index
+                std::vector<unsigned long> noneZeroIndices(mRows, mColumns);
+                for (unsigned long row = reducedRow; row < mRows; ++row)
+                {
+                    for (unsigned long column = 0; column < mColumns; ++column)
+                    {
+                        if (matrix(row, column) != 0)
+                        {
+                            noneZeroIndices[row] = column;
+                            break;
+                        }
+                    }
+                }
+                for (unsigned long row = reducedRow; row < mRows; ++row)
+                {
+                    for (unsigned long subRow = row + 1; subRow < mRows; ++subRow)
+                    {
+                        if (noneZeroIndices[subRow] < noneZeroIndices[row])
+                        {
+                            matrix.RowSwitch(row, subRow);
+                            unsigned long hold = noneZeroIndices[subRow];
+                            noneZeroIndices[subRow] = noneZeroIndices[row];
+                            noneZeroIndices[row] = hold;
+                        }
+                    }
+                }
+                // Reduce
+                unsigned long column = noneZeroIndices[reducedRow];
+                if (column == mColumns)
+                {
+                    break;
+                }
+                _T value = matrix(reducedRow, column);
+                matrix.RowDivide(reducedRow, value);
+                for (unsigned long subRow = 0; subRow < mRows; ++subRow)
+                {
+                    if (subRow == reducedRow)
+                    {
+                        continue;
+                    }
+                    _T subValue = matrix(subRow, column);
+                    if (subValue != 0)
+                    {
+                        matrix.RowAdd(subRow, reducedRow, -subValue);
+                    }
+                }
+            }
+            return matrix;
+        }
+        
         // this = Lower * Upper
         // Doolittle algorithm
-        // a00 a01 a02   1
-        // a10 a11 a12 =  1
-        // a20 a21 a22     1
         //----------------------------------------------------------------------------------------------------
         void LUDecomposition(VDynamicMatrix& _lower, VDynamicMatrix& _upper)
         {
@@ -573,14 +770,14 @@ namespace Void
                 return;
             }
             
-            _lower = VDynamicMatrix(mRows, mColumns);
+            _lower = VDynamicMatrix(mRows, mColumns, 0);
             _upper = this->Copy();
             for (unsigned long row = 0; row < mRows; ++row)
             {
                 _T value = _upper(row, row);
                 if (value != 0)
                 {
-                    _upper.RowDivide(row, value); // Memo: int type
+                    _upper.RowDivide(row, value);
                     _lower(row, row) = value;
                 }
                 
@@ -591,6 +788,11 @@ namespace Void
                     _lower(subRow, row) = value;
                 }
             }
+        }
+        
+        //----------------------------------------------------------------------------------------------------
+        void SingularValueDecomposition()
+        {
             
         }
         

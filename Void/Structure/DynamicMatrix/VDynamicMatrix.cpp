@@ -15,8 +15,8 @@ namespace Void
         matrix3(1, 1) = 100;
         // matrix3(3, 3); // Throw
         
-        double values[] = {1, 2.2, 333, 4, -5555, 6, 77.77, 88, 9999};
-        VDynamicMatrix<double> matrix4(3, 3, values, 9); // 3 * 3
+        double values0[] = {1, 2.2, 333, 4, -5555, 6, 77.77, 88, 9999};
+        VDynamicMatrix<double> matrix4(3, 3, values0, 9); // 3 * 3
         double value = matrix4.Determinant();
         VLogger::Info("Matrix \n%s", matrix4.String().c_str());
         value = matrix3.DotProduct(matrix4);
@@ -34,7 +34,22 @@ namespace Void
         VLogger::Info("Matrix \n%s", matrix1.String().c_str());
         matrix5 = matrix0 * matrix1;
         VLogger::Info("Matrix \n%s", matrix5.String().c_str());
-        
+        value = matrix5.Determinant();
+        value = matrix0.Determinant() * matrix1.Determinant();
+        matrix5 += matrix5;
+        VLogger::Info("Matrix \n%s", matrix5.String().c_str());
+        matrix1.RowAdd(2, 0, 1);
+        VLogger::Info("Matrix \n%s", matrix1.String().c_str());
+        double values1[] = {1, 2, 3, 6, 3, 1, 4, 4, 4};
+        VDynamicMatrix<double> matrix6(3, 3, values1, 9);
+        VLogger::Info("Matrix \n%s", matrix6.String().c_str());
+        matrix1 = matrix6.ReducedRowEchelonForm();
+        VLogger::Info("Matrix \n%s", matrix1.String().c_str());
+        matrix1 = matrix6.Inverse();
+        VLogger::Info("Matrix \n%s", matrix1.String().c_str());
+        matrix1 = matrix6 * matrix1;
+        VLogger::Info("Matrix \n%s", matrix1.String().c_str());
+
         return;
     }
 }
