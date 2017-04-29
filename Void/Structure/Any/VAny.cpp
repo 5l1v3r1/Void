@@ -20,7 +20,7 @@ namespace Void
         anyVector.push_back(anyValue1);
         anyVector.push_back(1.5f);
         anyVector.push_back(anyValue2);
-        anyValue2.type().name();
+        anyValue2.Type().name();
         
         return;
     }

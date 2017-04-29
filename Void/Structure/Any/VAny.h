@@ -31,7 +31,7 @@ namespace Void
         
         inline VAny(const VAny& _any)
             :
-            content(_any.content ? _any.content->clone() : 0)
+            content(_any.content ? _any.content->Clone() : 0)
         {
         }
         
@@ -64,9 +64,9 @@ namespace Void
             VAny().Swap(*this);
         }
         
-        const std::type_info& type() const
+        const std::type_info& Type() const
         {
-            return content ? content->type() : typeid(void);
+            return content ? content->Type() : typeid(void);
         }
         
         //----------------------------------------------------------------------------------------------------
@@ -110,8 +110,8 @@ namespace Void
             
         public:
             //----------------------------------------------------------------------------------------------------
-            virtual const std::type_info& type() const = 0;
-            virtual Placeholder* clone() const = 0;
+            virtual const std::type_info& Type() const = 0;
+            virtual Placeholder* Clone() const = 0;
         };
         
         //----------------------------------------------------------------------------------------------------
@@ -134,12 +134,12 @@ namespace Void
             }
 
             //----------------------------------------------------------------------------------------------------
-            virtual const std::type_info& type() const
+            virtual const std::type_info& Type() const
             {
                 return typeid(_T);
             }
             
-            virtual Placeholder* clone() const
+            virtual Placeholder* Clone() const
             {
                 return new Holder(held);
             }
@@ -202,7 +202,7 @@ namespace Void
     template<typename _T>
     inline _T* VAnyCast(VAny* _operand) noexcept
     {
-        return _operand && _operand->type() == typeid(_T) ? std::addressof(static_cast<VAny::Holder<typename std::remove_cv<_T>::type>*>(_operand->content)->held): 0;
+        return _operand && _operand->Type() == typeid(_T) ? std::addressof(static_cast<VAny::Holder<typename std::remove_cv<_T>::type>*>(_operand->content)->held): 0;
     }
     
     template<typename _T>

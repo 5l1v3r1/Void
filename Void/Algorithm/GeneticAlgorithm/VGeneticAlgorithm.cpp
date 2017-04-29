@@ -151,7 +151,7 @@ namespace Void
                                             std::function<int(int, int)> operateFunc;
                                             for (unsigned int i = 0; i < _meanings.size(); ++i)
                                             {
-                                                if (_meanings[i].type() == typeid(int))
+                                                if (_meanings[i].Type() == typeid(int))
                                                 {
                                                     if (isNumLoaded)
                                                     {
@@ -164,7 +164,7 @@ namespace Void
                                                         isNumLoaded = true;
                                                     }
                                                 }
-                                                else if (_meanings[i].type() == typeid(std::function<int(int, int)>))
+                                                else if (_meanings[i].Type() == typeid(std::function<int(int, int)>))
                                                 {
                                                     if (!isInitialized)
                                                     {
