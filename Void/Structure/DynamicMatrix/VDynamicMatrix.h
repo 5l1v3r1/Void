@@ -14,6 +14,7 @@ namespace Void
     // VDynamicMatrix
     // Runtime
     // Memo: float rounding
+    // Determinant(Vandermonde) = ∏(xi - xj), 1 ≤ j < i ≤ n
     //----------------------------------------------------------------------------------------------------
     template<typename _T=float>
     class VDynamicMatrix
@@ -458,14 +459,32 @@ namespace Void
         //----------------------------------------------------------------------------------------------------
         VDynamicMatrix operator/(const VDynamicMatrix& _matrix) const;
         VDynamicMatrix& operator/=(const VDynamicMatrix& _matrix);
-        VDynamicMatrix operator/(const _T& _scale) const;
-        VDynamicMatrix& operator/=(const _T& _scale);
+        VDynamicMatrix operator/(const _T& _scale) const
+        {
+            VDynamicMatrix result = this->Copy();
+            for (unsigned long row = 0; row < mRows; ++row)
+            {
+                for (unsigned long column = 0; column < mColumns; ++column)
+                {
+                    result(row, column) /= _scale;
+                }
+            }
+            return result;
+        }
+        VDynamicMatrix& operator/=(const _T& _scale)
+        {
+            *this = *this / _scale;
+            return *this;
+        }
         friend VDynamicMatrix operator/(const _T& _scale, const VDynamicMatrix& _matrix);
         
         // Elementary transformation
         // Row switching: Ri <-> Rj
+        //                determinant = -determinant
         // Row multiplication: kRi -> Ri, k ≠ 0
+        //                     determinant = k * determinant
         // Row addition: Ri + kRj -> Ri, i ≠ j
+        //               determinant = determinant
         //----------------------------------------------------------------------------------------------------
         void RowSwitch(const unsigned long& _iRow, const unsigned long& _jRow)
         {
@@ -645,6 +664,34 @@ namespace Void
         }
         
         //----------------------------------------------------------------------------------------------------
+        bool IsSingularMatrix() const
+        {
+             if (mRows == mColumns)
+             {
+                 return Determinant() == 0 ? true : false;
+             }
+            return false;
+        }
+    
+        // Transpose of algebraic cofactors
+        //----------------------------------------------------------------------------------------------------
+        VDynamicMatrix Adjugate()
+        {
+            VDynamicMatrix cofactors(mRows, mColumns);
+            for (unsigned long row = 0; row < mRows; ++row)
+            {
+                for (unsigned long column = 0; column < mColumns; ++column)
+                {
+                    VDynamicMatrix subMatrix = SubMatrix(row, column);
+                    cofactors(row, column) = (row + column) % 2 ? -subMatrix.Determinant() : subMatrix.Determinant();
+                }
+            }
+            return cofactors.Transpose();
+        }
+        
+        // Determinant ≠ 0
+        // Option: Adjugate / Determinant
+        //----------------------------------------------------------------------------------------------------
         VDynamicMatrix Inverse() const
         {
             VDynamicMatrix matrix = this->Concatenate(VDynamicMatrix::Identity(mRows, mColumns));
@@ -794,6 +841,14 @@ namespace Void
         void SingularValueDecomposition()
         {
             
+        }
+        
+        // Cramer's rule
+        // See also: Inverse
+        //----------------------------------------------------------------------------------------------------
+        std::vector<_T> Cramer()
+        {
+            return std::vector<_T>();
         }
         
     protected:

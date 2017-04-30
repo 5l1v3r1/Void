@@ -49,6 +49,12 @@ namespace Void
         VLogger::Info("Matrix \n%s", matrix1.String().c_str());
         matrix1 = matrix6 * matrix1;
         VLogger::Info("Matrix \n%s", matrix1.String().c_str());
+        matrix1 = matrix6.Adjugate();
+        VLogger::Info("Matrix \n%s", matrix1.String().c_str());
+        matrix1 = matrix1 / matrix6.Determinant();
+        VLogger::Info("Matrix \n%s", matrix1.String().c_str());
+        matrix1 = matrix6 * matrix1;
+        VLogger::Info("Matrix \n%s", matrix1.String().c_str());
 
         return;
     }
