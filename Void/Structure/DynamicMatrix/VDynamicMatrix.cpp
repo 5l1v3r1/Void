@@ -55,7 +55,12 @@ namespace Void
         VLogger::Info("Matrix \n%s", matrix1.String().c_str());
         matrix1 = matrix6 * matrix1;
         VLogger::Info("Matrix \n%s", matrix1.String().c_str());
-
+        double values2[] = {0, 2};
+        matrix1 = VDynamicMatrix<double>(1, 2, values2, 2);
+        double values3[] = {2, 0};
+        matrix2 = VDynamicMatrix<double>(1, 2, values3, 2);
+        value = matrix1.Radian(matrix2);
+        
         return;
     }
 }

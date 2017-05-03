@@ -7,6 +7,7 @@
 #include <map>
 #include <string>
 #include <sstream>
+#include <cmath>
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
@@ -98,6 +99,45 @@ namespace Void
         unsigned long Columns() const
         {
             return mColumns;
+        }
+        
+        unsigned long Ranks() const
+        {
+            unsigned long ranks = 0;
+            VDynamicMatrix matrix = ReducedRowEchelonForm();
+            unsigned long columnFloor = 0;
+            for (unsigned long row = 0; row < mRows; ++row)
+            {
+                for (unsigned long column = columnFloor; column < mColumns; ++column)
+                {
+                    if (matrix(row, column) != 0)
+                    {
+                        ++ranks;
+                        columnFloor = column + 1;
+                        break;
+                    }
+                }
+            }
+            return ranks;
+        }
+        
+        //----------------------------------------------------------------------------------------------------
+        bool IsSingularMatrix() const
+        {
+            if (mRows == mColumns)
+            {
+                return Determinant() == 0 ? true : false;
+            }
+            return false;
+        }
+        
+        bool IsVector() const
+        {
+            if (mRows == 1 || mColumns == 1)
+            {
+                return true;
+            }
+            return false;
         }
         
         //----------------------------------------------------------------------------------------------------
@@ -662,16 +702,6 @@ namespace Void
             }
             return result;
         }
-        
-        //----------------------------------------------------------------------------------------------------
-        bool IsSingularMatrix() const
-        {
-             if (mRows == mColumns)
-             {
-                 return Determinant() == 0 ? true : false;
-             }
-            return false;
-        }
     
         // Transpose of algebraic cofactors
         //----------------------------------------------------------------------------------------------------
@@ -843,12 +873,53 @@ namespace Void
             
         }
         
+        // ||x||
+        // Length
+        // Require: vector
+        //----------------------------------------------------------------------------------------------------
+        _T Norm() const
+        {
+            return std::sqrt(DotProduct(*this));
+        }
+        
+        // arccos([x, y] / (||x|| * ||y||))
+        // Require: vector
+        //----------------------------------------------------------------------------------------------------
+        double Radian(const VDynamicMatrix& _matrix)
+        {
+            if (mRows == _matrix.mRows && mRows == _matrix.mRows)
+            {
+                _T firstNorm = Norm();
+                _T secondNorm = _matrix.Norm();
+                if (firstNorm != 0 && secondNorm != 0)
+                {
+                    return std::acos(DotProduct(_matrix) / (Norm() * _matrix.Norm()));
+                }
+            }
+            return 0;
+        }
+        
         // Cramer's rule
         // See also: Inverse
         //----------------------------------------------------------------------------------------------------
-        std::vector<_T> Cramer()
+        std::vector<_T> CramerRule()
         {
             return std::vector<_T>();
+        }
+        
+        // Matrix * X = 0
+        // General solution
+        //----------------------------------------------------------------------------------------------------
+        std::vector<std::vector<_T>> HomogeneousLinearMaximalIndependentSet()
+        {
+            return std::vector<std::vector<_T>>();
+        }
+        
+        // Matrix * X = B
+        //----------------------------------------------------------------------------------------------------
+        std::vector<std::vector<_T>> NonhomogeneousLinearMaximalIndependentSet(const std::vector<_T>& _b)
+        {
+            return std::vector<std::vector<_T>>();
         }
         
     protected:
