@@ -18,8 +18,10 @@ namespace Void
         VFunction<float> x([](const std::map<std::string, VAny>& _variables)->auto{ return VAnyCast<float>(_variables.find("x")->second); });
         x.Bind("x", 111.1f);
         VFunction<int> y([](const std::map<std::string, VAny>& _variables)->auto{ return VAnyCast<int>(_variables.find("y")->second); });
-        auto function1 = x + y;
+        auto function1 = 200 + x + y + 100;
         function1.Bind("y", 222);
+        value0 = function1.Value();
+        function1.Bind("x", 999.f);
         value0 = function1.Value();
         
         return;

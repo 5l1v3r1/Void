@@ -2,7 +2,6 @@
 #ifndef _V_FUNCTION_H_
 #define _V_FUNCTION_H_
 
-#include "../../Utility/Logger/VLogger.h"
 #include "../../Utility/Type/VType.h"
 #include "../Any/VAny.h"
 #include <functional>
@@ -118,6 +117,30 @@ namespace Void
         };
         VFunction<typename VTypeIndex<0, typename VTypeLambda<decltype(lambda)>::Types>::Type> function(lambda);
         function.Bind(_leftFunction.variables);
+        function.Bind(_rightFunction.variables);
+        return function;
+    }
+    
+    template<typename _LT, typename _RT>
+    auto operator+(const VFunction<_LT>& _leftFunction, const _RT& _right)
+    {
+        auto lambda = [leftLambda=_leftFunction.lambda, _right](const std::map<std::string, VAny>& _variables)->auto
+        {
+            return leftLambda(_variables) + _right;
+        };
+        VFunction<typename VTypeIndex<0, typename VTypeLambda<decltype(lambda)>::Types>::Type> function(lambda);
+        function.Bind(_leftFunction.variables);
+        return function;
+    }
+    
+    template<typename _LT, typename _RT>
+    auto operator+(const _LT& _left, const VFunction<_RT>& _rightFunction)
+    {
+        auto lambda = [_left, rightLambda=_rightFunction.lambda](const std::map<std::string, VAny>& _variables)->auto
+        {
+            return _left + rightLambda(_variables);
+        };
+        VFunction<typename VTypeIndex<0, typename VTypeLambda<decltype(lambda)>::Types>::Type> function(lambda);
         function.Bind(_rightFunction.variables);
         return function;
     }
