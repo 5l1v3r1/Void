@@ -10,7 +10,7 @@ namespace Void
     // VEllipticCurveCryptography
     // Weierstrass
     // Common: (y^2) + (a1 * x * y) + (a3 * y) = (x3) + (a2 * x^2) + (a4 * x) + (a6)
-    //         k =  Fx(x, y) / Fy(x, y) = (3 * x^2 + 2 * a2 * x + a4 - a1 * y) / (2 * y + a1 * x +a3)
+    //         k = -Fx(x, y) / Fy(x, y) = (3 * x^2 + 2 * a2 * x + a4 - a1 * y) / (2 * y + a1 * x +a3)
     // Projection: X = x / z, Y = y / z
     //             (y^2 * z) + (a1 * x * y * z) + (a3 * y * z^2) = (x^3) + (a2 * x^2 * z) + (a3 * x * z^2) + (a6 * z^3)
     // P-Q-R' are collinear
