@@ -24,18 +24,21 @@ namespace Void
         //----------------------------------------------------------------------------------------------------
         VFunction()
             :
+            variables(),
             lambda()
         {
         }
         
         VFunction(std::function<_T(const std::map<std::string, VAny>&)> _lambda)
             :
+            variables(),
             lambda(_lambda)
         {
         }
         
         VFunction(const VFunction& _function)
             :
+            variables(_function.variables),
             lambda(_function.lambda)
         {
         }
@@ -87,6 +90,7 @@ namespace Void
         //----------------------------------------------------------------------------------------------------
         VFunction& operator=(const VFunction& _function)
         {
+            variables = _function.variables;
             lambda = _function.lambda;
             return *this;
         }
@@ -113,7 +117,8 @@ namespace Void
             return leftLambda(_variables) + rightLambda(_variables);
         };
         VFunction<typename VTypeIndex<0, typename VTypeLambda<decltype(lambda)>::Types>::Type> function(lambda);
-        
+        function.Bind(_leftFunction.variables);
+        function.Bind(_rightFunction.variables);
         return function;
     }
     

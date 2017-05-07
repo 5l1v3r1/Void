@@ -9,29 +9,18 @@ namespace Void
     {
         VFunction<int> function0;
         {
-            VFunction<int> function1([](const std::map<std::string, VAny>& _variables)->double{ return 123.4; });
-            VFunction<int> function2([](const std::map<std::string, VAny>& _variables)->double{ return 567.8; });
-            function0 = function1 + function2;
+            VFunction<int> tmp1([](const std::map<std::string, VAny>& _variables)->double{ return 123.4; });
+            VFunction<int> tmp2([](const std::map<std::string, VAny>& _variables)->double{ return 567.8; });
+            function0 = tmp1 + tmp2;
         }
-        auto value0 = function0.Value();
+        float value0 = function0.Value();
         
-//        {
-//            VFunction<int> function1([](const std::map<std::string, VAny>& _variables)->double{ return _variables.find(0)->second; });
-//            VFunction<int> function2([](const std::map<std::string, VAny>& _variables)->double{ return _variables.find(1)->second; });
-//            function0 = function1 + function2;
-//        }
-//        function0.Bind(0, 111.1);
-//        function0.Bind(1, 222.2);
-//        value0 = function0.Value();
-//        
-//        {
-//            VFunction<int> function1([](const std::map<std::string, VAny>& _variables)->double{ return _variables.find(0)->second; });
-//            VFunction<int> function2([](const std::map<std::string, VAny>& _variables)->double{ return _variables.find(1)->second; });
-//            function0 = function1 + function2;
-//        }
-//        function0.Bind(0, 100);
-//        function0.Bind(1, 200);
-//        value0 = function0.Value();
+        VFunction<float> x([](const std::map<std::string, VAny>& _variables)->auto{ return VAnyCast<float>(_variables.find("x")->second); });
+        x.Bind("x", 111.1f);
+        VFunction<int> y([](const std::map<std::string, VAny>& _variables)->auto{ return VAnyCast<int>(_variables.find("y")->second); });
+        auto function1 = x + y;
+        function1.Bind("y", 222);
+        value0 = function1.Value();
         
         return;
     }
