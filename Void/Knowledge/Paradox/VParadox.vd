@@ -1,0 +1,6 @@
+
+----------------------------------------------------------------------------------------------------
+(Russell's paradox) Let R be the set of all sets that are not members of themselves
+                  | R = { x | x ∉ x }
+                  | R ∈ R <=> R ∉ R
+
