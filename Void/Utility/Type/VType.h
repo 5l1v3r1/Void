@@ -21,16 +21,16 @@ namespace Void
     
     // VTypeIndex
     //----------------------------------------------------------------------------------------------------
-    template<unsigned _Index, typename _VType>
+    template<unsigned _Index, typename _VTypes>
     struct VTypeIndex
     {
-        typedef typename VTypeIndex<_Index - 1, typename _VType::Next::Self>::Type Type;
+        typedef typename VTypeIndex<_Index - 1, typename _VTypes::Next::Self>::Type Type;
     };
     
-    template<typename _VType>
-    struct VTypeIndex<0, _VType>
+    template<typename _VTypes>
+    struct VTypeIndex<0, _VTypes>
     {
-        typedef typename _VType::Type Type;
+        typedef typename _VTypes::Type Type;
     };
     
     // VTypeLambda
