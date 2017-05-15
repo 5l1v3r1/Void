@@ -5,5 +5,6 @@
 //----------------------------------------------------------------------------------------------------
 #include "Window/VWindow.h"
 #include "Console/VConsole.h"
+#include "Signal/VSignal.h"
 
 #endif
