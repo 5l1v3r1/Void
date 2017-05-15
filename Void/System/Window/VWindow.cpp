@@ -1,7 +1,7 @@
 #include "VWindow.h"
 #include "../../Utility/Logger/VLogger.h"
-#include "../../Geometry/VGeometry.h"
-#include "../../Camera/VCamera.h"
+#include "../../Graphics/Geometry/VGeometry.h"
+#include "../../Graphics/Camera/VCamera.h"
 #ifndef _VOID_DISABLE_OPENGL_
 #define GLFW_INCLUDE_GLCOREARB
 #pragma clang diagnostic push

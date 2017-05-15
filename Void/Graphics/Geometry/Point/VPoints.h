@@ -1,9 +1,10 @@
 #pragma once
 #ifndef _V_POINTS_H_
 #define _V_POINTS_H_
-#include "../../Structure/Angle/VAngle.h"
-#include "../../Structure/Vector/VVector.h"
-#include "../../Utility/OpenGL/VOpenGL.h"
+
+#include "../../../Structure/Angle/VAngle.h"
+#include "../../../Structure/Vector/VVector.h"
+#include "../../../Utility/OpenGL/VOpenGL.h"
 #include "../VGeometryBase.h"
 #include <vector>
 

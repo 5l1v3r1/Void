@@ -1,10 +1,10 @@
 #pragma once
 #ifndef _V_GEOMETRYBASE_H_
 #define _V_GEOMETRYBASE_H_
-#include "../Memory/SmartPtr/VSmartPtr.h"
+#include "../../Memory/SmartPtr/VSmartPtr.h"
+#include "../../Structure/Vector/VVector.h"
 #include "../Color/VColor.h"
 #include "../Camera/VCamera.h"
-#include "../Structure/Vector/VVector.h"
 #include "../Image/VImage.h"
 
 //----------------------------------------------------------------------------------------------------

@@ -1,7 +1,8 @@
 #pragma once
 #ifndef _V_COLOR_H_
 #define _V_COLOR_H_
-#include "../Structure/Vector/VVector.h"
+
+#include "../../Structure/Vector/VVector.h"
 
 //----------------------------------------------------------------------------------------------------
 namespace Void

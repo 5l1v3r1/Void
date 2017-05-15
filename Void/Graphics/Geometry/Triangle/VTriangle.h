@@ -1,18 +1,24 @@
 #pragma once
-#ifndef _V_RECTANGLE_H_
-#define _V_RECTANGLE_H_
-#include "../../Structure/Angle/VAngle.h"
-#include "../../Structure/Vector/VVector.h"
-#include "../../Utility/OpenGL/VOpenGL.h"
+#ifndef _V_TRIANGLE_H_
+#define _V_TRIANGLE_H_
+
+#include "../../../Structure/Vector/VVector.h"
+#include "../../../Utility/OpenGL/VOpenGL.h"
 #include "../VGeometryBase.h"
 #include <vector>
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
 {
-    // VRectangle
+    // VTriangleVertex
     //----------------------------------------------------------------------------------------------------
-    class VRectangle : public VGeometryBase
+    struct VTriangleVertex : public VVector<float, 3>
+    {
+    };
+    
+    // VTriangle
+    //----------------------------------------------------------------------------------------------------
+    class VTriangle : public VGeometryBase
     {
     protected:
         //----------------------------------------------------------------------------------------------------
@@ -25,10 +31,9 @@ namespace Void
         
     public:
         //----------------------------------------------------------------------------------------------------
-        VRectangle();
-        VRectangle(const VVector<float, 3>& _position, float _width, float _height);
-        VRectangle(const VRectangle& _rectangle);
-        virtual ~VRectangle();
+        VTriangle();
+        VTriangle(const VTriangle& _triangle);
+        virtual ~VTriangle();
         
         //----------------------------------------------------------------------------------------------------
         virtual bool Update();
@@ -36,18 +41,14 @@ namespace Void
         
     protected:
         //----------------------------------------------------------------------------------------------------
-        bool m_isRectangleDirty;
-        VVector<float, 3> m_position;
-        float m_width;
-        float m_height;
-        VVertexPosition m_rectangle[4];
-        VSmartPtr<std::vector<VVertexTextureCoord>> m_textureCoord;
+        bool m_isTriangleDirty;
+        VVertexPosition m_rectangle[3];
         
         std::vector<unsigned char> m_vertexData;
-        VOpenGLTexture m_texture;
         GLuint m_vertexArray;
         GLuint m_vertexBuffer;
     };
+
 }
 
 #endif

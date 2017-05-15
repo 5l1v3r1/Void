@@ -2,7 +2,7 @@
 #ifndef _VOID_DISABLE_OPENGL_
 #ifndef _V_OPENGLTEXTURE_H_
 #define _V_OPENGLTEXTURE_H_
-#include "../../../Image/VImage.h"
+#include "../../../Graphics/Image/VImage.h"
 #include "../../../Memory/SmartPtr/VSmartPtr.h"
 #define GLFW_INCLUDE_GLCOREARB
 #pragma clang diagnostic push

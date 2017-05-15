@@ -1,8 +1,9 @@
 #pragma once
 #ifndef _V_CAMERA_H_
 #define _V_CAMERA_H_
-#include "../Memory/SmartPtr/VSmartPtr.h"
-#include "../Structure/Matrix/VMatrix.h"
+
+#include "../../Memory/SmartPtr/VSmartPtr.h"
+#include "../../Structure/Matrix/VMatrix.h"
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
