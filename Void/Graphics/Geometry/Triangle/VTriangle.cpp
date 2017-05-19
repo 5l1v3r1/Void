@@ -19,8 +19,8 @@ namespace Void
         {
             s_isInitialized = true;
             std::vector<VOpenGLShader> shaders;
-            shaders.push_back(VOpenGLShader("Geometry/Triangle/Shader/VVertex.glsl", GL_VERTEX_SHADER, true));
-            shaders.push_back(VOpenGLShader("Geometry/Triangle/Shader/VFragment.glsl", GL_FRAGMENT_SHADER, true));
+            shaders.push_back(VOpenGLShader("Graphics/Geometry/Triangle/Shader/VVertex.glsl", GL_VERTEX_SHADER, true));
+            shaders.push_back(VOpenGLShader("Graphics/Geometry/Triangle/Shader/VFragment.glsl", GL_FRAGMENT_SHADER, true));
             s_program = VOpenGLProgram(shaders);
             return true;
         }
