@@ -1,5 +1,5 @@
 #include "VOpenGLTexture.h"
-#include "../../Logger/VLogger.h"
+#ifndef _VOID_DISABLE_OPENGL_
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
@@ -85,3 +85,5 @@ namespace Void
         return false;
     }
 }
+
+#endif

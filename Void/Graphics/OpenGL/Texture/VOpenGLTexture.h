@@ -1,62 +1,71 @@
 #pragma once
+#ifndef _V_OPENGLTEXTURE_H_
+#define _V_OPENGLTEXTURE_H_
+
+#include "../../../VDefine.h"
 #ifndef _VOID_DISABLE_OPENGL_
-#ifndef _V_OPENGLSHADER_H_
-#define _V_OPENGLSHADER_H_
+#include "../../Image/VImage.h"
 #include "../../../Memory/SmartPtr/VSmartPtr.h"
 #define GLFW_INCLUDE_GLCOREARB
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdocumentation"
 #include <GLFW/glfw3.h>
 #pragma clang diagnostic pop
-#include <string>
+#include <vector>
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
 {
-    // VOpenGLShaderData
+    // VOpenGLTextureData
     //----------------------------------------------------------------------------------------------------
-    class VOpenGLShaderData
+    class VOpenGLTextureData
     {
     public:
         //----------------------------------------------------------------------------------------------------
-        inline VOpenGLShaderData()
+        inline VOpenGLTextureData()
             :
-            shader(0)
+            texture(0)
         {
         }
         
-        inline VOpenGLShaderData(const GLuint& _shader)
+        inline VOpenGLTextureData(const GLuint& _texture)
             :
-            shader(_shader)
+            texture(_texture)
         {
         }
         
-        virtual ~VOpenGLShaderData()
+        virtual ~VOpenGLTextureData()
         {
-            if (shader)
+            if (texture)
             {
-                glDeleteShader(shader);
-                shader = 0;
+                glDeleteTextures(1, &texture);
+                texture = 0;
             }
         }
         
     public:
         //----------------------------------------------------------------------------------------------------
-        GLuint shader;
+        GLuint texture;
     };
     
-    // VOpenGLShader
+    // VOpenGLTexture
     //----------------------------------------------------------------------------------------------------
-    class VOpenGLShader : protected VSmartPtr<VOpenGLShaderData>
+    class VOpenGLTexture : protected VSmartPtr<VOpenGLTextureData>
     {
     public:
         //----------------------------------------------------------------------------------------------------
-        VOpenGLShader(const std::string& _shader, GLenum _shaderType, bool _isFromFile=false);
-        VOpenGLShader(const VOpenGLShader& _shader);
-        virtual ~VOpenGLShader();
+        static GLenum TextureFormatForVColorFormat(VColorFormat _format);
+        
+    public:
+        //----------------------------------------------------------------------------------------------------
+        VOpenGLTexture();
+        VOpenGLTexture(const VImage& _image, GLint _minMagFiler=GL_LINEAR, GLint _wrapMode=GL_CLAMP_TO_EDGE);
+        VOpenGLTexture(const VOpenGLTexture& _texture);
+        virtual ~VOpenGLTexture();
         
         //----------------------------------------------------------------------------------------------------
-        GLuint Shader();
+        GLuint Texture();
+        bool SetTexture(const VImage& _image, GLint _minMagFiler=GL_LINEAR, GLint _wrapMode=GL_CLAMP_TO_EDGE);
     };
 }
 

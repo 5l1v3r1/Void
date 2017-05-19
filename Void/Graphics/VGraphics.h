@@ -7,5 +7,6 @@
 #include "Image/VImage.h"
 #include "Geometry/VGeometry.h"
 #include "Camera/VCamera.h"
+#include "OpenGL/VOpenGL.h"
 
 #endif

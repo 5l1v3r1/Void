@@ -4,7 +4,7 @@
 
 #include "../../../Structure/Angle/VAngle.h"
 #include "../../../Structure/Vector/VVector.h"
-#include "../../../Utility/OpenGL/VOpenGL.h"
+#include "../../../Graphics/OpenGL/VOpenGL.h"
 #include "../VGeometryBase.h"
 #include <vector>
 

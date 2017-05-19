@@ -1,7 +1,9 @@
 #pragma once
-#ifndef _VOID_DISABLE_OPENGL_
 #ifndef _V_OPENGLPROGRAM_H_
 #define _V_OPENGLPROGRAM_H_
+
+#include "../../../VDefine.h"
+#ifndef _VOID_DISABLE_OPENGL_
 #include "../../../Structure/Vector/VVector.h"
 #include "../../../Structure/Matrix/VMatrix.h"
 #include "../Shader/VOpenGLShader.h"

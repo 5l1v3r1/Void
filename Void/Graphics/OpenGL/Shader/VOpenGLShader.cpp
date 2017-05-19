@@ -1,5 +1,6 @@
 #include "VOpenGLShader.h"
-#include "../../Logger/VLogger.h"
+#ifndef _VOID_DISABLE_OPENGL_
+#include "../../../Utility/Logger/VLogger.h"
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -83,3 +84,5 @@ namespace Void
         return 0;
     }
 }
+
+#endif

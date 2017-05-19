@@ -3,7 +3,7 @@
 #define _V_TRIANGLE_H_
 
 #include "../../../Structure/Vector/VVector.h"
-#include "../../../Utility/OpenGL/VOpenGL.h"
+#include "../../../Graphics/OpenGL/VOpenGL.h"
 #include "../VGeometryBase.h"
 #include <vector>
 

@@ -1,5 +1,6 @@
 #include "VOpenGLProgram.h"
-#include "../../Logger/VLogger.h"
+#ifndef _VOID_DISABLE_OPENGL_
+#include "../../../Utility/Logger/VLogger.h"
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
@@ -95,3 +96,5 @@ namespace Void
         return uniform;
     }
 }
+
+#endif
