@@ -2,7 +2,9 @@ Void.xcodeproj/
 .vs/
 *.vcxproj
 *.vcxproj.filters
+*.vcxproj.user
 *.sln
 *.opensdf
 *.sdf
 Debug/
+Void/Library

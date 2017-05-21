@@ -66,7 +66,7 @@ namespace Void
         std::chrono::duration<long long, std::milli> duration = std::chrono::milliseconds(mTime);
         auto timePoint = std::chrono::time_point<std::chrono::system_clock, std::chrono::milliseconds>(duration);
         time_t time = std::chrono::system_clock::to_time_t(timePoint);
-        std::tm *tm = std::localtime(&time);
+        std::tm *tm = localtime(&time);
         
         std::stringstream sstream;
         sstream << std::setfill('0');

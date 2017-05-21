@@ -1,6 +1,5 @@
 #include "VBigNumber.h"
 #include "../../Utility/String/VString.h"
-#include <cmath>
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
@@ -388,12 +387,12 @@ namespace Void
                 if (second.Shift(distance) <= first)
                 {
                     first -= second.Shift(distance);
-                    number += std::pow(10, distance);
+					number += std::string("1") + std::string(distance, '0');
                 }
                 else
                 {
                     first -= second.Shift(distance - 1);
-                    number += std::pow(10, distance - 1);
+                    number += std::string("1") + std::string(distance - 1, '0');
                 }
             }
             else

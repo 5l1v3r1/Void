@@ -2,6 +2,7 @@
 #ifndef _V_TIME_H_
 #define _V_TIME_H_
 
+#define  _CRT_SECURE_NO_WARNINGS
 #include <chrono>
 #include <string>
 
@@ -22,7 +23,7 @@ namespace Void
     public:
         //----------------------------------------------------------------------------------------------------
         VTime();
-        VTime(std::time_t _time);
+        VTime(time_t _time);
         VTime(const VTime& _time);
         ~VTime();
         
@@ -31,13 +32,13 @@ namespace Void
         VTime operator-(const VTime& _time) const;
         
         //----------------------------------------------------------------------------------------------------
-        std::time_t Timestamp();
+        time_t Timestamp();
         std::string String();
 
         
     protected:
         //----------------------------------------------------------------------------------------------------
-        std::time_t mTime; // milliseconds
+        time_t mTime; // milliseconds
     };
     
     // Test

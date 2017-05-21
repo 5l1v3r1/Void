@@ -15,7 +15,7 @@ namespace Void
     uint64_t VSimHash::Hash(const char* _key, size_t _length)
     {
         // Split
-        std::vector<std::string> tokens = Match(std::string(_key, _length), std::regex("[\\w\u4e00-\u9fcc]{1,4}")); // Todo: option
+        std::vector<std::string> tokens = Match(std::string(_key, _length), std::regex("[\\w]{1,4}")); // Todo: option
         std::map<std::string, size_t> features;
         for (auto& token : tokens)
         {
@@ -42,7 +42,7 @@ namespace Void
             uint64_t featureHash = (uint64_t)VJenkinsHash::OneAtATimeHash(feature.first.c_str(), feature.first.size()); // Todo: hash function
             for (int i = 0; i < 64; ++i)
             {
-                sums[i] += featureHash & masks[i] ? feature.second : -feature.second;
+                sums[i] += featureHash & masks[i] ? feature.second : -(int)feature.second;
             }
         }
         

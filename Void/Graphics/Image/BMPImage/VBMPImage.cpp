@@ -46,7 +46,7 @@ namespace Void
                 if (0 < infoHeader.height)
                 {
                     char pixel[3];
-                    for (int i = 0; i < infoHeader.sizeImage; i += bytesPerColor)
+                    for (unsigned int i = 0; i < infoHeader.sizeImage; i += bytesPerColor)
                     {
                         fin.read(pixel, 3);
                         buffer[i + 2] = pixel[0];

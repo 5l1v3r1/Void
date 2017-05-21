@@ -6,6 +6,7 @@
 #define GLFW_INCLUDE_GLCOREARB
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdocumentation"
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #pragma clang diagnostic pop
 #endif
@@ -29,9 +30,10 @@ namespace Void
                              });
         if (!glfwInit()) { return; }
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
         window = glfwCreateWindow(640, 480, "Void Test", NULL, NULL);
         if (!window)
@@ -51,6 +53,7 @@ namespace Void
         VLogger::Info("Vendor: %s", glGetString(GL_VENDOR));
         VLogger::Info("Renderer: %s", glGetString(GL_RENDERER));
         
+		if (glewInit() != GLEW_OK) { return; }
         VImage image = VImage::ReadFromBMPFile("./Test/Data/lenna.bmp");
         VCamera camera;
         camera.SetOrthogonaLens(640.f, 480.f, 0, 100.f, false);
@@ -60,7 +63,7 @@ namespace Void
         points.AddPoint(VVertexPosition(100, 200, 0));
         points.AddPoints(VPointsEllipse(VVector<float, 2>(100.f, 200.f), 100.f, 50.f));
         VTriangle triangle;
-        triangle.SetColor(VColor<>(0.5, 0.5, 1.0, 1.0));
+        triangle.SetColor(VColor<>(0.5f, 0.5f, 1.0f, 1.0f));
         VRectangle rectangle(VVector<float, 3>(400.f, 200.f, 0), 100.f, 100.f);
         rectangle.SetCamera(camera);
         rectangle.SetColor(VColor<>(1.f, 1.f, 1.f, 1.f));

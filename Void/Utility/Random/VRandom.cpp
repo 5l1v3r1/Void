@@ -55,7 +55,7 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     std::vector<int> VRandom::MultipleUniqueRand(unsigned int _count, int _min, int _max)
     {
-        if (_max - _min + 1 < _count)
+        if ((unsigned int)(_max - _min + 1) < _count)
         {
             _count = _max - _min + 1;
         }

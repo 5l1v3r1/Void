@@ -20,13 +20,14 @@ namespace Void
             const char *code = nullptr;
             if (_isFromFile)
             {
-                std::ifstream fin(_shader.c_str(), std::ios::in | std::ios::binary);
+                std::ifstream fin(_shader.c_str(), std::ios::in);
                 if(fin.is_open())
                 {
                     std::stringstream buffer;
                     buffer << fin.rdbuf();
                     fin.close();
-                    code = buffer.str().c_str();
+					std::string bufferString = buffer.str();
+                    code = bufferString.c_str();
                     if (!code) { return; }
                     glShaderSource(shader, 1, (const GLchar**)&code, nullptr);
                     code = nullptr; // Wild pointer

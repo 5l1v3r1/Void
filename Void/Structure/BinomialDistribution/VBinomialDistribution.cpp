@@ -36,7 +36,7 @@ namespace Void
     float VBinomialDistribution::Tries(unsigned int _times, unsigned int _success)
     {
         unsigned int combination = Combination(_times, _success);
-        return combination * std::powf(probability, _success) * std::powf(1 - probability, _times - _success);
+        return combination * std::powf(probability, (float)_success) * std::powf(1 - probability, (float)(_times - _success));
     }
     
     // n!

@@ -1,6 +1,7 @@
 #include "VGeneticAlgorithm.h"
 #include "../../Utility/Logger/VLogger.h"
 #include <math.h>
+#include <time.h>
 
 //----------------------------------------------------------------------------------------------------
 namespace Void

@@ -44,6 +44,7 @@ namespace Void
             default:
                 break;
         }
+		return 0;
     }
     
     // 1 - ∑(pi^2)

@@ -41,7 +41,7 @@ namespace Void
     {
         // _container.reserve(_container.size());
         std::vector<bool> table(_ceil + 1, false); // Define: true(composite), false(prime)
-        unsigned long long sieveFactorCeil = std::sqrtl(_ceil);
+        unsigned long long sieveFactorCeil = (unsigned long long)std::sqrtl(_ceil);
         for (unsigned long long sieveFactor = 2; sieveFactor <= sieveFactorCeil; ++sieveFactor)
         {
             if (!table[sieveFactor]) // Prime

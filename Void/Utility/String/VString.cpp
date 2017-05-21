@@ -71,7 +71,7 @@ namespace Void
         std::string test("  1234   5  6   ");
         Trim(test);
         auto result = Split(test, std::string(""));
-        result = Match(test, std::regex("[\\w\u4e00-\u9fcc]+"));
+        result = Match(test, std::regex("[\\w]+"));
         
         return;
     }

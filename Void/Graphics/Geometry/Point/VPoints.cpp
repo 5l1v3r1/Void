@@ -1,8 +1,9 @@
 #include "VPoints.h"
 #ifndef _VOID_DISABLE_OPENGL_
-#define GLFW_INCLUDE_GLCOREARB
+//#define GLFW_INCLUDE_GLCOREARB
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdocumentation"
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #pragma clang diagnostic pop
 #endif

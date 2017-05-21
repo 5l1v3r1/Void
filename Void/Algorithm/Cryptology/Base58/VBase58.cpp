@@ -56,7 +56,7 @@ namespace Void
                 break;
         }
         mAlphabetMap.clear();
-        for (int i = 0; i < mAlphabet.length(); ++i) {
+        for (unsigned int i = 0; i < mAlphabet.length(); ++i) {
             mAlphabetMap[mAlphabet[i]] = i;
         }
     }

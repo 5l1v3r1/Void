@@ -93,7 +93,7 @@ namespace Void
         }
         
         template <typename _T>
-        inline VColor(const _T _x, const _T _y=0, const _T _z=0, const _T _w=0)
+        inline VColor(const _T _x, const _T _y=static_cast<_T>(0), const _T _z=static_cast<_T>(0), const _T _w=static_cast<_T>(0))
         {
             this->SetValue(_x, _y, _z, _w);
         }

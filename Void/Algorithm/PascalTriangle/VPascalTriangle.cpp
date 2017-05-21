@@ -17,7 +17,7 @@ namespace Void
                 std::vector<unsigned long long>& lastRow = triangle.back();
                 triangle.push_back(std::vector<unsigned long long>(lastRow.size() + 1, 1));
                 std::vector<unsigned long long>& currentRow = triangle.back();
-                for (int j = 1; j < lastRow.size(); ++j)
+                for (unsigned int j = 1; j < lastRow.size(); ++j)
                 {
                     currentRow[j] = lastRow[j - 1] + lastRow[j];
                 }

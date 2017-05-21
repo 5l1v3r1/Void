@@ -32,7 +32,7 @@ namespace Void
         double y = 0;
         double xx = 0;
         double xy = 0;
-        for (int i = 0; i < _xy.size(); ++i)
+        for (unsigned int i = 0; i < _xy.size(); ++i)
         {
             x += _xy[i].first;
             y += _xy[i].second;

@@ -22,13 +22,13 @@ namespace Void
         GLuint program = glCreateProgram();
         if(program != 0)
         {
-            for (int i = 0; i < _shaders.size(); ++i)
+            for (unsigned int i = 0; i < _shaders.size(); ++i)
             {
                 GLuint shader = _shaders[i].Shader();
                 if (shader) { glAttachShader(program, shader); }
             }
             glLinkProgram(program);
-            for (int i = 0; i < _shaders.size(); ++i)
+            for (unsigned int i = 0; i < _shaders.size(); ++i)
             {
                 GLuint shader = _shaders[i].Shader();
                 if (shader) { glDetachShader(program, shader); }

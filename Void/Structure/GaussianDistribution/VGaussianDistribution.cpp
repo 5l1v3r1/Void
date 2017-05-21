@@ -58,7 +58,7 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     float VGaussianDistribution::DifferentialEntropy()
     {
-        return 0.5f * std::log(2 * V_ANGLE_PI * M_E * powf(standardDeviation, 2));
+        return 0.5f * std::log(2 * V_ANGLE_PI * 2.71828182845904523536f * powf(standardDeviation, 2));
     }
     
     // Test

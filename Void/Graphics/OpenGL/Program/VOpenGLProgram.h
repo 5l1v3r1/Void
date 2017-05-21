@@ -8,9 +8,11 @@
 #include "../../../Structure/Matrix/VMatrix.h"
 #include "../Shader/VOpenGLShader.h"
 #include "../../../Memory/SmartPtr/VSmartPtr.h"
-#define GLFW_INCLUDE_GLCOREARB
+//#define GLFW_INCLUDE_GLCOREARB
+#pragma warning(disable:4068)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdocumentation"
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #pragma clang diagnostic pop
 #include <vector>

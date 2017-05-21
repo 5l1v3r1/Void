@@ -46,11 +46,11 @@ namespace Void
                 maxValue = highValue;
                 if (this->left)
                 {
-                    maxValue = std::max(maxValue, ((Interval*)this->left)->maxValue);
+                    maxValue = std::fmax(maxValue, ((Interval*)this->left)->maxValue);
                 }
                 if (this->right)
                 {
-                    maxValue = std::max(maxValue, ((Interval*)this->right)->maxValue);
+                    maxValue = std::fmax(maxValue, ((Interval*)this->right)->maxValue);
                 }
             }
             
@@ -59,7 +59,7 @@ namespace Void
             {
                 if (_node)
                 {
-                    maxValue = std::max(maxValue, ((Interval*)_node)->highValue);
+                    maxValue = std::fmax(maxValue, ((Interval*)_node)->highValue);
                 }
             }
         };

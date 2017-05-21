@@ -49,7 +49,7 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     float VEloRatingSystem::Expectation(const VEloPlayer& _player, const VEloPlayer& _opponent)
     {
-        return 1.0f / (1.0 + powf(10.f, -(_player.rating - _opponent.rating) / logisticFactor));
+        return 1.0f / (1.0f + powf(10.f, -(_player.rating - _opponent.rating) / logisticFactor));
     }
     
     //----------------------------------------------------------------------------------------------------

@@ -15,7 +15,7 @@ namespace Void
         unsigned char *test = (unsigned char *)&color2;
         test[0] = 100;
         VColor<V_COLOR_FORMAT_RGBA_FLOAT> color3;
-        color3.SetValue(1, 0.5f, 0.6f, 1.0f);
+        color3.SetValue(1.f, 0.5f, 0.6f, 1.0f);
         size = sizeof(color3);
         size += 0;
         

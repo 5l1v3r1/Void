@@ -13,7 +13,7 @@ namespace Void
             VFunction<int> tmp2([](const std::map<std::string, VAny>& _variables)->double{ return 567.8; });
             function0 = tmp1 + tmp2;
         }
-        float value0 = function0.Value();
+        float value0 = (float)function0.Value();
         
         VFunction<float> x([](const std::map<std::string, VAny>& _variables)->auto{ return VAnyCast<float>(_variables.find("x")->second); });
         x.Bind("x", 111.1f);
