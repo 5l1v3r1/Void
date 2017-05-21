@@ -1,5 +1,6 @@
 #include "VAudioHandler.h"
 #include "MacOS/VAudioMacOSHandler.h"
+#include "Windows/VAudioWindowsHandler.h"
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
@@ -10,6 +11,8 @@ namespace Void
     {
         #ifdef _VOID_USE_COREAUDIO_
         return VSmartPtr<VAudioHandler>(new VAudioMacOSHandler());
+		#elif defined(_WIN32) || defined(_WIN64)
+		return VSmartPtr<VAudioHandler>(new VAudioWindowsHandler());
         #endif
         return nullptr;
     }

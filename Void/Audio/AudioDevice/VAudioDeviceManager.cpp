@@ -1,5 +1,5 @@
 #include "VAudioDeviceManager.h"
-#include "VAudioHandler.h"
+#include "../AudioHandler/VAudioHandler.h"
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
