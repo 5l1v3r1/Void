@@ -3,7 +3,7 @@
 #define _V_INTERVALTREE_H_
 
 #include "../RedBlackTree/VRedBlackTree.h"
-#include <math.h>
+#include <cmath>
 
 //----------------------------------------------------------------------------------------------------
 namespace Void

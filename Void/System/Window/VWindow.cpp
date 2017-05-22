@@ -6,7 +6,9 @@
 #define GLFW_INCLUDE_GLCOREARB
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdocumentation"
+#if defined(_WIN32) || defined(_WIN64)
 #include <GL/glew.h>
+#endif
 #include <GLFW/glfw3.h>
 #pragma clang diagnostic pop
 #endif
@@ -53,7 +55,9 @@ namespace Void
         VLogger::Info("Vendor: %s", glGetString(GL_VENDOR));
         VLogger::Info("Renderer: %s", glGetString(GL_RENDERER));
         
-		if (glewInit() != GLEW_OK) { return; }
+        #if defined(_WIN32) || defined(_WIN64)
+        if (glewInit() != GLEW_OK) { return; }
+        #endif
         VImage image = VImage::ReadFromBMPFile("./Test/Data/lenna.bmp");
         VCamera camera;
         camera.SetOrthogonaLens(640.f, 480.f, 0, 100.f, false);

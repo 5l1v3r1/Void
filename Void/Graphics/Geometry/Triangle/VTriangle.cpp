@@ -1,9 +1,12 @@
 #include "VTriangle.h"
 #ifndef _VOID_DISABLE_OPENGL_
-//#define GLFW_INCLUDE_GLCOREARB
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdocumentation"
+#if defined(_WIN32) || defined(_WIN64)
 #include <GL/glew.h>
+#else
+#define GLFW_INCLUDE_GLCOREARB
+#endif
 #include <GLFW/glfw3.h>
 #pragma clang diagnostic pop
 #endif

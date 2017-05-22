@@ -6,12 +6,14 @@
 #ifndef _VOID_DISABLE_OPENGL_
 #include "../../Image/VImage.h"
 #include "../../../Memory/SmartPtr/VSmartPtr.h"
-//#define GLFW_INCLUDE_GLCOREARB
-//#define GL_GLEXT_PROTOTYPES
 #pragma warning(disable:4068)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdocumentation"
+#if defined(_WIN32) || defined(_WIN64)
 #include <GL/glew.h>
+#else
+#define GLFW_INCLUDE_GLCOREARB
+#endif
 #include <GLFW/glfw3.h>
 #pragma clang diagnostic pop
 #include <vector>
