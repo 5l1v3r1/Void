@@ -3,7 +3,7 @@
 #define _V_DECISIONTREE_H_
 
 #include "DecisionTreeOperator/DecisionTreeImpurity/VDecisionTreeImpurity.h"
-#include "DecisionTreeOperator/VDecisionTreeSplit/VDecisionTreeSplit.h"
+#include "DecisionTreeOperator/DecisionTreeSplit/VDecisionTreeSplit.h"
 #include "../../Structure/Any/VAny.h"
 #include "../../Memory/SmartPtr/VSmartPtr.h"
 #include <vector>
@@ -35,7 +35,7 @@ namespace Void
         public:
             //----------------------------------------------------------------------------------------------------
             // int depth;
-            // double gain;
+            double impurity;
             _T label;
             // unsigned feature;
             std::vector<VSmartPtr<Node>> children;
@@ -86,12 +86,19 @@ namespace Void
                 return;
             }
             
+            // Impurity
+            double impurity = this->CalculateImpurity(_samples);
+            _node->impurity = impurity;
+            if (impurity == 0)
+            {
+                return;
+            }
+            
             // Label
             _node->label = this->Label(_samples);
             
             // Split
-            double impurity = this->CalculateImpurity(_samples);
-            double bestInformationGain = 0; // Todo: option
+            double bestInformationGain = 0; // Todo: option(InformationGain, GainRatio, Gini)
             VDecisionTreeSplitResult<_T> bestFeature;
             VDecisionTreeSplitHelper<_T> splitHelper;
             for (unsigned i = 0; i < mFeatureTypes.size(); ++i)

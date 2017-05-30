@@ -16,6 +16,7 @@ namespace Void
     // VDecisionTreeSplit
     // Complete: categorical, ordinal features
     // Binary: categorical, ordinal, continuous features
+    // Clustering
     //----------------------------------------------------------------------------------------------------
     enum class VDecisionTreeSplit
     {
@@ -137,23 +138,23 @@ namespace Void
         bool Process(const VDecisionTreeSplitParameter<_T>& _parameter)
         {
             // Count
-            mBrancheMap.clear();
+            mBranchMap.clear();
             for (auto& sample : _parameter.samples)
             {
-                mBrancheMap[VAnyCast<_F>(sample->first[_parameter.featureIndex])].push_back(sample);
+                mBranchMap[VAnyCast<_F>(sample->first[_parameter.featureIndex])].push_back(sample);
             }
-            return 2 <= mBrancheMap.size() ? true : false;
+            return 2 <= mBranchMap.size() ? true : false;
         }
         
         //----------------------------------------------------------------------------------------------------
         bool Next(VDecisionTreeSplitResult<_T>& _result)
         {
-            if (2 <= mBrancheMap.size() && !mFlag)
+            if (2 <= mBranchMap.size() && !mFlag)
             {
                 mFlag = true;
                 _result.Clear();
                 std::map<_F, unsigned> routeMap;
-                for (auto& branch : mBrancheMap)
+                for (auto& branch : mBranchMap)
                 {
                     _result.branches.push_back(branch.second);
                     routeMap[VAnyCast<_F>(branch.first)] = (unsigned)(_result.branches.size() - 1);
@@ -172,7 +173,79 @@ namespace Void
     protected:
         //----------------------------------------------------------------------------------------------------
         bool mFlag;
-        std::map<_F, std::vector<std::pair<std::vector<VAny>, _T>*>> mBrancheMap;
+        std::map<_F, std::vector<std::pair<std::vector<VAny>, _T>*>> mBranchMap;
+    };
+    
+    //----------------------------------------------------------------------------------------------------
+    template<typename _T, typename _F>
+    class VDecisionTreeSplitOperator<_T, _F, VDecisionTreeSplit::BinaryContinuous> : public VDecisionTreeSplitInterface<_T>
+    {
+    public:
+        //----------------------------------------------------------------------------------------------------
+        VDecisionTreeSplitOperator()
+            :
+            mThresholdIndex(0)
+        {
+        }
+        
+        //----------------------------------------------------------------------------------------------------
+        bool Process(const VDecisionTreeSplitParameter<_T>& _parameter)
+        {
+            // Count
+            mBranchMap.clear();
+            for (auto& sample : _parameter.samples)
+            {
+                mBranchMap[VAnyCast<_F>(sample->first[_parameter.featureIndex])].push_back(sample);
+            }
+            // Sort
+            mSortedValues.clear();
+            mSortedValues.reserve(mBranchMap.size());
+            for (auto& pair : mBranchMap)
+            {
+                mSortedValues.push_back(pair.first);
+            }
+            std::sort(mSortedValues.begin(), mSortedValues.end());
+            mThresholdIndex = 0;
+            return 2 <= mBranchMap.size() ? true : false;
+        }
+        
+        //----------------------------------------------------------------------------------------------------
+        bool Next(VDecisionTreeSplitResult<_T>& _result)
+        {
+            if (2 <= mBranchMap.size() && mThresholdIndex < mSortedValues.size() - 1)
+            {
+                _result.Clear();
+                _F threshold = (mSortedValues[mThresholdIndex] + mSortedValues[mThresholdIndex + 1]) / 2;
+                
+                _result.branches.resize(2);
+                for (_F& value : mSortedValues)
+                {
+                    std::vector<std::pair<std::vector<VAny>, _T>*>& branch = mBranchMap[value];
+                    if (threshold <= value)
+                    {
+                        std::copy(branch.begin(), branch.end(), std::back_inserter(_result.branches[0]));
+                    }
+                    else
+                    {
+                        std::copy(branch.begin(), branch.end(), std::back_inserter(_result.branches[1]));
+                    }
+                }
+                _result.routes = [threshold](const VAny& _feature)->unsigned
+                {
+                    _F feature = VAnyCast<_F>(_feature);
+                    return feature <= threshold ? 0 : 1;
+                };
+                ++mThresholdIndex;
+                return true;
+            }
+            return false;
+        }
+        
+    protected:
+        //----------------------------------------------------------------------------------------------------
+        unsigned mThresholdIndex;
+        std::vector<_F> mSortedValues;
+        std::map<_F, std::vector<std::pair<std::vector<VAny>, _T>*>> mBranchMap;
     };
     
     // VDecisionTreeSplitHelper
@@ -225,6 +298,9 @@ namespace Void
             mSplitOperators[VDecisionTreeSplit::Complete][typeid(int).name()] = new VDecisionTreeSplitOperator<_T, int, VDecisionTreeSplit::Complete>();
             // Complete (string)
             mSplitOperators[VDecisionTreeSplit::Complete][typeid(std::string).name()] = new VDecisionTreeSplitOperator<_T, std::string, VDecisionTreeSplit::Complete>();
+            // BinaryContinuous (float)
+            mSplitOperators[VDecisionTreeSplit::BinaryContinuous][typeid(float).name()] = new VDecisionTreeSplitOperator<_T, float, VDecisionTreeSplit::BinaryContinuous>();
+
         }
         
     protected:
