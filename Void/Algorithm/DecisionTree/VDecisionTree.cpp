@@ -16,6 +16,7 @@ namespace Void
         tree.Push({ 1.f, 5, std::string("happy") }, "good");
         tree.Push({ 2.f, 5, std::string("sad") }, "bad");
         tree.Build();
+        auto result = tree.Predict({ 3.f, 5, std::string("happy") });
         
         return;
     }

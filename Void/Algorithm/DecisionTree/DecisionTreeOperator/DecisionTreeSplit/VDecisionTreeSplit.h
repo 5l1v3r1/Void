@@ -221,7 +221,7 @@ namespace Void
                 for (_F& value : mSortedValues)
                 {
                     std::vector<std::pair<std::vector<VAny>, _T>*>& branch = mBranchMap[value];
-                    if (threshold <= value)
+                    if (value <= threshold)
                     {
                         std::copy(branch.begin(), branch.end(), std::back_inserter(_result.branches[0]));
                     }

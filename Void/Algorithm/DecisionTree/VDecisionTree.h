@@ -30,14 +30,22 @@ namespace Void
         {
         public:
             //----------------------------------------------------------------------------------------------------
-            inline Node() {}
+            inline Node()
+                :
+                impurity(0),
+                label(),
+                splitFeature(-1),
+                children(),
+                routes(nullptr)
+            {
+            }
             
         public:
             //----------------------------------------------------------------------------------------------------
             // int depth;
             double impurity;
             _T label;
-            // unsigned feature;
+            int splitFeature;
             std::vector<VSmartPtr<Node>> children;
             std::function<unsigned(const VAny&)> routes;
         };
@@ -58,7 +66,7 @@ namespace Void
         }
         
         //----------------------------------------------------------------------------------------------------
-        inline void Push(std::vector<VAny> _features, _T _target)
+        inline void Push(const std::vector<VAny>& _features, _T _target)
         {
             mData.push_back(std::pair<std::vector<VAny>, _T>(_features, _target));
         }
@@ -76,6 +84,12 @@ namespace Void
             Build(mRoot, samples);
         }
         
+        //----------------------------------------------------------------------------------------------------
+        inline _T Predict(const std::vector<VAny>& _features)
+        {
+            return Predict(mRoot, _features);
+        }
+        
     protected:
         // Recursion
         //----------------------------------------------------------------------------------------------------
@@ -86,6 +100,9 @@ namespace Void
                 return;
             }
             
+            // Label
+            _node->label = this->Label(_samples);
+            
             // Impurity
             double impurity = this->CalculateImpurity(_samples);
             _node->impurity = impurity;
@@ -93,13 +110,10 @@ namespace Void
             {
                 return;
             }
-            
-            // Label
-            _node->label = this->Label(_samples);
-            
             // Split
+            int bestSplitFeature = -1;
             double bestInformationGain = 0; // Todo: option(InformationGain, GainRatio, Gini)
-            VDecisionTreeSplitResult<_T> bestFeature;
+            VDecisionTreeSplitResult<_T> bestSplit;
             VDecisionTreeSplitHelper<_T> splitHelper;
             for (unsigned i = 0; i < mFeatureTypes.size(); ++i)
             {
@@ -116,22 +130,47 @@ namespace Void
                         }
                         if (bestInformationGain < informationGain)
                         {
+                            bestSplitFeature = i;
                             bestInformationGain = informationGain;
-                            bestFeature.Swap(result);
+                            bestSplit.Swap(result);
                         }
                     }
                 }
             }
+            _node->splitFeature = bestSplitFeature;
+            
+            //
             if (bestInformationGain)
             {
-                for (auto& branch : bestFeature.branches)
+                for (auto& branch : bestSplit.branches)
                 {
                     VSmartPtr<Node> node = VSmartPtr<Node>(new Node());
                     _node->children.push_back(node);
                     Build(node, branch);
                 }
-                _node->routes = bestFeature.routes;
+                _node->routes = bestSplit.routes;
             }
+        }
+        
+        // Recursion
+        //----------------------------------------------------------------------------------------------------
+        inline _T Predict(VSmartPtr<Node>& _node, const std::vector<VAny>& _features)
+        {
+            if (_node)
+            {
+                if (_node->splitFeature != -1)
+                {
+                    unsigned childIndex = _node->routes(_features[_node->splitFeature]);
+                    if (childIndex != -1)
+                    {
+                        VSmartPtr<Node> nextNode = _node->children[childIndex];
+                        return Predict(nextNode, _features);
+                    }
+                }
+                return _node->label;
+            }
+            
+            return _T();
         }
         
     protected:
