@@ -27,9 +27,9 @@ namespace Void
     std::vector<std::string> VCorpusGameSkill::RandomSkills(unsigned int _count)
     {
         std::vector<std::string> result;
-        unsigned int maxPrefix = (unsigned int)mSkillComponents[VPartOfSpeech::ADJECTIVE].size();
-        unsigned int maxNSuffix = (unsigned int)mSkillComponents[VPartOfSpeech::NOUN].size();
-        unsigned int maxVSuffix = (unsigned int)mSkillComponents[VPartOfSpeech::VERB].size();
+        unsigned int maxPrefix = (unsigned int)mSkillComponents[VPartOfSpeech::Adjective].size();
+        unsigned int maxNSuffix = (unsigned int)mSkillComponents[VPartOfSpeech::Noun].size();
+        unsigned int maxVSuffix = (unsigned int)mSkillComponents[VPartOfSpeech::Verb].size();
         unsigned int maxSuffix = maxNSuffix + maxVSuffix;
         unsigned int maxSize = maxPrefix * maxSuffix;
         if (maxSize < _count)
@@ -41,8 +41,8 @@ namespace Void
         std::vector<int> indexes = random.MultipleUniqueRand(_count, 0, maxSize - 1);
         for (int index : indexes)
         {
-            std::string prefix = mSkillComponents[VPartOfSpeech::ADJECTIVE][index / maxSuffix];
-            std::string suffix = index % maxSuffix < maxNSuffix ? mSkillComponents[VPartOfSpeech::NOUN][index % maxSuffix] : mSkillComponents[VPartOfSpeech::VERB][index % maxSuffix - maxNSuffix];
+            std::string prefix = mSkillComponents[VPartOfSpeech::Adjective][index / maxSuffix];
+            std::string suffix = index % maxSuffix < maxNSuffix ? mSkillComponents[VPartOfSpeech::Noun][index % maxSuffix] : mSkillComponents[VPartOfSpeech::Verb][index % maxSuffix - maxNSuffix];
             result.push_back(prefix + suffix);
         }
         

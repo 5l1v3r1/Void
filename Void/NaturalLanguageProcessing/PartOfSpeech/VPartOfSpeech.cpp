@@ -34,18 +34,22 @@ namespace Void
         {
             return it->second;
         }
-        return VPartOfSpeech::NONE;
+        return VPartOfSpeech::None;
     }
     
     //----------------------------------------------------------------------------------------------------
     void VPartOfSpeechMapper::Initialize()
     {
-        mMapper["n"] = VPartOfSpeech::NOUN;
-        mMapper["adj"] = VPartOfSpeech::ADJECTIVE;
-        mMapper["v"] = VPartOfSpeech::VERB;
-        mMapper["s"] = VPartOfSpeech::SUBJECT;
-        mMapper["num"] = VPartOfSpeech::NUMERAL;
-        mMapper["prep"] = VPartOfSpeech::PREPOSITION;
+        mMapper["n"] = VPartOfSpeech::Noun;
+        mMapper["pron"] = VPartOfSpeech::Pronoun;
+        mMapper["adj"] = VPartOfSpeech::Adjective;
+        mMapper["v"] = VPartOfSpeech::Verb;
+        mMapper["ad"] = VPartOfSpeech::Adverb;
+        mMapper["prep"] = VPartOfSpeech::Preposition;
+        mMapper["conj"] = VPartOfSpeech::Conjunction;
+        mMapper["int"] = VPartOfSpeech::Interjection;
+        mMapper["art"] = VPartOfSpeech::Article;
+        mMapper["num"] = VPartOfSpeech::Numeral;
     }
     
     // Test

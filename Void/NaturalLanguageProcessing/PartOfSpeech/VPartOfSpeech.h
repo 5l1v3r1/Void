@@ -12,13 +12,20 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     enum class VPartOfSpeech
     {
-        NONE = 0,
-        NOUN, // n.
-        ADJECTIVE, // adj.
-        VERB, // v.
-        SUBJECT, // s.
-        NUMERAL, // num.
-        PREPOSITION, // prep.
+        None = 0,
+        
+        Noun, // n.
+        Pronoun, // pron.
+        Adjective, // adj.
+        Verb, // v.
+        Adverb, // ad.
+        Preposition, // prep.
+        Conjunction, // conj.
+        Interjection, // int.
+        Article, // art.
+        Numeral, // num.
+        
+        Subject, // s.
     };
     
     // VPartOfSpeechMapper
