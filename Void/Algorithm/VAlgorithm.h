@@ -13,5 +13,6 @@
 #include "HuffmanTree/VHuffmanTree.h"
 #include "Hash/VHash.h"
 #include "ViterbiAlgorithm/VViterbiAlgorithm.h"
+#include "Levenshtein/VLevenshtein.h"
 
 #endif
