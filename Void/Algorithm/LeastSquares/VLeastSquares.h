@@ -9,6 +9,8 @@ namespace Void
 {
     // VLeastSquares
     // min∑((yi - y)^2)
+    // f(y, variable) is a convex function
+    // find ∂f / ∂variable = 0
     //----------------------------------------------------------------------------------------------------
     class VLeastSquares
     {
@@ -20,6 +22,8 @@ namespace Void
         
         //----------------------------------------------------------------------------------------------------
         std::pair<double, double> LinearEquationWithOneUnknown(std::vector<std::pair<double, double>> _xy);
+        std::vector<double> LinearEquationWithOneUnknown(std::vector<std::pair<double, double>> _xy, unsigned _degree);
+        std::pair<double, std::vector<double>> LinearEquationWithMultivariable(std::vector<std::pair<std::vector<double>, double>> _xy);
         
     protected:
         //----------------------------------------------------------------------------------------------------

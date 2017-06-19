@@ -21,10 +21,18 @@ namespace Void
     }
     
     // y = a + b * x + ε
-    // min∑(εi)
-    // (n) * a + (n * x) * b = n * y
-    // (n * x) * a + ∑(xi^2) * b = ∑(xi * yi)
-    // b = (∑(xi - yi) - n * x * y) / ∑(xi^2) - n * x^2 = ∑((xi - x) * (yi - y)) / ∑((xi - x)^2)
+    // z = min∑(εi^2) => min∑((a + b * xi - yi)^2)
+    // ∂z/∂a = 2 * ∑(a + b * xi - yi)
+    //       = 2 * (n * a + b * ∑(xi) - ∑(yi))
+    //       = 0
+    // ∂z/∂b = 2 * ∑(a + b * xi - yi) * xi
+    //       = 2 * (a * ∑(xi) + b * ∑(xi ^ 2) - ∑(yi * xi))
+    //       = 0
+    // a = (∑(yi) * ∑(xi^2) - ∑(xi) * ∑(xi * yi)) / (n * ∑(xi^2) - ∑(xi)^2)
+    //   = y - b * x
+    // b = (n * ∑(xi * yi) - ∑(xi) * ∑(yi)) / (n * ∑(xi^2) - ∑(xi)^2)
+    //
+    // return: (a, b)
     //----------------------------------------------------------------------------------------------------
     std::pair<double, double> VLeastSquares::LinearEquationWithOneUnknown(std::vector<std::pair<double, double>> _xy)
     {
@@ -42,6 +50,35 @@ namespace Void
         double a = (y * xx - x * xy) / (_xy.size() * xx - x * x);
         double b = (_xy.size() * xy - x * y) / (_xy.size() * xx - x * x);
         return std::pair<double, double>(a, b);
+    }
+    
+    // y = (a0 * x^0 + a1 * x^1 + ... + ak * x^k) + ε
+    // z = min∑(εi^2) => min∑(((a0 * xi^0 + a1 * xi^1 + ... + ak * xi^k) - yi)^2)
+    // ∂z/∂a0 = 2 * ∑((a0 * xi^0 + a1 * xi^1 + ... + ak * xi^k) - yi)
+    //        = 0
+    // ∂z/∂ak = 2 * ∑((a0 * xi^0 + a1 * xi^1 + ... + ak * xi^k) - yi) * xi^k
+    //        = 0
+    //
+    // return (a0, a1, a2 ...)
+    //----------------------------------------------------------------------------------------------------
+    std::vector<double> VLeastSquares::LinearEquationWithOneUnknown(std::vector<std::pair<double, double>> _xy, unsigned _degree)
+    {
+        
+        
+        return std::vector<double>();
+    }
+    
+    // y = a + (w0 * x0 + w1 * x1 + ...) + ε
+    // z = min∑(εi^2) => min∑((a + (w0 * x0 + w1 * x1 + ...) - yi)^2)
+    // ∂z/∂a = 2 * ∑(a + (w0 * x0 + w1 * x1 + ...) - yi)
+    //       = 0
+    //
+    // return: (a, w)
+    //----------------------------------------------------------------------------------------------------
+    std::pair<double, std::vector<double>> VLeastSquares::LinearEquationWithMultivariable(std::vector<std::pair<std::vector<double>, double>> _xy)
+    {
+        
+        return std::pair<double, std::vector<double>>();
     }
     
     // Test
