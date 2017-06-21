@@ -22,7 +22,7 @@ namespace Void
         
         //----------------------------------------------------------------------------------------------------
         std::pair<double, double> LinearEquationWithOneUnknown(std::vector<std::pair<double, double>> _xy);
-        std::vector<double> LinearEquationWithOneUnknown(std::vector<std::pair<double, double>> _xy, unsigned _degree);
+        std::vector<double> LinearEquationWithOneUnknown(std::vector<std::pair<double, double>> _xy, unsigned _order);
         std::pair<double, std::vector<double>> LinearEquationWithMultivariable(std::vector<std::pair<std::vector<double>, double>> _xy);
         
     protected:
