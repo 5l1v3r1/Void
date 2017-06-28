@@ -65,7 +65,7 @@ namespace Void
     // matrix = [      n       ∑(xi^1) ...      ∑(xi^k)] [a0] = [∑(yi * xi^0)]
     //          [∑(xi^1)       ∑(xi^2) ... ∑(xi^(k + 1)] [a1]   [∑(yi * xi^1)]
     //          [    ...           ... ...          ...] [..]   [         ...]
-    //          [∑(xi^k) ∑(xi^(k + 1)) ... ∑(xi^(k * 2)) [ak]   [∑(yi * xi^k)]
+    //          [∑(xi^k) ∑(xi^(k + 1)) ... ∑(xi^(k * 2)] [ak]   [∑(yi * xi^k)]
     //
     // Return (a0, a1, a2 ...)
     //----------------------------------------------------------------------------------------------------
@@ -105,17 +105,67 @@ namespace Void
         return result;
     }
     
-    // y = a + (w0 * x0 + w1 * x1 + ...) + ε
-    // z = min∑(εi^2) => min∑((a + (w0 * x0 + w1 * x1 + ...) - yi)^2)
-    // ∂z/∂a = 2 * ∑(a + (w0 * x0 + w1 * x1 + ...) - yi)
-    //       = 0
+    // y = a + (w0 * x0 + w1 * x1 + ... + wk * xk) + ε
+    // min(z) = min∑(εi^2) => min∑((a + (w0 * x0 + w1 * x1 + ... + wk * xk) - yi)^2)
+    // ∂z/∂a  = 2 * ∑(a + (w0 * x0 + w1 * x1 + ... + wk * xk) - yi)
+    //        = 2 * (n * a + w0 * ∑(x0) + w1 * ∑(x1) + ... + wk * ∑(xl) - ∑(yi))
+    //        = 0
+    // ∂z/∂wk = 2 * ∑((a + (w0 * x0 + w1 * x1 + ... + wk * xk) - yi) * xk)
+    //        = 2 * (a * ∑(xk) + w0 * ∑(x0 * xk) + w1 * ∑(x1 * xk) + ... + wk * ∑(xk * xk) - ∑(yi * xk))
+    //        = 0
+    // matrix = [    n      ∑(x0)      ∑(x1) ...      ∑(xk)] [ a] = [     ∑(yi)]
+    //          [∑(x0) ∑(x0 * x0) ∑(x1 * x0) ... ∑(xk * x0)] [w0]   [∑(yi * x0)]
+    //          [  ...        ...        ... ...        ...] [..]   [       ...]
+    //          [∑(xk) ∑(x0 * xk) ∑(x1 * xk) ... ∑(xk * xk)] [wk]   [∑(yi * xk)]
     //
     // return: (a, w)
     //----------------------------------------------------------------------------------------------------
     std::pair<double, std::vector<double>> VLeastSquares::LinearEquationWithMultivariable(std::vector<std::pair<std::vector<double>, double>> _xy)
     {
+        if (!_xy.size())
+        {
+            return std::pair<double, std::vector<double>>();
+        }
         
-        return std::pair<double, std::vector<double>>();
+        unsigned long variableCount = _xy[0].first.size();
+        VDynamicMatrix<double> coefficientMatrix(variableCount + 1, variableCount + 1, 0);
+        VDynamicMatrix<double> constantMatrix(variableCount + 1, 1, 0);
+        for (unsigned int i = 0; i < _xy.size(); ++i)
+        {
+            std::vector<double> &x = _xy[i].first;
+            double y = _xy[i].second;
+            coefficientMatrix(0, 0) += 1;
+            for (unsigned long row = 1; row < coefficientMatrix.Rows(); ++row)
+            {
+                coefficientMatrix(row, 0) += x[row - 1];
+            }
+            for (unsigned long row = 1; row < coefficientMatrix.Rows(); ++row)
+            {
+                for (unsigned long column = 1; column <= row; ++column)
+                {
+                    coefficientMatrix(row, column) += x[row - 1] * x[column - 1];
+                }
+            }
+            constantMatrix(0, 0) += y;
+            for (unsigned long row = 1; row < constantMatrix.Rows(); ++row)
+            {
+                constantMatrix(row, 0) += y * x[row - 1];
+            }
+        }
+        for (unsigned long row = 1; row < coefficientMatrix.Rows(); ++row)
+        {
+            for (unsigned long column = row + 1; column < coefficientMatrix.Columns(); ++column)
+            {
+                coefficientMatrix(row, column) = coefficientMatrix(column, row);
+            }
+        }
+        VDynamicMatrix<double> unknownMatrix = coefficientMatrix.Inverse() * constantMatrix;
+        std::pair<double, std::vector<double>> result(unknownMatrix(0, 0), std::vector<double>(variableCount));
+        for (unsigned int i = 0; i < variableCount; ++i)
+        {
+            result.second[i] = unknownMatrix(i + 1, 0);
+        }
+        return result;
     }
     
     // Test
@@ -127,7 +177,8 @@ namespace Void
         
         // y = 5 + 4 * x
         std::vector<std::pair<double, double>> simulatedData;
-        for (int i = 0; i < 100000; ++i) {
+        for (int i = 0; i < 10000; ++i)
+        {
             float e = random.Rand(-1.f, 1.f);
             simulatedData.push_back(std::pair<double, double>(i, 5 + 4 * i + e));
         }
@@ -135,7 +186,8 @@ namespace Void
         
         // y = 2 - 2.5 * x
         simulatedData.clear();
-        for (int i = 0; i < 100000; ++i) {
+        for (int i = 0; i < 10000; ++i)
+        {
             float e = random.Rand(-1.f, 1.f);
             simulatedData.push_back(std::pair<double, double>(i, 2 + -2.5 * i + e));
         }
@@ -144,11 +196,27 @@ namespace Void
         
         // y = 8 - 3.5 * x + 2 * x^2
         simulatedData.clear();
-        for (float i = 0; i < 10; i += 0.02) {
+        for (float i = 0; i < 10; i += 0.02)
+        {
             float e = random.Rand(-1.f, 1.f);
             simulatedData.push_back(std::pair<double, double>(i, 100 + -3.5 * i + 2 * i * i + e));
         }
         result = leastSquares.LinearEquationWithOneUnknown(simulatedData, 2);
+        
+        // y = 8 - 3.5 * x0 + 2 * x1
+        std::vector<std::pair<std::vector<double>, double>> multiSimulatedData;
+        for (float i = 0; i < 10; i += 0.1)
+        {
+            for (float j = 0; j < 10; j += 0.1)
+            {
+                float e = random.Rand(-0.2f, 0.2f);
+                multiSimulatedData.push_back(std::pair<std::vector<double>, double>({i, j}, 100 + -3.5 * i + 2 * j + e));
+            }
+        }
+        auto multiResult = leastSquares.LinearEquationWithMultivariable(multiSimulatedData);
+        
+        // xxx
+        multiSimulatedData.clear();
         
         return;
     }
