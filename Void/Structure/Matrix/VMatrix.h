@@ -17,7 +17,7 @@ namespace Void
      |     | N (row)
      |     |
      +-----+
-     */
+    */
     //----------------------------------------------------------------------------------------------------
     template<typename _T=float, size_t _N=4, size_t _M=4>
     class VMatrixNM
