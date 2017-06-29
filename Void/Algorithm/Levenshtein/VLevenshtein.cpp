@@ -7,10 +7,10 @@ namespace Void
 {
 	// VLevenshtein
 	//----------------------------------------------------------------------------------------------------
-	unsigned VLevenshtein::Distance(const std::string& _first, const std::string& _second)
+	unsigned long VLevenshtein::Distance(const std::string& _first, const std::string& _second)
 	{
-		unsigned rows = _first.size();
-		unsigned columns = _second.size();
+		unsigned long rows = _first.size();
+		unsigned long columns = _second.size();
 		if (rows == 0)
 		{
 			return columns;

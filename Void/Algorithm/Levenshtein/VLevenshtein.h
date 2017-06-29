@@ -15,7 +15,7 @@ namespace Void
 	{
 	public:
 		//----------------------------------------------------------------------------------------------------
-		static unsigned Distance(const std::string& _first, const std::string& _second);
+		static unsigned long Distance(const std::string& _first, const std::string& _second);
 
 	protected:
 		//----------------------------------------------------------------------------------------------------
