@@ -12,22 +12,60 @@ namespace Void
 {
 	// VStableMatching
 	// Propose-And-Reject (Gale-Shapley)
-	// gentlemen rank
-	// ladies rank
 	//----------------------------------------------------------------------------------------------------
 	template <typename _T>
 	class VStableMatching
 	{
+    protected:
+        //----------------------------------------------------------------------------------------------------
+        struct Mind
+        {
+        public:
+            //----------------------------------------------------------------------------------------------------
+            Mind()
+                :
+                preferences(),
+                preferRank(-1)
+            {
+            }
+            
+            //----------------------------------------------------------------------------------------------------
+            Mind(std::vector<_T>& _preferences)
+                :
+                preferences(_preferences),
+                preferRank(-1)
+            {
+            }
+            
+            //----------------------------------------------------------------------------------------------------
+            int TargetRank(const _T& _target)
+            {
+                for (unsigned int i = 0; i < preferences.size(); ++i)
+                {
+                    if (preferences[i] == _target)
+                    {
+                        return i;
+                    }
+                }
+                return -1;
+            }
+            
+        public:
+            //----------------------------------------------------------------------------------------------------
+            std::vector<_T> preferences;
+            int preferRank;
+        };
+        
 	public:
 		//----------------------------------------------------------------------------------------------------
 		static std::map<_T, _T> GaleShapley(std::map<_T, std::vector<_T>>& _gentlemen, std::map<_T, std::vector<_T>>& _ladies)
 		{
 			std::map<_T, _T> result;
-			std::list<_T> leftover; // Why list? Lovelorn man may immerse in the grief
+			std::list<_T> leftover; // Why do we use list? Lovelorn man may immerse in the grief...
 			std::map<_T, Mind> gentlemen;
 			std::map<_T, Mind> ladies;
 
-			// init leftover, gentlemen, ladies
+			// Init leftover, gentlemen, ladies
 			for (typename std::map<_T, std::vector<_T>>::iterator it = _gentlemen.begin(); it != _gentlemen.end(); ++it)
 			{
 				leftover.push_back(it->first);
@@ -38,7 +76,7 @@ namespace Void
 				ladies.insert(std::pair<_T, Mind>(it->first, Mind(it->second)));
 			}
 
-			// fight
+			// Fight
 			while (!leftover.empty())
 			{
 				_T man = leftover.front();
@@ -48,14 +86,14 @@ namespace Void
 				_T &lady = manMind.preferences[manMind.preferRank];
 				Mind &ladyMind = ladies[lady];
 
-				int rankInHerMind = ladyMind.GetTargetRank(man);
-				if (ladyMind.preferRank == -1) // free
+				int rankInHerMind = ladyMind.TargetRank(man);
+				if (ladyMind.preferRank == -1) // Free
 				{
 					leftover.pop_front();
 					ladyMind.preferRank = rankInHerMind;
 					result[man] = lady;
 				}
-				else if (rankInHerMind < ladyMind.preferRank) // lady rank
+				else if (rankInHerMind < ladyMind.preferRank) // Green hat...
 				{
 					leftover.pop_front();
 					leftover.push_back(ladyMind.preferences[ladyMind.preferRank]);
@@ -66,42 +104,6 @@ namespace Void
 
 			return result;
 		}
-
-	protected:
-		//----------------------------------------------------------------------------------------------------
-		struct Mind
-		{
-		public:
-			std::vector<_T> preferences;
-			int preferRank;
-
-			Mind()
-				:
-				preferences(),
-				preferRank(-1)
-			{
-				// Error
-			}
-
-			Mind(std::vector<_T>& _preferences)
-				:
-				preferences(_preferences),
-				preferRank(-1)
-			{
-			}
-
-			int GetTargetRank(const _T& _target)
-			{
-				for (unsigned int i = 0; i < preferences.size(); ++i)
-				{
-					if (preferences[i] == _target)
-					{
-						return i;
-					}
-				}
-				return -1;
-			}
-		};
 	};
 
     // Test
