@@ -49,7 +49,8 @@ namespace Void
         }
         
         unsigned int result = 1;
-        for (unsigned int i = 2; i <= _n; ++i) {
+        for (unsigned int i = 2; i <= _n; ++i)
+        {
             result *= i;
         }
         return result;
@@ -65,7 +66,8 @@ namespace Void
         }
         
         unsigned int result = 1;
-        for (unsigned int i = _n - _m + 1; i <= _n; ++i) {
+        for (unsigned int i = _n - _m + 1; i <= _n; ++i)
+        {
             result *= i;
         }
         return result;

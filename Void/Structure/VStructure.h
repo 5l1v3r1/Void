@@ -12,6 +12,7 @@
 #include "DualNumber/VDualNumber.h"
 #include "GaussianDistribution/VGaussianDistribution.h"
 #include "BinomialDistribution/VBinomialDistribution.h"
+#include "PoissonDistribution/VPoissonDistribution.h"
 #include "BigNumber/VBigNumber.h"
 #include "PrimeNumber/VPrimeNumber.h"
 #include "Series/VSeries.h"

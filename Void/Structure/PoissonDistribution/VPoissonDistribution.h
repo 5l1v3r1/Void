@@ -1,39 +1,39 @@
 #pragma once
-#ifndef _V_BINOMIALDISTRIBUTION_H_
-#define _V_BINOMIALDISTRIBUTION_H_
+#ifndef _V_POISSONDISTRIBUTION_H_
+#define _V_POISSONDISTRIBUTION_H_
+
+#include <vector>
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
 {
-    // VBinomialDistribution
+    // VPoissonDistribution
     // Discrete
     //----------------------------------------------------------------------------------------------------
-    struct VBinomialDistribution
+    struct VPoissonDistribution
     {
     public:
         //----------------------------------------------------------------------------------------------------
-        VBinomialDistribution();
-        VBinomialDistribution(float _probability);
-        VBinomialDistribution(const VBinomialDistribution& _distribution);
-        ~VBinomialDistribution();
+        VPoissonDistribution();
+        VPoissonDistribution(const VPoissonDistribution& _distribution);
+        ~VPoissonDistribution();
         
         //----------------------------------------------------------------------------------------------------
-        float Tries(unsigned int _times, unsigned int _success);
+        float ProbabilityDensityFunction(unsigned int _times) const;
+        bool MaximumLikelihoodEstimation(std::vector<float> _samples);
         
     protected:
         //----------------------------------------------------------------------------------------------------
-        unsigned int Factorial(unsigned int _n);
-        unsigned int Arrangement(unsigned int _n, unsigned int _m);
-        unsigned int Combination(unsigned int _n, unsigned int _m);
+        unsigned int Factorial(unsigned int _n) const;
         
     public:
         //----------------------------------------------------------------------------------------------------
-        float probability;
+        float lambda; // Frequency
     };
     
     // Test
     //----------------------------------------------------------------------------------------------------
-    void VBinomialDistributionTest();
+    void VPoissonDistributionTest();
 }
 
 #endif
