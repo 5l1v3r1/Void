@@ -76,6 +76,17 @@ namespace Void
             SetValues(_values, _count);
         }
         
+        inline VDynamicMatrix(const unsigned long& _rows, const unsigned long& _columns, const std::vector<_T> _values)
+            :
+            mRows(_rows),
+            mColumns(_columns),
+            mRowRoutes(),
+            mColumnRoutes(),
+            mMatrix(new std::vector<std::vector<_T>>(_rows, std::vector<_T>(_columns)))
+        {
+            SetValues(_values.data(), _values.size());
+        }
+        
         inline VDynamicMatrix(const VDynamicMatrix& _matrix)
             :
             mRows(_matrix.mRows),
@@ -264,7 +275,7 @@ namespace Void
         }
         
         //----------------------------------------------------------------------------------------------------
-        void SetValues(_T* _values, const unsigned long& _count)
+        void SetValues(const _T* _values, const unsigned long& _count)
         {
             for (unsigned long row = 0; row < mRows; ++row)
             {
@@ -909,17 +920,83 @@ namespace Void
         
         // Matrix * X = 0
         // General solution
+        // Size = columns - ranks
         //----------------------------------------------------------------------------------------------------
-        std::vector<std::vector<_T>> HomogeneousLinearMaximalIndependentSet()
+        std::vector<std::vector<_T>> HomogeneousLinearMaximalIndependentSolutionSet()
         {
-            return std::vector<std::vector<_T>>();
+            std::vector<std::vector<_T>> result;
+            VDynamicMatrix matrix = ReducedRowEchelonForm();
+            unsigned long columnFloor = 0;
+            std::map<unsigned long, unsigned long> rankMap;
+            for (unsigned long row = 0; row < mRows; ++row)
+            {
+                for (unsigned long column = columnFloor; column < mColumns; ++column)
+                {
+                    if (matrix(row, column) != 0)
+                    {
+                        rankMap[row] = column;
+                        columnFloor = column + 1;
+                        break;
+                    }
+                    else
+                    {
+                        std::vector<_T> solution(mColumns, 0);
+                        for (unsigned long subRow = 0; subRow < row; ++subRow)
+                        {
+                            solution[rankMap[subRow]] = -matrix(subRow, column);
+                        }
+                        solution[column] = 1;
+                        result.push_back(solution);
+                    }
+                }
+            }
+            return result;
         }
         
         // Matrix * X = B
+        // HomogeneousLinear general solution + specific solution
         //----------------------------------------------------------------------------------------------------
-        std::vector<std::vector<_T>> NonhomogeneousLinearMaximalIndependentSet(const std::vector<_T>& _b)
+        std::pair<std::vector<std::vector<_T>>, std::vector<_T>> NonhomogeneousLinearMaximalIndependentSolutionSet(const std::vector<_T>& _constants)
         {
-            return std::vector<std::vector<_T>>();
+            std::pair<std::vector<std::vector<_T>>, std::vector<_T>> result;
+            VDynamicMatrix<double> constantMatrix(mRows, 1, 0);
+            for (unsigned row = 0; row < _constants.size() && row < mRows; ++row)
+            {
+                constantMatrix(row, 0) = _constants[row];
+            }
+            VDynamicMatrix augmentedMatrix = Concatenate(constantMatrix);
+            VDynamicMatrix matrix = augmentedMatrix.ReducedRowEchelonForm();
+            unsigned long columnFloor = 0;
+            std::map<unsigned long, unsigned long> rankMap;
+            for (unsigned long row = 0; row < mRows; ++row)
+            {
+                for (unsigned long column = columnFloor; column < mColumns; ++column)
+                {
+                    if (matrix(row, column) != 0)
+                    {
+                        rankMap[row] = column;
+                        columnFloor = column + 1;
+                        break;
+                    }
+                    else
+                    {
+                        std::vector<_T> solution(mColumns, 0);
+                        for (unsigned long subRow = 0; subRow < row; ++subRow)
+                        {
+                            solution[rankMap[subRow]] = -matrix(subRow, column);
+                        }
+                        solution[column] = 1;
+                        result.first.push_back(solution);
+                    }
+                }
+            }
+            std::vector<_T> specificSolution(mColumns, 0);
+            for (unsigned long row = 0; row < mRows; ++row)
+            {
+                specificSolution[rankMap[row]] = -matrix(row, mColumns);
+            }
+            result.second = specificSolution;
+            return result;
         }
         
     protected:
