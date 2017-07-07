@@ -194,7 +194,7 @@ namespace Void
         ab = leastSquares.LinearEquationWithOneUnknown(simulatedData);
         std::vector<double> result = leastSquares.LinearEquationWithOneUnknown(simulatedData, 1);
         
-        // y = 8 - 3.5 * x + 2 * x^2
+        // y = 100 - 3.5 * x + 2 * x^2
         simulatedData.clear();
         for (float i = 0; i < 10; i += 0.02)
         {
@@ -203,11 +203,11 @@ namespace Void
         }
         result = leastSquares.LinearEquationWithOneUnknown(simulatedData, 2);
         
-        // y = 8 - 3.5 * x0 + 2 * x1
+        // y = 100 - 3.5 * x0 + 2 * x1
         std::vector<std::pair<std::vector<double>, double>> multiSimulatedData;
-        for (float i = 0; i < 10; i += 0.1)
+        for (float i = -10; i < 10; i += 0.1)
         {
-            for (float j = 0; j < 10; j += 0.1)
+            for (float j = -10; j < 10; j += 0.1)
             {
                 float e = random.Rand(-0.2f, 0.2f);
                 multiSimulatedData.push_back(std::pair<std::vector<double>, double>({i, j}, 100 + -3.5 * i + 2 * j + e));
