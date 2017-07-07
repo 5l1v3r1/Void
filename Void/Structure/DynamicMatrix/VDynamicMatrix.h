@@ -41,7 +41,7 @@ namespace Void
             mColumns(0),
             mRowRoutes(),
             mColumnRoutes(),
-            mMatrix(nullptr)
+            mMatrix(new std::vector<std::vector<_T>>())
         {
         }
         
@@ -620,9 +620,62 @@ namespace Void
             return subMatrix;
         }
         
+        const VDynamicMatrix SubMatrix(const unsigned long& _omittedRow, const unsigned long& _omittedColumn) const
+        {
+            VDynamicMatrix subMatrix(*this);
+            // Shift routes
+            if (_omittedRow < subMatrix.mRows)
+            {
+                --subMatrix.mRows;
+                auto& rowRoutes = subMatrix.mRowRoutes;
+                for (unsigned long row = _omittedRow; row < subMatrix.mRows; ++row)
+                {
+                    auto route = rowRoutes.find(row + 1);
+                    route != rowRoutes.end() ? rowRoutes[row] = route->second : rowRoutes[row] = row + 1;
+                }
+            }
+            if (_omittedColumn < subMatrix.mColumns)
+            {
+                --subMatrix.mColumns;
+                auto& columnRoutes = subMatrix.mColumnRoutes;
+                for (unsigned long column = _omittedColumn; column < subMatrix.mColumns; ++column)
+                {
+                    auto route = columnRoutes.find(column + 1);
+                    route != columnRoutes.end() ? columnRoutes[column] = route->second : columnRoutes[column] = column + 1;
+                }
+            }
+            return subMatrix;
+        }
+        
         VDynamicMatrix SubMatrix(const unsigned long& _fromRow, const unsigned long& _toRow, const unsigned long& _fromColumn, const unsigned long& _toColumn)
         {
-            if (!(_fromRow < _toRow && _toRow < mRows && _fromColumn < _toColumn && _toColumn < mColumns))
+            if (!(_fromRow <= _toRow && _toRow < mRows && _fromColumn <= _toColumn && _toColumn < mColumns))
+            {
+                return VDynamicMatrix();
+            }
+            
+            VDynamicMatrix subMatrix(*this);
+            subMatrix.mRows = _toRow - _fromRow + 1;
+            subMatrix.mColumns = _toColumn - _fromColumn + 1;
+            // Shift routes
+            auto& rowRoutes = subMatrix.mRowRoutes;
+            auto& columnRoutes = subMatrix.mColumnRoutes;
+            for (unsigned long row = 0; row < subMatrix.mRows; ++row)
+            {
+                auto route = rowRoutes.find(_fromRow + row);
+                route != rowRoutes.end() ? rowRoutes[row] = route->second : rowRoutes[row] = _fromRow + row;
+            }
+            for (unsigned long column = 0; column < mColumns; ++column)
+            {
+                auto route = columnRoutes.find(_fromColumn + column);
+                route != columnRoutes.end() ? columnRoutes[column] = route->second : columnRoutes[column] = _fromColumn + column;
+            }
+            return subMatrix;
+        }
+        
+        const VDynamicMatrix SubMatrix(const unsigned long& _fromRow, const unsigned long& _toRow, const unsigned long& _fromColumn, const unsigned long& _toColumn) const
+        {
+            if (!(_fromRow <= _toRow && _toRow < mRows && _fromColumn <= _toColumn && _toColumn < mColumns))
             {
                 return VDynamicMatrix();
             }
@@ -716,7 +769,7 @@ namespace Void
     
         // Transpose of algebraic cofactors
         //----------------------------------------------------------------------------------------------------
-        VDynamicMatrix Adjugate()
+        VDynamicMatrix Adjugate() const
         {
             VDynamicMatrix cofactors(mRows, mColumns);
             for (unsigned long row = 0; row < mRows; ++row)
@@ -735,7 +788,7 @@ namespace Void
         //----------------------------------------------------------------------------------------------------
         VDynamicMatrix Inverse() const
         {
-            VDynamicMatrix matrix = this->Concatenate(VDynamicMatrix::Identity(mRows, mColumns));
+            VDynamicMatrix matrix = Copy().Concatenate(VDynamicMatrix::Identity(mRows, mColumns));
             matrix = matrix.ReducedRowEchelonForm();
             return matrix.SubMatrix(0, mRows - 1, mColumns, mColumns + mColumns - 1);
         }
@@ -762,27 +815,31 @@ namespace Void
             return result;
         }
         
-        // result = [this | other]
+        // this = [this | other]
         //----------------------------------------------------------------------------------------------------
-        VDynamicMatrix Concatenate(const VDynamicMatrix& _matrix) const
+        VDynamicMatrix Concatenate(const VDynamicMatrix& _matrix)
         {
-            VDynamicMatrix result(mRows < _matrix.mRows ? _matrix.mRows : mRows, mColumns + _matrix.mColumns, 0);
+            // Resize
+            mColumns += _matrix.mColumns;
             for (unsigned long row = 0; row < mRows; ++row)
             {
-                for (unsigned long column = 0; column < mColumns; ++column)
-                {
-                    result(row, column) = (*this)(row, column);
-                }
+                (*mMatrix)[row].resize(mColumns);
             }
-            for (unsigned long row = 0; row < _matrix.Rows(); ++row)
+            if (mRows < _matrix.mRows)
             {
-                for (unsigned long column = 0; column < _matrix.mColumns; ++column)
-                {
-                    result(row, mColumns + column) = _matrix(row, column);
-                }
+                mRows = _matrix.mRows;
+                (*mMatrix).resize(mRows, std::vector<_T>(mColumns));
             }
             
-            return result;
+            // Copy data
+            for (unsigned long row = 0; row < _matrix.Rows(); ++row)
+            {
+                for (unsigned long column = mColumns - _matrix.mColumns; column < mColumns; ++column)
+                {
+                    (*this)(row, column) = _matrix(row, column - (mColumns - _matrix.mColumns));
+                }
+            }
+            return *this;
         }
         
         // Row canonical form
@@ -964,7 +1021,7 @@ namespace Void
             {
                 constantMatrix(row, 0) = _constants[row];
             }
-            VDynamicMatrix augmentedMatrix = Concatenate(constantMatrix);
+            VDynamicMatrix augmentedMatrix = Copy().Concatenate(constantMatrix);
             VDynamicMatrix matrix = augmentedMatrix.ReducedRowEchelonForm();
             unsigned long columnFloor = 0;
             std::map<unsigned long, unsigned long> rankMap;
@@ -996,6 +1053,34 @@ namespace Void
                 specificSolution[rankMap[row]] = -matrix(row, mColumns);
             }
             result.second = specificSolution;
+            return result;
+        }
+        
+        // Require: full column rank
+        //----------------------------------------------------------------------------------------------------
+        VDynamicMatrix GramSchmidtOrthogonalization() const
+        {
+            if (mRows < mColumns) // Todo: strict protect
+            {
+                return VDynamicMatrix();
+            }
+            
+            std::vector<VDynamicMatrix> orthonormalSet;
+            for (unsigned long column = 0; column < mColumns; ++column)
+            {
+                VDynamicMatrix vector = SubMatrix(0, mRows - 1, column, column).Copy();
+                for (VDynamicMatrix& orthogonalizedVector : orthonormalSet)
+                {
+                    vector -= orthogonalizedVector * orthogonalizedVector.DotProduct(vector);
+                }
+                orthonormalSet.push_back(vector / vector.Norm());
+            }
+            
+            VDynamicMatrix result;
+            for (VDynamicMatrix& orthogonalizedVector : orthonormalSet)
+            {
+                result.Concatenate(orthogonalizedVector);
+            }
             return result;
         }
         

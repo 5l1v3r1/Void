@@ -20,7 +20,7 @@ namespace Void
         double value = matrix4.Determinant();
         VLogger::Info("Matrix \n%s", matrix4.String().c_str());
         value = matrix3.DotProduct(matrix4);
-        auto matrix5 = matrix4.Concatenate(matrix3); // 3 * 6
+        auto matrix5 = matrix4.Copy().Concatenate(matrix3); // 3 * 6
         matrix5 = matrix4;
         VLogger::Info("Matrix \n%s", matrix5.String().c_str());
         matrix5.RowSwitch(1, 2);
@@ -64,6 +64,10 @@ namespace Void
         VDynamicMatrix<double> equations(3, 3, {1, 1, 1, 1, 2, 3, 1, 2, 3});
         auto solutionSet = equations.HomogeneousLinearMaximalIndependentSolutionSet();
         auto nonhomogeneousSolutionSet = equations.NonhomogeneousLinearMaximalIndependentSolutionSet({1, 2, 2});
+        
+        VDynamicMatrix<double> orthogonalization(3, 3, {1, 2, 2, 1, 0, 2, 0, 1, 1});
+        auto orthonormalMatrix = orthogonalization.GramSchmidtOrthogonalization();
+        orthonormalMatrix = orthonormalMatrix * orthonormalMatrix.Transpose();
         
         return;
     }
