@@ -151,6 +151,21 @@ namespace Void
             return false;
         }
         
+        bool IsZero() const
+        {
+            for (unsigned long row = 0; row < mRows; ++row)
+            {
+                for (unsigned long column = 0; column < mColumns; ++column)
+                {
+                    if ((*mMatrix)[row][column] != 0)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        
         //----------------------------------------------------------------------------------------------------
         _T Min() const
         {
@@ -292,6 +307,18 @@ namespace Void
         }
         
         //----------------------------------------------------------------------------------------------------
+        void Resize(const unsigned long& _row, const unsigned long& _columns)
+        {
+            (*mMatrix).resize(_row, std::vector<_T>(_columns));
+            for (unsigned long row = 0; row < mRows; ++row)
+            {
+                (*mMatrix)[row].resize(_columns);
+            }
+            mRows = _row;
+            mColumns = _columns;
+        }
+        
+        //----------------------------------------------------------------------------------------------------
         _T& operator()(const unsigned long& _row, const unsigned long& _column)
         {
             if (_row < mRows && _column < mColumns)
@@ -378,7 +405,18 @@ namespace Void
         
         VDynamicMatrix& operator+=(const VDynamicMatrix& _matrix)
         {
-            *this = *this + _matrix;
+            if (mRows != _matrix.mRows || mColumns != _matrix.mColumns)
+            {
+                throw "VDynamicMatrix: invalid addition";;
+            }
+            
+            for (unsigned long row = 0; row < mRows; ++row)
+            {
+                for (unsigned long column = 0; column < mColumns; ++column)
+                {
+                    (*this)(row, column) += _matrix(row, column);
+                }
+            }
             return *this;
         }
         
@@ -397,7 +435,14 @@ namespace Void
         
         VDynamicMatrix& operator+=(const _T& _scale)
         {
-            *this = *this + _scale;
+            for (unsigned long row = 0; row < mRows; ++row)
+            {
+                for (unsigned long column = 0; column < mColumns; ++column)
+                {
+                    (*this)(row, column) += _scale;
+                }
+            }
+
             return *this;
         }
         
@@ -436,7 +481,18 @@ namespace Void
         
         VDynamicMatrix& operator-=(const VDynamicMatrix& _matrix)
         {
-            *this = *this - _matrix;
+            if (mRows != _matrix.mRows || mColumns != _matrix.mColumns)
+            {
+                throw "VDynamicMatrix: invalid subtraction";;
+            }
+            
+            for (unsigned long row = 0; row < mRows; ++row)
+            {
+                for (unsigned long column = 0; column < mColumns; ++column)
+                {
+                    (*this)(row, column) -= _matrix(row, column);
+                }
+            }
             return *this;
         }
         
@@ -455,7 +511,13 @@ namespace Void
         
         VDynamicMatrix& operator-=(const _T& _scale)
         {
-            *this = *this - _scale;
+            for (unsigned long row = 0; row < mRows; ++row)
+            {
+                for (unsigned long column = 0; column < mColumns; ++column)
+                {
+                    (*this)(row, column) -= _scale;
+                }
+            }
             return *this;
         }
         
@@ -484,7 +546,22 @@ namespace Void
         
         VDynamicMatrix& operator*=(const VDynamicMatrix& _matrix)
         {
-            *this = *this * _matrix;
+            if (mColumns != _matrix.mRows)
+            {
+                throw "VDynamicMatrix: invalid multiplication";;
+            }
+            
+            for (unsigned long row = 0; row < mRows; ++row)
+            {
+                for (unsigned long column = 0; column < _matrix.mColumns; ++column)
+                {
+                    _T& value = (*this)(row, column);
+                    for (unsigned long index = 0; index < mColumns; ++index)
+                    {
+                        value += (*this)(row, index) * _matrix(index, column);
+                    }
+                }
+            }
             return *this;
         }
         
@@ -503,7 +580,13 @@ namespace Void
         
         VDynamicMatrix& operator*=(const _T& _scale)
         {
-            *this = *this * _scale;
+            for (unsigned long row = 0; row < mRows; ++row)
+            {
+                for (unsigned long column = 0; column < mColumns; ++column)
+                {
+                    (*this)(row, column) *= _scale;
+                }
+            }
             return *this;
         }
         
@@ -524,7 +607,13 @@ namespace Void
         }
         VDynamicMatrix& operator/=(const _T& _scale)
         {
-            *this = *this / _scale;
+            for (unsigned long row = 0; row < mRows; ++row)
+            {
+                for (unsigned long column = 0; column < mColumns; ++column)
+                {
+                    (*this)(row, column) /= _scale;
+                }
+            }
             return *this;
         }
         friend VDynamicMatrix operator/(const _T& _scale, const VDynamicMatrix& _matrix);
@@ -820,16 +909,7 @@ namespace Void
         VDynamicMatrix Concatenate(const VDynamicMatrix& _matrix)
         {
             // Resize
-            mColumns += _matrix.mColumns;
-            for (unsigned long row = 0; row < mRows; ++row)
-            {
-                (*mMatrix)[row].resize(mColumns);
-            }
-            if (mRows < _matrix.mRows)
-            {
-                mRows = _matrix.mRows;
-                (*mMatrix).resize(mRows, std::vector<_T>(mColumns));
-            }
+            Resize(mRows < _matrix.mRows ? _matrix.mRows : mRows, mColumns + _matrix.mColumns);
             
             // Copy data
             for (unsigned long row = 0; row < _matrix.Rows(); ++row)
@@ -908,7 +988,7 @@ namespace Void
         // this = Lower * Upper
         // Doolittle algorithm
         //----------------------------------------------------------------------------------------------------
-        void LUDecomposition(VDynamicMatrix& _lower, VDynamicMatrix& _upper)
+        void LUDecomposition(VDynamicMatrix& _lower, VDynamicMatrix& _upper) const
         {
             if (mRows != mColumns)
             {
@@ -932,6 +1012,38 @@ namespace Void
                     _upper.RowAdd(subRow, row, -value);
                     _lower(subRow, row) = value;
                 }
+            }
+        }
+        
+        // this = Q * R
+        // Q = orthogonal matrix
+        // R = upper triangular matrix
+        //----------------------------------------------------------------------------------------------------
+        void QRDecomposition(VDynamicMatrix& _Q, VDynamicMatrix& _R) const
+        {
+            _Q = this->Copy();
+            _R = VDynamicMatrix(mRows, mColumns, 0);
+            std::vector<VDynamicMatrix> orthonormalSet;
+            for (unsigned long column = 0; column < mColumns; ++column)
+            {
+                VDynamicMatrix vector = _Q.SubMatrix(0, mRows - 1, column, column);
+                for (unsigned long subColumn = 0; subColumn < orthonormalSet.size(); ++subColumn)
+                {
+                    VDynamicMatrix& orthogonalizedVector = orthonormalSet[subColumn];
+                    if (!orthogonalizedVector.IsZero()) // Make sure vector is not equal to zero to guarantee uniqueness
+                    {
+                        _T factor = orthogonalizedVector.DotProduct(vector);
+                        vector -= orthogonalizedVector * factor;
+                        _R(subColumn, column) = factor;
+                    }
+                }
+                _T norm = vector.Norm();
+                if (norm)
+                {
+                    vector /= norm;
+                    _R(column, column) = norm;
+                }
+                orthonormalSet.push_back(vector);
             }
         }
         
@@ -1060,26 +1172,29 @@ namespace Void
         //----------------------------------------------------------------------------------------------------
         VDynamicMatrix GramSchmidtOrthogonalization() const
         {
-            if (mRows < mColumns) // Todo: strict protect
-            {
-                return VDynamicMatrix();
-            }
-            
+            // if (mRows < mColumns)
+            // {
+            //     return VDynamicMatrix();
+            // }
+            VDynamicMatrix result = this->Copy();
             std::vector<VDynamicMatrix> orthonormalSet;
             for (unsigned long column = 0; column < mColumns; ++column)
             {
-                VDynamicMatrix vector = SubMatrix(0, mRows - 1, column, column).Copy();
+                VDynamicMatrix vector = result.SubMatrix(0, mRows - 1, column, column);
                 for (VDynamicMatrix& orthogonalizedVector : orthonormalSet)
                 {
-                    vector -= orthogonalizedVector * orthogonalizedVector.DotProduct(vector);
+                    if (!orthogonalizedVector.IsZero()) // Make sure vector is not equal to zero to guarantee uniqueness
+                    {
+                        // vector -= orthogonalizedVector * (orthogonalizedVector.DotProduct(vector) / orthogonalizedVector.DotProduct(orthogonalizedVector));
+                        vector -= orthogonalizedVector * orthogonalizedVector.DotProduct(vector);
+                    }
                 }
-                orthonormalSet.push_back(vector / vector.Norm());
-            }
-            
-            VDynamicMatrix result;
-            for (VDynamicMatrix& orthogonalizedVector : orthonormalSet)
-            {
-                result.Concatenate(orthogonalizedVector);
+                _T norm = vector.Norm();
+                if (norm)
+                {
+                    vector /= norm;
+                }
+                orthonormalSet.push_back(vector);
             }
             return result;
         }

@@ -68,6 +68,8 @@ namespace Void
         VDynamicMatrix<double> orthogonalization(3, 3, {1, 2, 2, 1, 0, 2, 0, 1, 1});
         auto orthonormalMatrix = orthogonalization.GramSchmidtOrthogonalization();
         orthonormalMatrix = orthonormalMatrix * orthonormalMatrix.Transpose();
+        VDynamicMatrix<double> q, r;
+        orthogonalization.QRDecomposition(q, r);
         
         return;
     }
