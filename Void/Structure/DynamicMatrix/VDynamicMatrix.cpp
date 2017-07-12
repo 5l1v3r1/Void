@@ -70,6 +70,10 @@ namespace Void
         orthonormalMatrix = orthonormalMatrix * orthonormalMatrix.Transpose();
         VDynamicMatrix<double> q, r;
         orthogonalization.QRDecomposition(q, r);
+        orthogonalization = q * r;
+        
+        VDynamicMatrix<double> eigenMatrix(2, 2, {2, 3, 2, 1});
+        auto eigenvalues = eigenMatrix.QRIteration(200);
         
         return;
     }

@@ -166,6 +166,21 @@ namespace Void
             return true;
         }
         
+        bool IsUpperTriangularMatrix() const
+        {
+            for (unsigned long row = 0; row < mRows; ++row)
+            {
+                for (unsigned long column = 0; column < row; ++column)
+                {
+                    if ((*this)(row, column) != 0)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        
         //----------------------------------------------------------------------------------------------------
         _T Min() const
         {
@@ -1030,7 +1045,7 @@ namespace Void
                 for (unsigned long subColumn = 0; subColumn < orthonormalSet.size(); ++subColumn)
                 {
                     VDynamicMatrix& orthogonalizedVector = orthonormalSet[subColumn];
-                    if (!orthogonalizedVector.IsZero()) // Make sure vector is not equal to zero to guarantee uniqueness
+                    if (!orthogonalizedVector.IsZero())
                     {
                         _T factor = orthogonalizedVector.DotProduct(vector);
                         vector -= orthogonalizedVector * factor;
@@ -1045,6 +1060,26 @@ namespace Void
                 }
                 orthonormalSet.push_back(vector);
             }
+        }
+        
+        //----------------------------------------------------------------------------------------------------
+        VDynamicMatrix QRIteration(unsigned int _maxTimes) const
+        {
+            VDynamicMatrix result = this->Copy();
+            VDynamicMatrix Q, R;
+            while (_maxTimes != 0 && !result.IsUpperTriangularMatrix())
+            {
+                result.QRDecomposition(Q, R);
+                result = R * Q;
+                _maxTimes -= 1;
+            }
+            return result;
+        }
+        
+        //----------------------------------------------------------------------------------------------------
+        void SchurDecomposition()
+        {
+            
         }
         
         //----------------------------------------------------------------------------------------------------
