@@ -35,6 +35,10 @@ namespace Void
 
     public:
         //----------------------------------------------------------------------------------------------------
+        typedef _T value_type;
+        typedef _T ValueType;
+        
+        //----------------------------------------------------------------------------------------------------
         inline VDynamicMatrix()
             :
             mRows(0),
@@ -42,6 +46,16 @@ namespace Void
             mRowRoutes(),
             mColumnRoutes(),
             mMatrix(new std::vector<std::vector<_T>>())
+        {
+        }
+        
+        inline VDynamicMatrix(const std::vector<_T>& _values)
+            :
+            mRows(1),
+            mColumns(_values.size()),
+            mRowRoutes(),
+            mColumnRoutes(),
+            mMatrix(new std::vector<std::vector<_T>>(1, _values))
         {
         }
         
@@ -76,7 +90,7 @@ namespace Void
             SetValues(_values, _count);
         }
         
-        inline VDynamicMatrix(const unsigned long& _rows, const unsigned long& _columns, const std::vector<_T> _values)
+        inline VDynamicMatrix(const unsigned long& _rows, const unsigned long& _columns, const std::vector<_T>& _values)
             :
             mRows(_rows),
             mColumns(_columns),
@@ -110,6 +124,11 @@ namespace Void
         unsigned long Columns() const
         {
             return mColumns;
+        }
+        
+        unsigned long Size() const
+        {
+            return mRows * mColumns;
         }
         
         unsigned long Ranks() const
@@ -258,6 +277,36 @@ namespace Void
             }
         }
         
+        _T Sum() const
+        {
+            _T result = static_cast<_T>(0);
+            for (unsigned long row = 0; row < mRows; ++row)
+            {
+                for (unsigned long column = 0; column < mColumns; ++column)
+                {
+                    result += (*this)(row, column);
+                }
+            }
+            return result;
+        }
+        
+        VDynamicMatrix Absolute() const
+        {
+            VDynamicMatrix result = this->Copy();
+            for (unsigned long row = 0; row < mRows; ++row)
+            {
+                for (unsigned long column = 0; column < mColumns; ++column)
+                {
+                    _T& value = result(row, column);
+                    if (value < 0)
+                    {
+                        value = -value;
+                    }
+                }
+            }
+            return result;
+        }
+        
         //----------------------------------------------------------------------------------------------------
         std::string String() const
         {
@@ -333,6 +382,11 @@ namespace Void
             mColumns = _columns;
         }
         
+        void Reshape(const unsigned long& _row, const unsigned long& _columns)
+        {
+            // Todo
+        }
+        
         //----------------------------------------------------------------------------------------------------
         _T& operator()(const unsigned long& _row, const unsigned long& _column)
         {
@@ -374,6 +428,62 @@ namespace Void
                 return (*mMatrix)[realRow][realColumn];
             }
             throw "VDynamicMatrix: out of range";
+        }
+        
+        _T& operator()(const unsigned long& _index)
+        {
+            if (_index < Size())
+            {
+                unsigned long row = _index / mColumns;
+                unsigned long realRow = row;
+                auto route = mRowRoutes.find(row);
+                if (route != mRowRoutes.end())
+                {
+                    realRow = route->second;
+                }
+                unsigned long column = _index % mColumns;
+                unsigned long realColumn = column;
+                route = mColumnRoutes.find(column);
+                if (route != mColumnRoutes.end())
+                {
+                    realColumn = route->second;
+                }
+                return (*mMatrix)[realRow][realColumn];
+            }
+            throw "VDynamicMatrix: out of range";
+        }
+        
+        _T operator()(const unsigned long& _index) const
+        {
+            if (_index < Size())
+            {
+                unsigned long row = _index / mColumns;
+                unsigned long realRow = row;
+                auto route = mRowRoutes.find(row);
+                if (route != mRowRoutes.end())
+                {
+                    realRow = route->second;
+                }
+                unsigned long column = _index % mColumns;
+                unsigned long realColumn = column;
+                route = mColumnRoutes.find(column);
+                if (route != mColumnRoutes.end())
+                {
+                    realColumn = route->second;
+                }
+                return (*mMatrix)[realRow][realColumn];
+            }
+            throw "VDynamicMatrix: out of range";
+        }
+        
+        _T& operator[](const unsigned long& _index)
+        {
+            return (*this)(_index);
+        }
+        
+        _T operator[](const unsigned long& _index) const
+        {
+            return (*this)(_index);
         }
         
         //----------------------------------------------------------------------------------------------------
@@ -1067,7 +1177,7 @@ namespace Void
         {
             VDynamicMatrix result = this->Copy();
             VDynamicMatrix Q, R;
-            while (_maxTimes != 0 && !result.IsUpperTriangularMatrix())
+            while (_maxTimes != 0 && !result.IsUpperTriangularMatrix()) // Todo: IsUpperTriangularMatrix -> Epsilon
             {
                 result.QRDecomposition(Q, R);
                 result = R * Q;

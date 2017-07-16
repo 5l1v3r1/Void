@@ -17,6 +17,7 @@
 #include "PrimeNumber/VPrimeNumber.h"
 #include "Series/VSeries.h"
 #include "Function/VFunction.h"
+#include "Distance/VDistance.h"
 
 //----------------------------------------------------------------------------------------------------
 #include "Vector+Matrix/VVector+VMatrix.h"
