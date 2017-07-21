@@ -25,28 +25,28 @@ namespace Void
     
     // VDistanceInterface
     //----------------------------------------------------------------------------------------------------
-    template<template<typename...> class _Template, typename _T>
+    template<typename _T>
     class VDistanceInterface
     {
     protected:
         //----------------------------------------------------------------------------------------------------
-        static bool IsValid(const _Template<_T>& _u, const _Template<_T>& _v)
+        static bool IsValid(const _T& _u, const _T& _v)
         {
             return Size(_u) == Size(_v);
         }
         
         //----------------------------------------------------------------------------------------------------
-        static unsigned long Size(const _Template<_T>& _vector)
+        static unsigned long Size(const _T& _vector)
         {
             return _vector.size();
         }
         
         //----------------------------------------------------------------------------------------------------
-        static _T DotProduct(const _Template<_T>& _u, const _Template<_T>& _v)
+        static typename _T::value_type DotProduct(const _T& _u, const _T& _v)
         {
             if (IsValid(_u, _v))
             {
-                _T result(0);
+                typename _T::value_type result(0);
                 unsigned long size = Size(_u);
                 for (unsigned long i = 0; i < size; ++i)
                 {
@@ -54,15 +54,15 @@ namespace Void
                 }
                 return result;
             }
-            return static_cast<_T>(0);
+            return static_cast<typename _T::value_type>(0);
         }
         
         //----------------------------------------------------------------------------------------------------
-        static _Template<_T> Subtract(const _Template<_T>& _u, const _Template<_T>& _v)
+        static _T Subtract(const _T& _u, const _T& _v)
         {
             if (IsValid(_u, _v))
             {
-                _Template<_T> result = _u;
+                _T result = _u;
                 unsigned long size = Size(result);
                 for (unsigned long i = 0; i < size; ++i)
                 {
@@ -70,14 +70,14 @@ namespace Void
                 }
                 return result;
             }
-            return _Template<_T>();
+            return _T();
         }
     };
     
     // VDistanceInterface: VDynamicMatrix
     //----------------------------------------------------------------------------------------------------
     template<typename _T>
-    class VDistanceInterface<VDynamicMatrix, _T>
+    class VDistanceInterface<VDynamicMatrix<_T>>
     {
     protected:
         //----------------------------------------------------------------------------------------------------
@@ -107,8 +107,8 @@ namespace Void
     
     // VDistance
     //----------------------------------------------------------------------------------------------------
-    template<template<typename...> class _Template, typename _T, VDistanceType _D>
-    class VDistance : public VDistanceInterface<_Template, _T>
+    template<typename _T, VDistanceType _D>
+    class VDistance : public VDistanceInterface<_T>
     {
     };
     
@@ -116,24 +116,24 @@ namespace Void
     // City Block (Manhattan)
     // Distance = ∑(|ui - vi|)
     //----------------------------------------------------------------------------------------------------
-    template<template<typename...> class _Template, typename _T>
-    class VDistance<_Template, _T, VDistanceType::Cityblock> : public VDistanceInterface<_Template, _T>
+    template<typename _T>
+    class VDistance<_T, VDistanceType::Cityblock> : public VDistanceInterface<_T>
     {
     public:
         //----------------------------------------------------------------------------------------------------
-        static _T Calculate(const _Template<_T>& _u, const _Template<_T>& _v)
+        static typename _T::value_type Calculate(const _T& _u, const _T& _v)
         {
-            if (VDistanceInterface<_Template, _T>::IsValid(_u, _v))
+            if (VDistanceInterface<_T>::IsValid(_u, _v))
             {
-                _T result(0);
-                unsigned long size = VDistanceInterface<_Template, _T>::Size(_u);
+                typename _T::value_type result(0);
+                unsigned long size = VDistanceInterface<_T>::Size(_u);
                 for (unsigned long i = 0; i < size; ++i)
                 {
                     result += std::abs(_u[i] - _v[i]);
                 }
                 return result;
             }
-            return static_cast<_T>(0);
+            return static_cast<typename _T::value_type>(0);
         }
     };
     
@@ -141,18 +141,18 @@ namespace Void
     // Bray-Curtis dissimilarity
     // Distance = ∑(|ui - vi|) / ∑(|ui + vi|)
     //----------------------------------------------------------------------------------------------------
-    template<template<typename...> class _Template, typename _T>
-    class VDistance<_Template, _T, VDistanceType::BrayCurtis> : public VDistanceInterface<_Template, _T>
+    template<typename _T>
+    class VDistance<_T, VDistanceType::BrayCurtis> : public VDistanceInterface<_T>
     {
     public:
         //----------------------------------------------------------------------------------------------------
-        static double Calculate(const _Template<_T>& _u, const _Template<_T>& _v)
+        static double Calculate(const _T& _u, const _T& _v)
         {
-            if (VDistanceInterface<_Template, _T>::IsValid(_u, _v))
+            if (VDistanceInterface<_T>::IsValid(_u, _v))
             {
-                _T numerator = 0;
-                _T denominator = 0;
-                unsigned long size = VDistanceInterface<_Template, _T>::Size(_u);
+                typename _T::value_type numerator = 0;
+                typename _T::value_type denominator = 0;
+                unsigned long size = VDistanceInterface<_T>::Size(_u);
                 for (unsigned long i = 0; i < size; ++i)
                 {
                     numerator += std::abs(_u[i] - _v[i]);
@@ -170,17 +170,17 @@ namespace Void
     // VDistance: Cosine
     // Distance = 1 - u · v / (||u|| * ||v||)
     //----------------------------------------------------------------------------------------------------
-    template<template<typename...> class _Template, typename _T>
-    class VDistance<_Template, _T, VDistanceType::Cosine> : public VDistanceInterface<_Template, _T>
+    template<typename _T>
+    class VDistance<_T, VDistanceType::Cosine> : public VDistanceInterface<_T>
     {
     public:
         //----------------------------------------------------------------------------------------------------
-        static double Calculate(const _Template<_T>& _u, const _Template<_T>& _v)
+        static double Calculate(const _T& _u, const _T& _v)
         {
-            if (VDistanceInterface<_Template, _T>::IsValid(_u, _v))
+            if (VDistanceInterface<_T>::IsValid(_u, _v))
             {
-                double numerator = VDistanceInterface<_Template, _T>::DotProduct(_u, _v);
-                double denominator = std::sqrt(VDistanceInterface<_Template, _T>::DotProduct(_u, _u)) * std::sqrt(VDistanceInterface<_Template, _T>::DotProduct(_v, _v));
+                double numerator = VDistanceInterface<_T>::DotProduct(_u, _v);
+                double denominator = std::sqrt(VDistanceInterface<_T>::DotProduct(_u, _u)) * std::sqrt(VDistanceInterface<_T>::DotProduct(_v, _v));
                 return 1.0 - numerator / denominator;
             }
             return 0;
@@ -190,17 +190,17 @@ namespace Void
     // VDistance: Euclidean
     // Distance = ||u - v||
     //----------------------------------------------------------------------------------------------------
-    template<template<typename...> class _Template, typename _T>
-    class VDistance<_Template, _T, VDistanceType::Euclidean> : public VDistanceInterface<_Template, _T>
+    template<typename _T>
+    class VDistance<_T, VDistanceType::Euclidean> : public VDistanceInterface<_T>
     {
     public:
         //----------------------------------------------------------------------------------------------------
-        static double Calculate(const _Template<_T>& _u, const _Template<_T>& _v)
+        static double Calculate(const _T& _u, const _T& _v)
         {
-            if (VDistanceInterface<_Template, _T>::IsValid(_u, _v))
+            if (VDistanceInterface<_T>::IsValid(_u, _v))
             {
-                _Template<_T> result = VDistanceInterface<_Template, _T>::Subtract(_u, _v);
-                return std::sqrt(VDistanceInterface<_Template, _T>::DotProduct(result, result));
+                _T result = VDistanceInterface<_T>::Subtract(_u, _v);
+                return std::sqrt(VDistanceInterface<_T>::DotProduct(result, result));
             }
             return 0;
         }
