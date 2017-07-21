@@ -59,6 +59,14 @@ namespace Void
         typedef VTypes<_Return, _Args...> Type;
     };
     
+    // VTypeTemplate
+    //----------------------------------------------------------------------------------------------------
+    template<template<typename...> class _Template, typename... _Types>
+    class VTypeTemplate
+    {
+        typedef _Template<_Types...> Type;
+    };
+    
     // Test
     //----------------------------------------------------------------------------------------------------
     void VTypeTest();
