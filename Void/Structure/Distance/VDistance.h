@@ -20,6 +20,7 @@ namespace Void
         Cosine,
         Hamming,
         Jaccard,
+        Euclidean,
     };
     
     // VDistanceInterface
@@ -55,6 +56,22 @@ namespace Void
             }
             return static_cast<_T>(0);
         }
+        
+        //----------------------------------------------------------------------------------------------------
+        static _Template<_T> Subtract(const _Template<_T>& _u, const _Template<_T>& _v)
+        {
+            if (IsValid(_u, _v))
+            {
+                _Template<_T> result = _u;
+                unsigned long size = Size(result);
+                for (unsigned long i = 0; i < size; ++i)
+                {
+                    result[i] -= _v[i];
+                }
+                return result;
+            }
+            return _Template<_T>();
+        }
     };
     
     // VDistanceInterface: VDynamicMatrix
@@ -79,6 +96,12 @@ namespace Void
         static _T DotProduct(const VDynamicMatrix<_T>& _u, const VDynamicMatrix<_T>& _v)
         {
             return _u.DotProduct(_v);
+        }
+        
+        //----------------------------------------------------------------------------------------------------
+        static VDynamicMatrix<_T> Subtract(const VDynamicMatrix<_T>& _u, const VDynamicMatrix<_T>& _v)
+        {
+            return _u - _v;
         }
     };
     
@@ -159,6 +182,25 @@ namespace Void
                 double numerator = VDistanceInterface<_Template, _T>::DotProduct(_u, _v);
                 double denominator = std::sqrt(VDistanceInterface<_Template, _T>::DotProduct(_u, _u)) * std::sqrt(VDistanceInterface<_Template, _T>::DotProduct(_v, _v));
                 return 1.0 - numerator / denominator;
+            }
+            return 0;
+        }
+    };
+    
+    // VDistance: Euclidean
+    // Distance = ||u - v||
+    //----------------------------------------------------------------------------------------------------
+    template<template<typename...> class _Template, typename _T>
+    class VDistance<_Template, _T, VDistanceType::Euclidean> : public VDistanceInterface<_Template, _T>
+    {
+    public:
+        //----------------------------------------------------------------------------------------------------
+        static double Calculate(const _Template<_T>& _u, const _Template<_T>& _v)
+        {
+            if (VDistanceInterface<_Template, _T>::IsValid(_u, _v))
+            {
+                _Template<_T> result = VDistanceInterface<_Template, _T>::Subtract(_u, _v);
+                return std::sqrt(VDistanceInterface<_Template, _T>::DotProduct(result, result));
             }
             return 0;
         }
