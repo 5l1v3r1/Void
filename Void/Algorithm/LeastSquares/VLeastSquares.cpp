@@ -215,8 +215,14 @@ namespace Void
         }
         auto multiResult = leastSquares.LinearEquationWithMultivariable(multiSimulatedData);
         
-        // xxx
-        multiSimulatedData.clear();
+        // y = a + b * x
+        std::vector<std::pair<double, double>> testData;
+        std::vector<double> recordData = {0, 121, 211, 301, 378, 404, 467, 426, 463, 506, 507, 507, 498, 683, 755, 883, 1280, 1014, 926, 1025, 1107, 1091, 1345, 1441, 1401, 1389, 1483, 1557, 1680, 1679, 1740, 1716, 1649, 1634, 1807, 1846, 1941, 1027};
+        for (int i = 0; i < recordData.size(); ++i)
+        {
+            testData.push_back(std::pair<double, double>(i, recordData[i]));
+        }
+        auto testResult = leastSquares.LinearEquationWithOneUnknown(testData, 1);
         
         return;
     }
