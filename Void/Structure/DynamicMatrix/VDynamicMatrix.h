@@ -151,6 +151,18 @@ namespace Void
             return ranks;
         }
         
+        std::vector<_T> DiagonalValues() const
+        {
+            std::vector<_T> result;
+            unsigned long size = mRows < mColumns ? mRows : mColumns;
+            result.reserve(size);
+            for (unsigned long i = 0; i < size; ++i)
+            {
+                result.push_back((*this)(i, i));
+            }
+            return result;
+        }
+        
         //----------------------------------------------------------------------------------------------------
         bool IsSingularMatrix() const
         {
@@ -1172,6 +1184,7 @@ namespace Void
             }
         }
         
+        // Result = upper triangular matrix (eigen values)
         //----------------------------------------------------------------------------------------------------
         VDynamicMatrix QRIteration(unsigned int _maxTimes) const
         {
@@ -1192,10 +1205,18 @@ namespace Void
             
         }
         
+        // this = U * Σ * VT
+        // U = the orthonormal basis in the co-domain
+        // Σ = the stretching amount from V to U (singular value)
+        // V = the orthonormal basis in the domain
         //----------------------------------------------------------------------------------------------------
-        void SingularValueDecomposition()
+        void SingularValueDecomposition(VDynamicMatrix& _u, VDynamicMatrix& _sigma, VDynamicMatrix& _v)
         {
+            VDynamicMatrix matrix = this->Transpose() * (*this);
+            matrix = matrix.QRIteration(500);
+            std::vector<_T> diagonalValues = matrix.DiagonalValues();
             
+            return;
         }
         
         // ||x||
@@ -1341,6 +1362,24 @@ namespace Void
                 }
                 orthonormalSet.push_back(vector);
             }
+            return result;
+        }
+        
+        // Means Matrix = (1 / (Rows - 1)) * e * eT * Matrix
+        // Difference Matrix = M - (Means Matrix)
+        // Result = (1 / (Rows - 1)) * (Difference Matrix)T * (Difference Matrix)
+        //----------------------------------------------------------------------------------------------------
+        VDynamicMatrix CovarianceMatrix() const
+        {
+            if (this->Rows() <= 1 || this->Columns() == 0)
+            {
+                return VDynamicMatrix();
+            }
+            
+            VDynamicMatrix result = VDynamicMatrix(1, this->Rows(), 1) * (*this);
+            result /= this->Rows();
+            result = (*this) - VDynamicMatrix(this->Rows(), 1, 1) * result;
+            result = result.Transpose() * result / (this->Rows() - 1);
             return result;
         }
         

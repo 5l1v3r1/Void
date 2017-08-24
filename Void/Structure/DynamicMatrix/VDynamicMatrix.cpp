@@ -74,6 +74,11 @@ namespace Void
         
         VDynamicMatrix<double> eigenMatrix(2, 2, {2, 3, 2, 1});
         auto eigenvalues = eigenMatrix.QRIteration(200);
+        VDynamicMatrix<double> u, sigma, v;
+        eigenMatrix.SingularValueDecomposition(u, sigma, v);
+        
+        VDynamicMatrix<double> covarianceMatrix(2, 2, {1, 3, 2, 1});
+        covarianceMatrix = covarianceMatrix.CovarianceMatrix();
         
         return;
     }
