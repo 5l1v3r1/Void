@@ -20,7 +20,8 @@ namespace Void
         double value = matrix4.Determinant();
         VLogger::Info("Matrix \n%s", matrix4.String().c_str());
         value = matrix3.DotProduct(matrix4);
-        auto matrix5 = matrix4.Copy().Concatenate(matrix3); // 3 * 6
+        auto matrix5 = matrix4.Copy().ConcatenateRight(matrix3); // 3 * 6
+        matrix5 = matrix4.Copy().ConcatenateBottom(matrix3).ConcatenateBottom({1, 2, 3, 4});
         matrix5 = matrix4;
         VLogger::Info("Matrix \n%s", matrix5.String().c_str());
         matrix5.RowSwitch(1, 2);
@@ -77,9 +78,9 @@ namespace Void
         VDynamicMatrix<double> u, sigma, v;
         eigenMatrix.SingularValueDecomposition(u, sigma, v);
         
-        VDynamicMatrix<double> covarianceMatrix(2, 2, {1, 3, 2, 1});
+        VDynamicMatrix<double> covarianceMatrix(5, 2, {4, 1, 2, 4, 2, 3, 3, 6, 4, 4});
         covarianceMatrix = covarianceMatrix.CovarianceMatrix();
-        
+                
         return;
     }
 }

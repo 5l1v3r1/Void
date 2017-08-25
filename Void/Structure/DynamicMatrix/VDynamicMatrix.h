@@ -394,6 +394,15 @@ namespace Void
             mColumns = _columns;
         }
         
+        void Reserve(const unsigned long& _row, const unsigned long& _columns)
+        {
+            (*mMatrix).reserve(_row);
+            for (unsigned long row = 0; row < mRows; ++row)
+            {
+                (*mMatrix)[row].reserve(_columns);
+            }
+        }
+        
         void Reshape(const unsigned long& _row, const unsigned long& _columns)
         {
             // Todo
@@ -1014,7 +1023,7 @@ namespace Void
         //----------------------------------------------------------------------------------------------------
         VDynamicMatrix Inverse() const
         {
-            VDynamicMatrix matrix = Copy().Concatenate(VDynamicMatrix::Identity(mRows, mColumns));
+            VDynamicMatrix matrix = Copy().ConcatenateRight(VDynamicMatrix::Identity(mRows, mColumns));
             matrix = matrix.ReducedRowEchelonForm();
             return matrix.SubMatrix(0, mRows - 1, mColumns, mColumns + mColumns - 1);
         }
@@ -1043,18 +1052,64 @@ namespace Void
         
         // this = [this | other]
         //----------------------------------------------------------------------------------------------------
-        VDynamicMatrix Concatenate(const VDynamicMatrix& _matrix)
+        VDynamicMatrix ConcatenateRight(const VDynamicMatrix& _matrix)
         {
             // Resize
             Resize(mRows < _matrix.mRows ? _matrix.mRows : mRows, mColumns + _matrix.mColumns);
             
             // Copy data
-            for (unsigned long row = 0; row < _matrix.Rows(); ++row)
+            for (unsigned long row = 0; row < _matrix.mRows; ++row)
             {
                 for (unsigned long column = mColumns - _matrix.mColumns; column < mColumns; ++column)
                 {
                     (*this)(row, column) = _matrix(row, column - (mColumns - _matrix.mColumns));
                 }
+            }
+            return *this;
+        }
+        
+        VDynamicMatrix ConcatenateRight(const std::vector<_T>& _vector)
+        {
+            // Resize
+            Resize(mRows < _vector.size() ? _vector.size() : mRows, mColumns + 1);
+            
+            // Copy data
+            for (unsigned long row = 0; row < _vector.size(); ++row)
+            {
+                (*this)(row, mColumns - 1) = _vector[row];
+            }
+            return *this;
+        }
+        
+        // this = [this ]
+        //        [-----]
+        //        [other]
+        //----------------------------------------------------------------------------------------------------
+        VDynamicMatrix ConcatenateBottom(const VDynamicMatrix& _matrix)
+        {
+            // Resize
+            Resize(mRows + _matrix.mRows, mColumns < _matrix.mColumns ? _matrix.mColumns : mColumns);
+            
+            // Copy data
+            for (unsigned long row = mRows - _matrix.mRows; row < mRows; ++row)
+            {
+                for (unsigned long column = 0; column < _matrix.mColumns; ++column)
+                {
+                    (*this)(row, column) = _matrix(row - (mRows - _matrix.mRows), column);
+                }
+            }
+            return *this;
+        }
+        
+        VDynamicMatrix ConcatenateBottom(const std::vector<_T>& _vector)
+        {
+            // Resize
+            Resize(mRows + 1, mColumns < _vector.size() ? _vector.size() : mColumns);
+            
+            // Copy data
+            for (unsigned long column = 0; column < _vector.size(); ++column)
+            {
+                (*this)(mRows - 1, column) = _vector[column];
             }
             return *this;
         }
@@ -1299,7 +1354,7 @@ namespace Void
             {
                 constantMatrix(row, 0) = _constants[row];
             }
-            VDynamicMatrix augmentedMatrix = Copy().Concatenate(constantMatrix);
+            VDynamicMatrix augmentedMatrix = Copy().ConcatenateRight(constantMatrix);
             VDynamicMatrix matrix = augmentedMatrix.ReducedRowEchelonForm();
             unsigned long columnFloor = 0;
             std::map<unsigned long, unsigned long> rankMap;
