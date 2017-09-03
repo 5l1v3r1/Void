@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sstream>
-#if defined(WIN32) || defined(WIN64) || defined(_WIN32_WCE)
+#if defined(_WIN32) || defined(_WIN64) || defined(_WIN32_WCE)
 #
 #else
 #include <sys/ioctl.h>
