@@ -197,13 +197,14 @@ namespace Void
             return true;
         }
         
-        bool IsUpperTriangularMatrix() const
+        bool IsUpperTriangularMatrix(const _T& _tolerance=0) const
         {
             for (unsigned long row = 0; row < mRows; ++row)
             {
                 for (unsigned long column = 0; column < row; ++column)
                 {
-                    if ((*this)(row, column) != 0)
+                    _T value = (*this)(row, column);
+                    if (!(-_tolerance <= value && value <= _tolerance))
                     {
                         return false;
                     }
@@ -1241,11 +1242,11 @@ namespace Void
         
         // Result = upper triangular matrix (eigen values)
         //----------------------------------------------------------------------------------------------------
-        VDynamicMatrix QRIteration(unsigned int _maxTimes) const
+        VDynamicMatrix QRIteration(unsigned int _maxTimes, float _tolerance=0.0001) const
         {
             VDynamicMatrix result = this->Copy();
             VDynamicMatrix Q, R;
-            while (_maxTimes != 0 && !result.IsUpperTriangularMatrix()) // Todo: IsUpperTriangularMatrix -> Epsilon
+            while (_maxTimes != 0 && !result.IsUpperTriangularMatrix(_tolerance)) // Epsilon
             {
                 result.QRDecomposition(Q, R);
                 result = R * Q;
@@ -1420,7 +1421,7 @@ namespace Void
             return result;
         }
         
-        // Means Matrix = (1 / (Rows - 1)) * e * eT * Matrix
+        // Means Matrix = (1 / Rows) * e * eT * Matrix
         // Difference Matrix = M - (Means Matrix)
         // Result = (1 / (Rows - 1)) * (Difference Matrix)T * (Difference Matrix)
         //----------------------------------------------------------------------------------------------------
