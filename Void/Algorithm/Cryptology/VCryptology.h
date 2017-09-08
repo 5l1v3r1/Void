@@ -7,5 +7,6 @@
 #include "Base64/VBase64.h"
 #include "SecureHashAlgorithm/VSecureHashAlgorithm.h"
 #include "DataEncryptionStandard/VDataEncryptionStandard.h"
+#include "MorseCode/VMorseCode.h"
 
 #endif
