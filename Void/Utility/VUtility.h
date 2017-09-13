@@ -9,5 +9,6 @@
 #include "Timer/VTimer.h"
 #include "Random/VRandom.h"
 #include "Type/VType.h"
+#include "Parser/VParser.h"
 
 #endif
