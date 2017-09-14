@@ -5,7 +5,7 @@
 #include "../../../VDefine.h"
 #ifndef _VOID_DISABLE_OPENGL_
 #include "../../Image/VImage.h"
-#include "../../../Memory/SmartPtr/VSmartPtr.h"
+#include "../../../Memory/SmartPointer/VSmartPointer.h"
 #pragma warning(disable:4068)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdocumentation"
@@ -55,7 +55,7 @@ namespace Void
     
     // VOpenGLTexture
     //----------------------------------------------------------------------------------------------------
-    class VOpenGLTexture : protected VSmartPtr<VOpenGLTextureData>
+    class VOpenGLTexture : protected VSmartPointer<VOpenGLTextureData>
     {
     public:
         //----------------------------------------------------------------------------------------------------

@@ -5,7 +5,7 @@
 #include "DecisionTreeOperator/DecisionTreeImpurity/VDecisionTreeImpurity.h"
 #include "DecisionTreeOperator/DecisionTreeSplit/VDecisionTreeSplit.h"
 #include "../../Structure/Any/VAny.h"
-#include "../../Memory/SmartPtr/VSmartPtr.h"
+#include "../../Memory/SmartPointer/VSmartPointer.h"
 #include <vector>
 #include <string>
 #include <map>
@@ -46,13 +46,13 @@ namespace Void
             double impurity;
             _T label;
             int splitFeature;
-            std::vector<VSmartPtr<Node>> children;
+            std::vector<VSmartPointer<Node>> children;
             std::function<unsigned(const VAny&)> routes;
         };
         
         // SmartNode
         //----------------------------------------------------------------------------------------------------
-        typedef VSmartPtr<Node> SmartNode;
+        typedef VSmartPointer<Node> SmartNode;
         
     public:
         //----------------------------------------------------------------------------------------------------
@@ -74,7 +74,7 @@ namespace Void
         //----------------------------------------------------------------------------------------------------
         inline void Build()
         {
-            mRoot = VSmartPtr<Node>(new Node());
+            mRoot = VSmartPointer<Node>(new Node());
             std::vector<std::pair<std::vector<VAny>, _T>*> samples;
             samples.reserve(mData.size());
             for (auto& sample : mData)
@@ -93,7 +93,7 @@ namespace Void
     protected:
         // Recursion
         //----------------------------------------------------------------------------------------------------
-        inline void Build(VSmartPtr<Node> _node, std::vector<std::pair<std::vector<VAny>, _T>*>& _samples)
+        inline void Build(VSmartPointer<Node> _node, std::vector<std::pair<std::vector<VAny>, _T>*>& _samples)
         {
             if (!_samples.size())
             {
@@ -139,12 +139,12 @@ namespace Void
             }
             _node->splitFeature = bestSplitFeature;
             
-            //
+            // Todo: use stack
             if (bestInformationGain)
             {
                 for (auto& branch : bestSplit.branches)
                 {
-                    VSmartPtr<Node> node = VSmartPtr<Node>(new Node());
+                    VSmartPointer<Node> node = VSmartPointer<Node>(new Node());
                     _node->children.push_back(node);
                     Build(node, branch);
                 }
@@ -154,7 +154,7 @@ namespace Void
         
         // Recursion
         //----------------------------------------------------------------------------------------------------
-        inline _T Predict(VSmartPtr<Node>& _node, const std::vector<VAny>& _features)
+        inline _T Predict(VSmartPointer<Node>& _node, const std::vector<VAny>& _features)
         {
             if (_node)
             {
@@ -163,7 +163,7 @@ namespace Void
                     unsigned childIndex = _node->routes(_features[_node->splitFeature]);
                     if (childIndex != -1)
                     {
-                        VSmartPtr<Node> nextNode = _node->children[childIndex];
+                        VSmartPointer<Node> nextNode = _node->children[childIndex];
                         return Predict(nextNode, _features);
                     }
                 }

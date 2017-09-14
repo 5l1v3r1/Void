@@ -4,6 +4,6 @@
 
 //----------------------------------------------------------------------------------------------------
 #include "MemoryLeakDetector/VMemoryLeakDetector.h"
-#include "SmartPtr/VSmartPtr.h"
+#include "SmartPointer/VSmartPointer.h"
 
 #endif

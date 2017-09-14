@@ -3,7 +3,7 @@
 #define _V_DECISIONTREESPLIT_H_
 
 #include "../../../../Structure/Any/VAny.h"
-#include "../../../../Memory/SmartPtr/VSmartPtr.h"
+#include "../../../../Memory/SmartPointer/VSmartPointer.h"
 #include <vector>
 #include <utility>
 #include <map>
@@ -306,8 +306,8 @@ namespace Void
         
     protected:
         //----------------------------------------------------------------------------------------------------
-        VSmartPtr<VDecisionTreeSplitInterface<_T>> mCurrentInterface;
-        std::map<VDecisionTreeSplit, std::map<std::string, VSmartPtr<VDecisionTreeSplitInterface<_T>>>> mSplitOperators;
+        VSmartPointer<VDecisionTreeSplitInterface<_T>> mCurrentInterface;
+        std::map<VDecisionTreeSplit, std::map<std::string, VSmartPointer<VDecisionTreeSplitInterface<_T>>>> mSplitOperators;
     };
 }
 

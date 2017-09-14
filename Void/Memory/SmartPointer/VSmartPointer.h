@@ -1,6 +1,6 @@
 #pragma once
-#ifndef _V_SMARTPTR_H_
-#define _V_SMARTPTR_H_
+#ifndef _V_SMARTPOINTER_H_
+#define _V_SMARTPOINTER_H_
 
 #include "../../VDefine.h"
 #ifdef _VOID_ENABLE_DEBUG_
@@ -11,89 +11,89 @@
 //----------------------------------------------------------------------------------------------------
 namespace Void
 {
-	// VSmartPtr
+	// VSmartPointer
 	// new -> counter(1) -> counter(...) -> counter(0) -> delete
 	//----------------------------------------------------------------------------------------------------
 	template <typename _T>
-	class VSmartPtr
+	class VSmartPointer
 	{
 	public:
 		//----------------------------------------------------------------------------------------------------
-		VSmartPtr(_T* _value = nullptr)
+		VSmartPointer(_T* _value = nullptr)
 			:
-			m_counter(new int(0)),
-			m_value(_value)
+			mCounter(new int(0)),
+			mValue(_value)
 		{
             Increase();
 		}
 
 		//----------------------------------------------------------------------------------------------------
-		VSmartPtr(const VSmartPtr& _smartPtr)
+		VSmartPointer(const VSmartPointer& _smartPtr)
 			:
-			m_counter(_smartPtr.m_counter),
-			m_value(_smartPtr.m_value)
+			mCounter(_smartPtr.mCounter),
+			mValue(_smartPtr.mValue)
 		{
 			Increase();
 		}
 
 		//----------------------------------------------------------------------------------------------------
-		virtual ~VSmartPtr()
+		virtual ~VSmartPointer()
 		{
 			Decrease();
 		}
 
 		//----------------------------------------------------------------------------------------------------
-		VSmartPtr& operator=(const VSmartPtr& _smartPtr)
+		VSmartPointer& operator=(const VSmartPointer& _smartPtr)
 		{
 			Decrease();
 
-			m_counter = _smartPtr.m_counter;
-			m_value = _smartPtr.m_value;
+			mCounter = _smartPtr.mCounter;
+			mValue = _smartPtr.mValue;
 			Increase();
 
 			return *this;
 		}
 
 		//----------------------------------------------------------------------------------------------------
-		bool operator==(const VSmartPtr& _smartPtr) const
+		bool operator==(const VSmartPointer& _smartPtr) const
 		{
-			return m_counter == _smartPtr.m_counter && m_value == _smartPtr.m_value;
+			return mCounter == _smartPtr.mCounter && mValue == _smartPtr.mValue;
 		}
 
 		//----------------------------------------------------------------------------------------------------
-		bool operator!=(const VSmartPtr& _smartPtr) const
+		bool operator!=(const VSmartPointer& _smartPtr) const
 		{
 			return !(*this == _smartPtr);
 		}
 
 		//----------------------------------------------------------------------------------------------------
-		bool operator<(const VSmartPtr& _smartPtr) const
+		bool operator<(const VSmartPointer& _smartPtr) const
 		{
-			return m_value < _smartPtr.m_value;
+			return mValue < _smartPtr.mValue;
 		}
 
 		//----------------------------------------------------------------------------------------------------
 		_T* operator->()
 		{
-			return m_value;
+			return mValue;
 		}
 
 		//----------------------------------------------------------------------------------------------------
 		_T& operator*()
 		{
-			return *m_value;
+			return *mValue;
 		}
         
         //----------------------------------------------------------------------------------------------------
         const _T& operator*() const
         {
-            return *m_value;
+            return *mValue;
         }
 
 		//----------------------------------------------------------------------------------------------------
 		operator bool()
 		{
-			return m_value ? true : false;
+			return mValue ? true : false;
 		}
 
 		// Dangerous
@@ -101,7 +101,7 @@ namespace Void
 		/*
 		operator _T* ()
 		{
-		return m_value;
+		return mValue;
 		}
 		*/
 
@@ -110,8 +110,8 @@ namespace Void
 		{
 			Decrease();
 
-			m_counter = new int(0);
-			m_value = _value;
+			mCounter = new int(0);
+			mValue = _value;
             Increase();
 		}
 
@@ -119,9 +119,9 @@ namespace Void
 		//----------------------------------------------------------------------------------------------------
 		void Increase()
 		{
-			++*m_counter;
+			++*mCounter;
             #ifdef _VOID_ENABLE_DEBUG_
-            VLogger::Print("SMARTPTR", "Increase: %s %x %d", typeid(*this).name(), m_counter, *m_counter);
+            VLogger::Print("SMARTPTR", "Increase: %s %x %d", typeid(*this).name(), mCounter, *mCounter);
             #endif
 		}
 
@@ -129,24 +129,24 @@ namespace Void
 		void Decrease()
 		{
             #ifdef _VOID_ENABLE_DEBUG_
-            VLogger::Print("SMARTPTR", "Decrease: %s %x %d", typeid(*this).name(), m_counter, *m_counter - 1);
+            VLogger::Print("SMARTPTR", "Decrease: %s %x %d", typeid(*this).name(), mCounter, *mCounter - 1);
             #endif
-			if (--*m_counter == 0)
+			if (--*mCounter == 0)
 			{
-				delete m_counter;
-				m_counter = nullptr;
-				if (m_value)
+				delete mCounter;
+				mCounter = nullptr;
+				if (mValue)
 				{
-					delete m_value;
-					m_value = nullptr;
+					delete mValue;
+					mValue = nullptr;
 				}
 			}
 		}
 
 	protected:
 		//----------------------------------------------------------------------------------------------------
-		int *m_counter;
-		_T *m_value;
+		int *mCounter;
+		_T *mValue;
 	};
 }
 

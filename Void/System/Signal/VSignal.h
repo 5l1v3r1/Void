@@ -2,7 +2,7 @@
 #ifndef _V_SIGNAL_H_
 #define _V_SIGNAL_H_
 
-#include "../../Memory/SmartPtr/VSmartPtr.h"
+#include "../../Memory/SmartPointer/VSmartPointer.h"
 #include <map>
 #include <functional>
 
@@ -19,12 +19,12 @@ namespace Void
         
     protected:
         //----------------------------------------------------------------------------------------------------
-        static VSmartPtr<VSignalManager> Instance();
+        static VSmartPointer<VSignalManager> Instance();
         static void Callback(int _signal);
         
     protected:
         //----------------------------------------------------------------------------------------------------
-        static VSmartPtr<VSignalManager> sInstance;
+        static VSmartPointer<VSignalManager> sInstance;
         
     protected:
         //----------------------------------------------------------------------------------------------------

@@ -2,7 +2,7 @@
 #ifndef _V_DYNAMICMATRIX_H_
 #define _V_DYNAMICMATRIX_H_
 
-#include "../../Memory/SmartPtr/VSmartPtr.h"
+#include "../../Memory/SmartPointer/VSmartPointer.h"
 #include <vector>
 #include <map>
 #include <string>
@@ -1445,7 +1445,7 @@ namespace Void
         unsigned long mColumns;
         std::map<unsigned long, unsigned long> mRowRoutes; // empty == common index
         std::map<unsigned long, unsigned long> mColumnRoutes; // empty == common index
-        VSmartPtr<std::vector<std::vector<_T>>> mMatrix;
+        VSmartPointer<std::vector<std::vector<_T>>> mMatrix;
     };
     
     // Test

@@ -2,7 +2,7 @@
 #ifndef _V_IMAGE_H_
 #define _V_IMAGE_H_
 
-#include "../../Memory/SmartPtr/VSmartPtr.h"
+#include "../../Memory/SmartPointer/VSmartPointer.h"
 #include "../Color/VColor.h"
 #include <vector>
 
@@ -67,7 +67,7 @@ namespace Void
     
     // VImage
     //----------------------------------------------------------------------------------------------------
-    class VImage : protected VSmartPtr<VImageData>
+    class VImage : protected VSmartPointer<VImageData>
     {
     public:
         //----------------------------------------------------------------------------------------------------

@@ -42,7 +42,7 @@ namespace Void
         float m_width;
         float m_height;
         VVertexPosition m_rectangle[4];
-        VSmartPtr<std::vector<VVertexTextureCoord>> m_textureCoord;
+        VSmartPointer<std::vector<VVertexTextureCoord>> m_textureCoord;
         
         std::vector<unsigned char> m_vertexData;
         VOpenGLTexture m_texture;

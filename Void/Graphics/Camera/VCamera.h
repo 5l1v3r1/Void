@@ -2,7 +2,7 @@
 #ifndef _V_CAMERA_H_
 #define _V_CAMERA_H_
 
-#include "../../Memory/SmartPtr/VSmartPtr.h"
+#include "../../Memory/SmartPointer/VSmartPointer.h"
 #include "../../Structure/Matrix/VMatrix.h"
 
 //----------------------------------------------------------------------------------------------------
@@ -30,7 +30,7 @@ namespace Void
     
     // VCamera
     //----------------------------------------------------------------------------------------------------
-    class VCamera : protected VSmartPtr<VCameraData>
+    class VCamera : protected VSmartPointer<VCameraData>
     {
     public:
         //----------------------------------------------------------------------------------------------------

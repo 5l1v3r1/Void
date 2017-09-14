@@ -4,7 +4,7 @@
 
 #include "../RouletteWheel/VRouletteWheel.h"
 #include "../../Structure/Any/VAny.h"
-#include "../../Memory/SmartPtr/VSmartPtr.h"
+#include "../../Memory/SmartPointer/VSmartPointer.h"
 #include <string>
 #include <map>
 #include <vector>
@@ -46,7 +46,7 @@ namespace Void
         std::vector<std::string> genes; // bits
         float fitness; // 0.f - 1.f
     };
-    typedef VSmartPtr<VChromosome> VChromosomePtr;
+    typedef VSmartPointer<VChromosome> VChromosomePtr;
     
     // VGeneController
     //----------------------------------------------------------------------------------------------------

@@ -7,7 +7,7 @@
 #include "../../../Structure/Vector/VVector.h"
 #include "../../../Structure/Matrix/VMatrix.h"
 #include "../Shader/VOpenGLShader.h"
-#include "../../../Memory/SmartPtr/VSmartPtr.h"
+#include "../../../Memory/SmartPointer/VSmartPointer.h"
 #pragma warning(disable:4068)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdocumentation"
@@ -57,7 +57,7 @@ namespace Void
     
     // VOpenGLProgram
     //----------------------------------------------------------------------------------------------------
-    class VOpenGLProgram : protected VSmartPtr<VOpenGLProgramData>
+    class VOpenGLProgram : protected VSmartPointer<VOpenGLProgramData>
     {
     public:
         //----------------------------------------------------------------------------------------------------

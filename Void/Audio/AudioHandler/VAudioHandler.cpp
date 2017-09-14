@@ -1,18 +1,19 @@
 #include "VAudioHandler.h"
 #include "MacOS/VAudioMacOSHandler.h"
 #include "Windows/VAudioWindowsHandler.h"
+#include "../AudioStream/VAudioStream.h"
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
 {
     // VAudioHandler
     //----------------------------------------------------------------------------------------------------
-    VSmartPtr<VAudioHandler> VAudioHandler::Instance()
+    VSmartPointer<VAudioHandler> VAudioHandler::Instance()
     {
         #ifdef _VOID_USE_COREAUDIO_
-        return VSmartPtr<VAudioHandler>(new VAudioMacOSHandler());
-		#elif defined(_WIN32) || defined(_WIN64)
-		return VSmartPtr<VAudioHandler>(new VAudioWindowsHandler());
+        return VSmartPointer<VAudioHandler>(new VAudioMacOSHandler());
+		#elif _VOID_USE_WINMM_
+		return VSmartPointer<VAudioHandler>(new VAudioWindowsHandler());
         #endif
         return nullptr;
     }

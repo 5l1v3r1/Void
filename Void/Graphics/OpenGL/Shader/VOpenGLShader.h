@@ -4,7 +4,7 @@
 
 #include "../../../VDefine.h"
 #ifndef _VOID_DISABLE_OPENGL_
-#include "../../../Memory/SmartPtr/VSmartPtr.h"
+#include "../../../Memory/SmartPointer/VSmartPointer.h"
 #pragma warning(disable:4068)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdocumentation"
@@ -54,7 +54,7 @@ namespace Void
     
     // VOpenGLShader
     //----------------------------------------------------------------------------------------------------
-    class VOpenGLShader : protected VSmartPtr<VOpenGLShaderData>
+    class VOpenGLShader : protected VSmartPointer<VOpenGLShaderData>
     {
     public:
         //----------------------------------------------------------------------------------------------------

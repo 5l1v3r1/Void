@@ -5,6 +5,18 @@
 //----------------------------------------------------------------------------------------------------
 namespace Void
 {
+    // VAudioSampleFormat
+    //----------------------------------------------------------------------------------------------------
+    enum class VAudioSampleFormat
+    {
+        Float32 = 0,
+        Int32,
+        Int24,
+        Int16,
+        Int8,
+        UInt8,
+    };
+    
 	// VAudioFormat
 	//----------------------------------------------------------------------------------------------------
 	class VAudioFormat
@@ -17,13 +29,13 @@ namespace Void
 
 	public:
 		//----------------------------------------------------------------------------------------------------
-		int formatType; // WAV...
+		VAudioSampleFormat format; // PCM...
 		int channels; // number of channels (i.e. mono, stereo...)
-		int samplesPerSec; // sample rate
+		int samplesPerSec; // sample rate (i.e. 8000, 44100, 48000, 192000...)
 		int bitsPerSample; // number of bits per sample of mono data
 
-		// int avgBytesPerSec = channels * samplesPerSec * bitsPerSample / 8;
-		// int blockAlign = channels * bitsPerSample / 8;
+        // int blockAlign = channels * bitsPerSample / 8;
+		// int avgBytesPerSec = samplesPerSec * blockAlign;
 	};
 
 	// Test

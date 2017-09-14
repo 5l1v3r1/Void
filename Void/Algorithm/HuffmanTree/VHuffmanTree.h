@@ -2,7 +2,7 @@
 #ifndef _V_HUFFMANTREE_H_
 #define _V_HUFFMANTREE_H_
 
-#include "../../Memory/SmartPtr/VSmartPtr.h"
+#include "../../Memory/SmartPointer/VSmartPointer.h"
 #include "../MinHeap/VMinHeap.h"
 #include <vector>
 #include <map>
@@ -34,29 +34,29 @@ namespace Void
             
         public:
             //----------------------------------------------------------------------------------------------------
-            VSmartPtr<Node> left;
-            VSmartPtr<Node> right;
+            VSmartPointer<Node> left;
+            VSmartPointer<Node> right;
             int weight;
             std::pair<const int, int>* data;
         };
         
         // SmartNode
         //----------------------------------------------------------------------------------------------------
-        typedef VSmartPtr<Node> SmartNode;
+        typedef VSmartPointer<Node> SmartNode;
         
     public:
         // +counter
         //----------------------------------------------------------------------------------------------------
         inline void Insert(const _T& _data)
         {
-            auto it = m_counter.find(_data);
-            if(it != m_counter.end())
+            auto it = mCounter.find(_data);
+            if(it != mCounter.end())
             {
                 ++it->second;
             }
             else
             {
-                m_counter[_data] = 1;
+                mCounter[_data] = 1;
             }
         }
         
@@ -65,7 +65,7 @@ namespace Void
         inline const std::map<_T, std::string>& Generate()
         {
             VMinHeap<int, SmartNode> heap;
-            for (std::pair<const int, int>& pair : m_counter)
+            for (std::pair<const int, int>& pair : mCounter)
             {
                 heap.Insert(pair.second, SmartNode(new Node(pair.second, &pair)));
             }
@@ -81,12 +81,12 @@ namespace Void
                 heap.Insert(newNode->weight, newNode);
             }
             
-            m_codeTable.clear();
+            mCodeTable.clear();
             if (heap.Size())
             {
                 Generate("", heap.Front());
             }
-            return m_codeTable;
+            return mCodeTable;
         }
         
     protected:
@@ -105,15 +105,15 @@ namespace Void
                 }
                 if (!_node->left && !_node->right)
                 {
-                    m_codeTable.insert(std::pair<_T, std::string>(_node->data->first, _prefixCode));
+                    mCodeTable.insert(std::pair<_T, std::string>(_node->data->first, _prefixCode));
                 }
             }
         }
         
     protected:
         //----------------------------------------------------------------------------------------------------
-        std::map<_T, int> m_counter;
-        std::map<_T, std::string> m_codeTable;
+        std::map<_T, int> mCounter;
+        std::map<_T, std::string> mCodeTable;
     };
     
     // Test

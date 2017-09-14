@@ -3,7 +3,8 @@
 #define _V_AUDIOWINDOWSHANDLER_H_
 
 #include "../../../VDefine.h"
-#if defined(_WIN32) || defined(_WIN64)
+#if defined(_VOID_WINDOWS_)
+#define _VOID_USE_WINMM_
 #include "../VAudioHandler.h"
 #include "../../AudioDevice/VAudioDevice.h"
 #define WIN32_LEAN_AND_MEAN

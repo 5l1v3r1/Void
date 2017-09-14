@@ -7,14 +7,14 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     VCamera::VCamera()
         :
-        VSmartPtr(nullptr)
+        VSmartPointer(nullptr)
     {
     }
     
     //----------------------------------------------------------------------------------------------------
     VCamera::VCamera(const VCamera& _camera)
         :
-        VSmartPtr(_camera)
+        VSmartPointer(_camera)
     {
     }
     
@@ -26,25 +26,25 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     bool VCamera::SetOrthogonaLens(float _width, float _height, float _nearZ, float _farZ, bool _isLeftHand)
     {
-        if (!m_value)
+        if (!mValue)
         {
             this->SetValue(new VCameraData());
         }
         
-        m_value->cameraType = V_CAMERA_TYPE_2D;
-        m_value->projectionMatrix = _isLeftHand ? VMatrixOrthogonalLH(_width, _height, _nearZ, _farZ) : VMatrixOrthogonalRH(_width, _height, _nearZ, _farZ);
+        mValue->cameraType = V_CAMERA_TYPE_2D;
+        mValue->projectionMatrix = _isLeftHand ? VMatrixOrthogonalLH(_width, _height, _nearZ, _farZ) : VMatrixOrthogonalRH(_width, _height, _nearZ, _farZ);
         return true;
     }
     
     //----------------------------------------------------------------------------------------------------
     VCameraType VCamera::CameraType()
     {
-        return m_value ? m_value->cameraType : V_CAMERA_TYPE_NONE;
+        return mValue ? mValue->cameraType : V_CAMERA_TYPE_NONE;
     }
     
     //----------------------------------------------------------------------------------------------------
     VMatrix<> VCamera::Projection()
     {
-        return m_value ? m_value->projectionMatrix : VMatrix<>::Identity();
+        return mValue ? mValue->projectionMatrix : VMatrix<>::Identity();
     }
 }

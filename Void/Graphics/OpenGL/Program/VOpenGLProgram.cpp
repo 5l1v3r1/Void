@@ -9,7 +9,7 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     VOpenGLProgram::VOpenGLProgram()
         :
-        VSmartPtr(nullptr)
+        VSmartPointer(nullptr)
     {
         
     }
@@ -17,7 +17,7 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     VOpenGLProgram::VOpenGLProgram(std::vector<VOpenGLShader>& _shaders)
         :
-        VSmartPtr(nullptr)
+        VSmartPointer(nullptr)
     {
         GLuint program = glCreateProgram();
         if(program != 0)
@@ -50,7 +50,7 @@ namespace Void
             }
             else
             {
-                VSmartPtr::SetValue(new VOpenGLProgramData(program));
+                VSmartPointer::SetValue(new VOpenGLProgramData(program));
             }
         }
     }
@@ -58,7 +58,7 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     VOpenGLProgram::VOpenGLProgram(const VOpenGLProgram& _program)
         :
-        VSmartPtr(_program)
+        VSmartPointer(_program)
     {
         
     }
@@ -71,9 +71,9 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     GLuint VOpenGLProgram::Program()
     {
-        if (m_value)
+        if (mValue)
         {
-            return m_value->program;
+            return mValue->program;
         }
         return 0;
     }
@@ -81,18 +81,18 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     GLuint VOpenGLProgram::Attrib(const GLchar* attribName)
     {
-        if(!m_value || !attribName) { return -1; }
+        if(!mValue || !attribName) { return -1; }
         
-        GLint attrib = glGetAttribLocation(m_value->program, attribName);
+        GLint attrib = glGetAttribLocation(mValue->program, attribName);
         return attrib;
     }
     
     //----------------------------------------------------------------------------------------------------
     GLuint VOpenGLProgram::Uniform(const GLchar* uniformName)
     {
-        if(!m_value || !uniformName) { return -1; }
+        if(!mValue || !uniformName) { return -1; }
         
-        GLint uniform = glGetUniformLocation(m_value->program, uniformName);
+        GLint uniform = glGetUniformLocation(mValue->program, uniformName);
         return uniform;
     }
 }

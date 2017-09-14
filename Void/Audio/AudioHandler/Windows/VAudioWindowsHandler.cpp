@@ -1,5 +1,5 @@
 #include "VAudioWindowsHandler.h"
-#if defined(_WIN32) || defined(_WIN64)
+#if _VOID_USE_WINMM_
 #include "../../AudioFormat/VAudioFormat.h"
 #include "../../../Utility/Logger/VLogger.h"
 #include <vector>

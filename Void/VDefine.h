@@ -8,6 +8,14 @@
 #include <TargetConditionals.h>
 #endif
 
+#if defined(TARGET_OS_MAC)
+#define _VOID_MACOS_
+#endif
+
+#if defined(_WIN32) || defined(_WIN64) || defined(_WIN32_WCE)
+#define _VOID_WINDOWS_
+#endif
+
 // OpenGL
 //----------------------------------------------------------------------------------------------------
 //#define _VOID_DISABLE_OPENGL_

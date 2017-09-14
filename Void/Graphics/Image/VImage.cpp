@@ -16,14 +16,14 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     VImage::VImage()
         :
-        VSmartPtr(nullptr)
+        VSmartPointer(nullptr)
     {
     }
     
     //----------------------------------------------------------------------------------------------------
     VImage::VImage(const VImage& _image)
         :
-        VSmartPtr(_image)
+        VSmartPointer(_image)
     {
     }
     
@@ -35,38 +35,38 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     unsigned int VImage::Width() const
     {
-        if (m_value)
+        if (mValue)
         {
-            return m_value->width;
+            return mValue->width;
         }
         return 0;
     }
     
     unsigned int VImage::Height() const
     {
-        if (m_value)
+        if (mValue)
         {
-            return m_value->height;
+            return mValue->height;
         }
         return 0;
     }
     
     VColorFormat VImage::ColorFormat() const
     {
-        if (m_value)
+        if (mValue)
         {
-            return m_value->colorFormat;
+            return mValue->colorFormat;
         }
         return V_COLOR_FORMAT_NONE;
     }
     
     unsigned char* VImage::Data(size_t index)
     {
-        if (m_value)
+        if (mValue)
         {
-            if (index < m_value->data.size())
+            if (index < mValue->data.size())
             {
-                return m_value->data[index].data();
+                return mValue->data[index].data();
             }
         }
         return nullptr;
@@ -74,11 +74,11 @@ namespace Void
     
     const unsigned char* VImage::Data(size_t index) const
     {
-        if (m_value)
+        if (mValue)
         {
-            if (index < m_value->data.size())
+            if (index < mValue->data.size())
             {
-                return m_value->data[index].data();
+                return mValue->data[index].data();
             }
         }
         return nullptr;

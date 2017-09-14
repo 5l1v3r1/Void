@@ -1,7 +1,7 @@
 #pragma once
 #ifndef _V_GEOMETRYBASE_H_
 #define _V_GEOMETRYBASE_H_
-#include "../../Memory/SmartPtr/VSmartPtr.h"
+#include "../../Memory/SmartPointer/VSmartPointer.h"
 #include "../../Structure/Vector/VVector.h"
 #include "../Color/VColor.h"
 #include "../Camera/VCamera.h"
@@ -72,7 +72,7 @@ namespace Void
     protected:
         //----------------------------------------------------------------------------------------------------
         VCamera m_camera;
-        VSmartPtr<VColor<V_COLOR_FORMAT_RGBA_FLOAT>> m_color;
+        VSmartPointer<VColor<V_COLOR_FORMAT_RGBA_FLOAT>> m_color;
         VImage m_image;
     };
 }

@@ -12,7 +12,7 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     VOpenGLShader::VOpenGLShader(const std::string& _shader, GLenum _shaderType, bool _isFromFile)
         :
-        VSmartPtr()
+        VSmartPointer()
     {
         GLuint shader = glCreateShader(_shaderType);
         if(shader != 0)
@@ -57,7 +57,7 @@ namespace Void
             }
             else
             {
-                VSmartPtr::SetValue(new VOpenGLShaderData(shader));
+                VSmartPointer::SetValue(new VOpenGLShaderData(shader));
             }
         }
     }
@@ -65,7 +65,7 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     VOpenGLShader::VOpenGLShader(const VOpenGLShader& _shader)
         :
-        VSmartPtr(_shader)
+        VSmartPointer(_shader)
     {
         
     }
@@ -78,9 +78,9 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     GLuint VOpenGLShader::Shader()
     {
-        if (m_value)
+        if (mValue)
         {
-            return m_value->shader;
+            return mValue->shader;
         }
         return 0;
     }
