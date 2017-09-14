@@ -1,35 +1,27 @@
-#include "VAudioStream.h"
-#include "../../Utility/Logger/VLogger.h"
+#include "VUserDatagramProtocol.h"
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
 {
-    // VAudioStream
+    // VUDPClient
     //----------------------------------------------------------------------------------------------------
-    VAudioStream::VAudioStream()
+    VUDPClient::VUDPClient()
     {
     }
     
     //----------------------------------------------------------------------------------------------------
-    VAudioStream::VAudioStream(const VAudioStream& _stream)
+    VUDPClient::VUDPClient(const VUDPClient& _client)
     {
     }
     
     //----------------------------------------------------------------------------------------------------
-    VAudioStream::~VAudioStream()
+    VUDPClient::~VUDPClient()
     {
-    }
-    
-    //----------------------------------------------------------------------------------------------------
-    bool VAudioStream::Opoen(const VAudioDevice& _device)
-    {
-        
-        return false;
     }
     
     // Test
     //----------------------------------------------------------------------------------------------------
-    void VAudioStreamTest()
+    void VUserDatagramProtocolTest()
     {
         
         return;
