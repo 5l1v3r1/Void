@@ -7,14 +7,14 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     VCamera::VCamera()
         :
-        VSmartPointer(nullptr)
+        VSharePointer(nullptr)
     {
     }
     
     //----------------------------------------------------------------------------------------------------
     VCamera::VCamera(const VCamera& _camera)
         :
-        VSmartPointer(_camera)
+        VSharePointer(_camera)
     {
     }
     

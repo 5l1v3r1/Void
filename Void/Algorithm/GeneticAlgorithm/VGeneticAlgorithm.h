@@ -46,7 +46,7 @@ namespace Void
         std::vector<std::string> genes; // bits
         float fitness; // 0.f - 1.f
     };
-    typedef VSmartPointer<VChromosome> VChromosomePtr;
+    typedef VSharePointer<VChromosome> VChromosomePtr;
     
     // VGeneController
     //----------------------------------------------------------------------------------------------------

@@ -1445,7 +1445,7 @@ namespace Void
         unsigned long mColumns;
         std::map<unsigned long, unsigned long> mRowRoutes; // empty == common index
         std::map<unsigned long, unsigned long> mColumnRoutes; // empty == common index
-        VSmartPointer<std::vector<std::vector<_T>>> mMatrix;
+        VSharePointer<std::vector<std::vector<_T>>> mMatrix;
     };
     
     // Test

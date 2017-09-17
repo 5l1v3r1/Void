@@ -306,8 +306,8 @@ namespace Void
         
     protected:
         //----------------------------------------------------------------------------------------------------
-        VSmartPointer<VDecisionTreeSplitInterface<_T>> mCurrentInterface;
-        std::map<VDecisionTreeSplit, std::map<std::string, VSmartPointer<VDecisionTreeSplitInterface<_T>>>> mSplitOperators;
+        VSharePointer<VDecisionTreeSplitInterface<_T>> mCurrentInterface;
+        std::map<VDecisionTreeSplit, std::map<std::string, VSharePointer<VDecisionTreeSplitInterface<_T>>>> mSplitOperators;
     };
 }
 

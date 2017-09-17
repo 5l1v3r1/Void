@@ -55,7 +55,7 @@ namespace Void
     
     // VOpenGLTexture
     //----------------------------------------------------------------------------------------------------
-    class VOpenGLTexture : protected VSmartPointer<VOpenGLTextureData>
+    class VOpenGLTexture : protected VSharePointer<VOpenGLTextureData>
     {
     public:
         //----------------------------------------------------------------------------------------------------

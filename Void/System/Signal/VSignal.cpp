@@ -8,18 +8,18 @@ namespace Void
 {
     // VSignalManager
     //----------------------------------------------------------------------------------------------------
-    VSmartPointer<VSignalManager> VSignalManager::sInstance = nullptr;
+    VSharePointer<VSignalManager> VSignalManager::sInstance = nullptr;
     
     //----------------------------------------------------------------------------------------------------
     void VSignalManager::Bind(int _signal, const std::function<void()>& _handler)
     {
-        VSmartPointer<VSignalManager> manager = VSignalManager::Instance();
+        VSharePointer<VSignalManager> manager = VSignalManager::Instance();
         manager->mHandler[_signal] = _handler;
         ::signal(_signal, VSignalManager::Callback);
     }
     
     //----------------------------------------------------------------------------------------------------
-    VSmartPointer<VSignalManager> VSignalManager::Instance()
+    VSharePointer<VSignalManager> VSignalManager::Instance()
     {
         if (!VSignalManager::sInstance)
         {
@@ -31,7 +31,7 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     void VSignalManager::Callback(int _signal)
     {
-        VSmartPointer<VSignalManager> manager = VSignalManager::Instance();
+        VSharePointer<VSignalManager> manager = VSignalManager::Instance();
         auto it = manager->mHandler.find(_signal);
         if (it != manager->mHandler.end())
         {

@@ -9,7 +9,7 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     VOpenGLProgram::VOpenGLProgram()
         :
-        VSmartPointer(nullptr)
+        VSharePointer(nullptr)
     {
         
     }
@@ -17,7 +17,7 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     VOpenGLProgram::VOpenGLProgram(std::vector<VOpenGLShader>& _shaders)
         :
-        VSmartPointer(nullptr)
+        VSharePointer(nullptr)
     {
         GLuint program = glCreateProgram();
         if(program != 0)
@@ -50,7 +50,7 @@ namespace Void
             }
             else
             {
-                VSmartPointer::SetValue(new VOpenGLProgramData(program));
+                VSharePointer::SetValue(new VOpenGLProgramData(program));
             }
         }
     }
@@ -58,7 +58,7 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     VOpenGLProgram::VOpenGLProgram(const VOpenGLProgram& _program)
         :
-        VSmartPointer(_program)
+        VSharePointer(_program)
     {
         
     }

@@ -46,13 +46,13 @@ namespace Void
             double impurity;
             _T label;
             int splitFeature;
-            std::vector<VSmartPointer<Node>> children;
+            std::vector<VSharePointer<Node>> children;
             std::function<unsigned(const VAny&)> routes;
         };
         
         // SmartNode
         //----------------------------------------------------------------------------------------------------
-        typedef VSmartPointer<Node> SmartNode;
+        typedef VSharePointer<Node> SmartNode;
         
     public:
         //----------------------------------------------------------------------------------------------------
@@ -74,7 +74,7 @@ namespace Void
         //----------------------------------------------------------------------------------------------------
         inline void Build()
         {
-            mRoot = VSmartPointer<Node>(new Node());
+            mRoot = VSharePointer<Node>(new Node());
             std::vector<std::pair<std::vector<VAny>, _T>*> samples;
             samples.reserve(mData.size());
             for (auto& sample : mData)
@@ -93,7 +93,7 @@ namespace Void
     protected:
         // Recursion
         //----------------------------------------------------------------------------------------------------
-        inline void Build(VSmartPointer<Node> _node, std::vector<std::pair<std::vector<VAny>, _T>*>& _samples)
+        inline void Build(VSharePointer<Node> _node, std::vector<std::pair<std::vector<VAny>, _T>*>& _samples)
         {
             if (!_samples.size())
             {
@@ -144,7 +144,7 @@ namespace Void
             {
                 for (auto& branch : bestSplit.branches)
                 {
-                    VSmartPointer<Node> node = VSmartPointer<Node>(new Node());
+                    VSharePointer<Node> node = VSharePointer<Node>(new Node());
                     _node->children.push_back(node);
                     Build(node, branch);
                 }
@@ -154,7 +154,7 @@ namespace Void
         
         // Recursion
         //----------------------------------------------------------------------------------------------------
-        inline _T Predict(VSmartPointer<Node>& _node, const std::vector<VAny>& _features)
+        inline _T Predict(VSharePointer<Node>& _node, const std::vector<VAny>& _features)
         {
             if (_node)
             {
@@ -163,7 +163,7 @@ namespace Void
                     unsigned childIndex = _node->routes(_features[_node->splitFeature]);
                     if (childIndex != -1)
                     {
-                        VSmartPointer<Node> nextNode = _node->children[childIndex];
+                        VSharePointer<Node> nextNode = _node->children[childIndex];
                         return Predict(nextNode, _features);
                     }
                 }

@@ -34,15 +34,15 @@ namespace Void
             
         public:
             //----------------------------------------------------------------------------------------------------
-            VSmartPointer<Node> left;
-            VSmartPointer<Node> right;
+            VSharePointer<Node> left;
+            VSharePointer<Node> right;
             int weight;
             std::pair<const int, int>* data;
         };
         
         // SmartNode
         //----------------------------------------------------------------------------------------------------
-        typedef VSmartPointer<Node> SmartNode;
+        typedef VSharePointer<Node> SmartNode;
         
     public:
         // +counter

@@ -22,7 +22,7 @@
 
 // Memory
 //----------------------------------------------------------------------------------------------------
-//#define _VOID_ENABLE_DEBUG_
+#define _VOID_ENABLE_MEMORY_DEBUG_
 #define _VOID_ENABLE_MEMORYLEAKDETECTOR_
 
 // Audio

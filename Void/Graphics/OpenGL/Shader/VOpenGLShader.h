@@ -54,7 +54,7 @@ namespace Void
     
     // VOpenGLShader
     //----------------------------------------------------------------------------------------------------
-    class VOpenGLShader : protected VSmartPointer<VOpenGLShaderData>
+    class VOpenGLShader : protected VSharePointer<VOpenGLShaderData>
     {
     public:
         //----------------------------------------------------------------------------------------------------

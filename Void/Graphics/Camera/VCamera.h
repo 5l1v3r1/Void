@@ -30,7 +30,7 @@ namespace Void
     
     // VCamera
     //----------------------------------------------------------------------------------------------------
-    class VCamera : protected VSmartPointer<VCameraData>
+    class VCamera : protected VSharePointer<VCameraData>
     {
     public:
         //----------------------------------------------------------------------------------------------------

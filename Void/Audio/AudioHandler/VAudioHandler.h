@@ -18,7 +18,7 @@ namespace Void
     {
     public:
         //----------------------------------------------------------------------------------------------------
-        static VSmartPointer<VAudioHandler> Instance();
+        static VSharePointer<VAudioHandler> Instance();
         
     public:
         //----------------------------------------------------------------------------------------------------

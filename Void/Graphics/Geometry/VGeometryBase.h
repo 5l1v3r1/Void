@@ -72,7 +72,7 @@ namespace Void
     protected:
         //----------------------------------------------------------------------------------------------------
         VCamera m_camera;
-        VSmartPointer<VColor<V_COLOR_FORMAT_RGBA_FLOAT>> m_color;
+        VSharePointer<VColor<V_COLOR_FORMAT_RGBA_FLOAT>> m_color;
         VImage m_image;
     };
 }

@@ -1,43 +1,41 @@
 #pragma once
-#ifndef _V_SIGNAL_H_
-#define _V_SIGNAL_H_
+#ifndef _V_NEURALNETWORKS_H_
+#define _V_NEURALNETWORKS_H_
 
-#include "../../Memory/SmartPointer/VSmartPointer.h"
-#include <map>
-#include <functional>
+#include "./VSynapse.h"
+#include "./VNeuron.h"
+#include <vector>
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
 {
-    // VSignalManager
+    // VNeuralNetworks
     //----------------------------------------------------------------------------------------------------
-    class VSignalManager
+    class VNeuralNetworks
     {
     public:
         //----------------------------------------------------------------------------------------------------
-        static void Bind(int _signal, const std::function<void()>& _handler);
+        VNeuralNetworks();
+        VNeuralNetworks(const VNeuralNetworks& _networks);
+        virtual ~VNeuralNetworks();
+        
+        //----------------------------------------------------------------------------------------------------
+        bool Generate(const unsigned long& _inputLevel, const std::vector<const unsigned long>& _neuronLevel, const unsigned long& _outputLevel);
+        std::vector<float> Stimulate(const std::vector<double>& _inputs);
+        
+        // Learning
+        //----------------------------------------------------------------------------------------------------
+        bool BPTrain(const std::vector<double>& _inputs, const std::vector<double>& _outputs); // Back Propagation
         
     protected:
         //----------------------------------------------------------------------------------------------------
-        static VSharePointer<VSignalManager> Instance();
-        static void Callback(int _signal);
-        
-    protected:
-        //----------------------------------------------------------------------------------------------------
-        static VSharePointer<VSignalManager> sInstance;
-        
-    protected:
-        //----------------------------------------------------------------------------------------------------
-        VSignalManager();
-        
-    protected:
-        //----------------------------------------------------------------------------------------------------
-        std::map<int, std::function<void()>> mHandler;
+        std::vector<VNeuron> mInputs;
+        std::vector<VNeuron> mOutputs;
     };
     
     // Test
     //----------------------------------------------------------------------------------------------------
-    void VSignalTest();
+    void VNeuralNetworksTest();
 }
 
 #endif

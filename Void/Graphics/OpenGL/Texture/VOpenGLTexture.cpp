@@ -27,7 +27,7 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     VOpenGLTexture::VOpenGLTexture()
         :
-        VSmartPointer(nullptr)
+        VSharePointer(nullptr)
     {
         
     }
@@ -35,7 +35,7 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     VOpenGLTexture::VOpenGLTexture(const VImage& _image, GLint _minMagFiler, GLint _wrapMode)
         :
-        VSmartPointer(nullptr)
+        VSharePointer(nullptr)
     {
         SetTexture(_image, _minMagFiler, _wrapMode);
     }
@@ -43,7 +43,7 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     VOpenGLTexture::VOpenGLTexture(const VOpenGLTexture& _texture)
         :
-        VSmartPointer(_texture)
+        VSharePointer(_texture)
     {
         
     }
@@ -79,7 +79,7 @@ namespace Void
             glTexImage2D(GL_TEXTURE_2D, 0, TextureFormatForVColorFormat(_image.ColorFormat()), (GLsizei)_image.Width(), (GLsizei)_image.Height(), 0, TextureFormatForVColorFormat(_image.ColorFormat()), GL_UNSIGNED_BYTE, _image.Data());
             glBindTexture(GL_TEXTURE_2D, 0);
             
-            VSmartPointer::SetValue(new VOpenGLTextureData(texture));
+            VSharePointer::SetValue(new VOpenGLTextureData(texture));
             return true;
         }
         return false;

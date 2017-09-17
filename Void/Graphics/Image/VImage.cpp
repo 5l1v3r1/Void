@@ -16,14 +16,14 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     VImage::VImage()
         :
-        VSmartPointer(nullptr)
+        VSharePointer(nullptr)
     {
     }
     
     //----------------------------------------------------------------------------------------------------
     VImage::VImage(const VImage& _image)
         :
-        VSmartPointer(_image)
+        VSharePointer(_image)
     {
     }
     

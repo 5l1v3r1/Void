@@ -8,12 +8,12 @@ namespace Void
 {
     // VAudioHandler
     //----------------------------------------------------------------------------------------------------
-    VSmartPointer<VAudioHandler> VAudioHandler::Instance()
+    VSharePointer<VAudioHandler> VAudioHandler::Instance()
     {
         #ifdef _VOID_USE_COREAUDIO_
-        return VSmartPointer<VAudioHandler>(new VAudioMacOSHandler());
+        return VSharePointer<VAudioHandler>(new VAudioMacOSHandler());
 		#elif _VOID_USE_WINMM_
-		return VSmartPointer<VAudioHandler>(new VAudioWindowsHandler());
+		return VSharePointer<VAudioHandler>(new VAudioWindowsHandler());
         #endif
         return nullptr;
     }

@@ -57,7 +57,7 @@ namespace Void
     
     // VOpenGLProgram
     //----------------------------------------------------------------------------------------------------
-    class VOpenGLProgram : protected VSmartPointer<VOpenGLProgramData>
+    class VOpenGLProgram : protected VSharePointer<VOpenGLProgramData>
     {
     public:
         //----------------------------------------------------------------------------------------------------

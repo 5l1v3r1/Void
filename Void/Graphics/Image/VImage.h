@@ -67,7 +67,7 @@ namespace Void
     
     // VImage
     //----------------------------------------------------------------------------------------------------
-    class VImage : protected VSmartPointer<VImageData>
+    class VImage : protected VSharePointer<VImageData>
     {
     public:
         //----------------------------------------------------------------------------------------------------
