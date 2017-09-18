@@ -14,6 +14,10 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     class VPointerCounter
     {
+        #ifdef _VOID_ENABLE_MEMORY_DEBUG_
+        static int sTotalShareCount;
+        static int sTotalWeakCount;
+        #endif
     public:
         //----------------------------------------------------------------------------------------------------
         VPointerCounter()
@@ -52,24 +56,36 @@ namespace Void
         //----------------------------------------------------------------------------------------------------
         void IncreaseShare()
         {
+            #ifdef _VOID_ENABLE_MEMORY_DEBUG_
+            VLogger::Print("SMARTPOINTER", "Share Increase: %d", ++sTotalShareCount);
+            #endif
             ++mShareCount;
         }
         
         //----------------------------------------------------------------------------------------------------
         void IncreaseWeak()
         {
+            #ifdef _VOID_ENABLE_MEMORY_DEBUG_
+            VLogger::Print("SMARTPOINTER", "Weak Increase: %d", ++sTotalWeakCount);
+            #endif
             ++mWeakCount;
         }
         
         //----------------------------------------------------------------------------------------------------
         int DecreaseShare()
         {
+            #ifdef _VOID_ENABLE_MEMORY_DEBUG_
+            VLogger::Print("SMARTPOINTER", "Share Decrease: %d", --sTotalShareCount);
+            #endif
             return --mShareCount;
         }
         
         //----------------------------------------------------------------------------------------------------
         int DecreaseWeak()
         {
+            #ifdef _VOID_ENABLE_MEMORY_DEBUG_
+            VLogger::Print("SMARTPOINTER", "Weak Decrease: %d", --sTotalWeakCount);
+            #endif
             return --mWeakCount;
         }
         
