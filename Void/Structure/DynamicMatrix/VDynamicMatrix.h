@@ -320,6 +320,43 @@ namespace Void
             return result;
         }
         
+        VDynamicMatrix Softmax() const
+        {
+            if (mRows == 0 || mColumns == 0)
+            {
+                return VDynamicMatrix();
+            }
+            
+            VDynamicMatrix result = this->Copy();
+            for (unsigned long row = 0; row < mRows; ++row)
+            {
+                // Max
+                _T max = result(row, 0);
+                for (unsigned long column = 0; column < mColumns; ++column)
+                {
+                    _T value = result(row, column);
+                    if (max < value)
+                    {
+                        max = value;
+                    }
+                }
+                // Diff && Exp
+                _T sum = 0;
+                for (unsigned long column = 0; column < mColumns; ++column)
+                {
+                    _T& value = result(row, column);
+                    value = std::exp(value - max);
+                    sum += value;
+                }
+                // Normalize
+                for (unsigned long column = 0; column < mColumns; ++column)
+                {
+                    result(row, column) /= sum;
+                }
+            }
+            return result;
+        }
+        
         //----------------------------------------------------------------------------------------------------
         std::string String() const
         {

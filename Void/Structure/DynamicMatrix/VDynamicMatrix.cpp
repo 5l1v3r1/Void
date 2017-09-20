@@ -80,6 +80,7 @@ namespace Void
         
         VDynamicMatrix<double> covarianceMatrix(5, 2, {4, 1, 2, 4, 2, 3, 3, 6, 4, 4});
         covarianceMatrix = covarianceMatrix.CovarianceMatrix();
+        covarianceMatrix = covarianceMatrix.Softmax();
                 
         return;
     }
