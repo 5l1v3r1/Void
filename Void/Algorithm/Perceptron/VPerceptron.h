@@ -119,6 +119,17 @@ namespace Void
             return true;
         }
         
+        //----------------------------------------------------------------------------------------------------
+        bool Perceive(const std::vector<_T>& _features) const
+        {
+            bool result = false;
+            if (Perceive(_features, result))
+            {
+                return result;
+            }
+            throw "VPerceptron: perceive error";
+        }
+        
     protected:
         //----------------------------------------------------------------------------------------------------
         bool Learn(const VPerceptronSample<_T>& _sample)
