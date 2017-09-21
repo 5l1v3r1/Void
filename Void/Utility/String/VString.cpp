@@ -50,6 +50,28 @@ namespace Void
     }
     
     //----------------------------------------------------------------------------------------------------
+    std::vector<std::string> Split(std::string _str, const std::regex& _delimiter, bool isDiscardBlank)
+    {
+        std::vector<std::string> result;
+        std::smatch match;
+        while (regex_search(_str, match, _delimiter))
+        {
+            size_t index = match.position();
+            if (!isDiscardBlank || index != 0)
+            {
+                result.push_back(_str.substr(0, index));
+            }
+            _str = _str.substr(index + match.length());
+        }
+        if (_str.size())
+        {
+            result.push_back(_str);
+        }
+        
+        return result;
+    }
+    
+    //----------------------------------------------------------------------------------------------------
     std::vector<std::string> Match(const std::string& _str, const std::regex& _pattern)
     {
         std::vector<std::string> result;
@@ -74,6 +96,7 @@ namespace Void
         std::string test("  1234   5  6   ");
         Trim(test);
         auto result = Split(test, std::string(" "), true);
+        result = Split(test, std::regex("[ 3]+"), true);
         result = Match(test, std::regex("[\\w]+"));
         
         return;
