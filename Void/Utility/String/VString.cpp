@@ -50,7 +50,7 @@ namespace Void
     }
     
     //----------------------------------------------------------------------------------------------------
-    std::vector<std::string> Split(std::string _str, const std::regex& _delimiter, bool isDiscardBlank)
+    std::vector<std::string> Split(std::string _str, const std::regex& _delimiter, bool isDiscardBlank=false)
     {
         std::vector<std::string> result;
         std::smatch match;
@@ -96,7 +96,7 @@ namespace Void
         std::string test("  1234   5  6   ");
         Trim(test);
         auto result = Split(test, std::string(" "), true);
-        result = Split(test, std::regex("[ 3]+"), true);
+        result = Split(test, std::regex("[ 3]"));
         result = Match(test, std::regex("[\\w]+"));
         
         return;
