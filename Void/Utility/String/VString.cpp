@@ -18,7 +18,7 @@ namespace Void
     }
     
     //----------------------------------------------------------------------------------------------------
-    std::vector<std::string> Split(const std::string& _str, const std::string& _delimiter)
+    std::vector<std::string> Split(const std::string& _str, const std::string& _delimiter, bool isDiscardBlank=false)
     {
         std::vector<std::string> result;
         if (_delimiter.empty())
@@ -34,7 +34,10 @@ namespace Void
         size_t index = _str.find_first_of(_delimiter, last);
         while (index != std::string::npos)
         {
-            result.push_back(_str.substr(last, index - last));
+            if (!isDiscardBlank || index != last)
+            {
+                result.push_back(_str.substr(last, index - last));
+            }
             last = index + 1;
             index = _str.find_first_of(_delimiter, last);
         }
@@ -70,7 +73,7 @@ namespace Void
     {
         std::string test("  1234   5  6   ");
         Trim(test);
-        auto result = Split(test, std::string(""));
+        auto result = Split(test, std::string(" "), true);
         result = Match(test, std::regex("[\\w]+"));
         
         return;
