@@ -62,7 +62,7 @@ namespace Void
         matrix2 = VDynamicMatrix<double>(1, 2, values3, 2);
         value = matrix1.Radian(matrix2);
         
-        VDynamicMatrix<double> equations(3, 3, {1, 1, 1, 1, 2, 3, 1, 2, 3});
+        VDynamicMatrix<double> equations(3, 3, {1, 2, 3, 1, 2, 3, 1, 2, 3});
         auto solutionSet = equations.HomogeneousLinearMaximalIndependentSolutionSet();
         auto nonhomogeneousSolutionSet = equations.NonhomogeneousLinearMaximalIndependentSolutionSet({1, 2, 2});
         
@@ -78,7 +78,7 @@ namespace Void
         VDynamicMatrix<double> u, sigma, v;
         eigenMatrix.SingularValueDecomposition(u, sigma, v);
         
-        VDynamicMatrix<double> covarianceMatrix(5, 2, {4, 1, 2, 4, 2, 3, 3, 6, 4, 4});
+        VDynamicMatrix<double> covarianceMatrix(2, 3, {4, 1, 2, 4, 2, 3});
         covarianceMatrix = covarianceMatrix.CovarianceMatrix();
         covarianceMatrix = covarianceMatrix.Softmax();
                 

@@ -1468,11 +1468,32 @@ namespace Void
             return result;
         }
         
+        // Means Matrix = (1 / Columns) * Matrix * eT * e
+        // Difference Matrix = M - (Means Matrix)
+        // Result = (1 / (Columns - 1)) * (Difference Matrix) * (Difference Matrix)T
+        //----------------------------------------------------------------------------------------------------
+        VDynamicMatrix CovarianceMatrix() const
+        {
+            if (this->Rows() == 0 || this->Columns() <= 1)
+            {
+                return VDynamicMatrix();
+            }
+            
+            VDynamicMatrix result = (*this) * VDynamicMatrix(this->Columns(), 1, 1);
+            result /= this->Columns();
+            result = (*this) - result * VDynamicMatrix(1, this->Columns(), 1);
+            result = result * result.Transpose() / (this->Columns() - 1);
+            return result;
+        }
+        
         // Means Matrix = (1 / Rows) * e * eT * Matrix
+        //              = [∑(xi0) / Rows, ∑(xi1) / Rows, ...]
+        //                [∑(xi0) / Rows, ...          , ...]
+        //                [...          , ...          , ...]
         // Difference Matrix = M - (Means Matrix)
         // Result = (1 / (Rows - 1)) * (Difference Matrix)T * (Difference Matrix)
         //----------------------------------------------------------------------------------------------------
-        VDynamicMatrix CovarianceMatrix() const
+        VDynamicMatrix CovarianceMatrixColumn() const
         {
             if (this->Rows() <= 1 || this->Columns() == 0)
             {
