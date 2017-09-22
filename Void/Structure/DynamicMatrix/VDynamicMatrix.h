@@ -116,54 +116,6 @@ namespace Void
         }
         
         //----------------------------------------------------------------------------------------------------
-        unsigned long Rows() const
-        {
-            return mRows;
-        }
-        
-        unsigned long Columns() const
-        {
-            return mColumns;
-        }
-        
-        unsigned long Size() const
-        {
-            return mRows * mColumns;
-        }
-        
-        unsigned long Ranks() const
-        {
-            unsigned long ranks = 0;
-            VDynamicMatrix matrix = ReducedRowEchelonForm();
-            unsigned long columnFloor = 0;
-            for (unsigned long row = 0; row < mRows; ++row)
-            {
-                for (unsigned long column = columnFloor; column < mColumns; ++column)
-                {
-                    if (matrix(row, column) != 0)
-                    {
-                        ++ranks;
-                        columnFloor = column + 1;
-                        break;
-                    }
-                }
-            }
-            return ranks;
-        }
-        
-        std::vector<_T> DiagonalValues() const
-        {
-            std::vector<_T> result;
-            unsigned long size = mRows < mColumns ? mRows : mColumns;
-            result.reserve(size);
-            for (unsigned long i = 0; i < size; ++i)
-            {
-                result.push_back((*this)(i, i));
-            }
-            return result;
-        }
-        
-        //----------------------------------------------------------------------------------------------------
         bool IsSingularMatrix() const
         {
             if (mRows == mColumns)
@@ -214,6 +166,53 @@ namespace Void
         }
         
         //----------------------------------------------------------------------------------------------------
+        unsigned long Rows() const
+        {
+            return mRows;
+        }
+        
+        unsigned long Columns() const
+        {
+            return mColumns;
+        }
+        
+        unsigned long Size() const
+        {
+            return mRows * mColumns;
+        }
+        
+        unsigned long Ranks() const
+        {
+            unsigned long ranks = 0;
+            VDynamicMatrix matrix = ReducedRowEchelonForm();
+            unsigned long columnFloor = 0;
+            for (unsigned long row = 0; row < mRows; ++row)
+            {
+                for (unsigned long column = columnFloor; column < mColumns; ++column)
+                {
+                    if (matrix(row, column) != 0)
+                    {
+                        ++ranks;
+                        columnFloor = column + 1;
+                        break;
+                    }
+                }
+            }
+            return ranks;
+        }
+        
+        std::vector<_T> DiagonalValues() const
+        {
+            std::vector<_T> result;
+            unsigned long size = mRows < mColumns ? mRows : mColumns;
+            result.reserve(size);
+            for (unsigned long i = 0; i < size; ++i)
+            {
+                result.push_back((*this)(i, i));
+            }
+            return result;
+        }
+        
         _T Min() const
         {
             if (mRows == 0 || mColumns == 0)
@@ -316,6 +315,17 @@ namespace Void
                         value = -value;
                     }
                 }
+            }
+            return result;
+        }
+        
+        _T Trace() const
+        {
+            _T result = static_cast<_T>(0);;
+            unsigned long size = mRows < mColumns ? mRows : mColumns;
+            for (unsigned long i = 0; i < size; ++i)
+            {
+                result += (*this)(i, i);
             }
             return result;
         }
