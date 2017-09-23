@@ -3,7 +3,6 @@
 #define _V_PERCEPTRON_H_
 
 #include <vector>
-#include "../../Utility/Logger/VLogger.h"
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
@@ -74,16 +73,8 @@ namespace Void
                 return;
             }
             
-            unsigned int currentTimes = 0;
-            while (true)
+            for (unsigned int i = 0; i < _maxTimes; ++i)
             {
-                ++currentTimes;
-                if (_maxTimes < currentTimes)
-                {
-                    return;
-                }
-                
-                // Training
                 unsigned int errorCount = 0;
                 for (VPerceptronSample<_T> sample : _samples)
                 {
@@ -115,7 +106,6 @@ namespace Void
                 value += mWeights[i] * _features[i];
             }
             _result = mThreshold < value;
-            VLogger::Info("%d %f", value - mThreshold, _result);
             return true;
         }
         
