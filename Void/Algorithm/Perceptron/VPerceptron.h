@@ -32,7 +32,7 @@ namespace Void
     // Separating: f(x) = sign(w * x + b) = y
     // Error Distance: |w * xi + b| / ||w|| = -yi * (w * xi + b) / ||w|| where i ∈ Error Indices
     // Loss Function: L(w, b) = -∑(yi * (w * xi + b)) where i ∈ Error Indices
-    // Goal: find min(w, b) for L(w, b)
+    // Goal: (w, b) = arg(min(∑(L(w, b))))
     // Method: Stochastic Gradient Descent
     //         ∂L/∂w = -∑(yi * xi)
     //         ∂L/∂b = -∑(yi)
