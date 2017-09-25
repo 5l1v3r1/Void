@@ -18,6 +18,7 @@
 #include "Series/VSeries.h"
 #include "Function/VFunction.h"
 #include "Distance/VDistance.h"
+#include "SparseMatrix/VSparseMatrix.h"
 
 //----------------------------------------------------------------------------------------------------
 #include "Vector+Matrix/VVector+VMatrix.h"
