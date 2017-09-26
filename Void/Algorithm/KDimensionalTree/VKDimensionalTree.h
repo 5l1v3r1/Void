@@ -11,6 +11,8 @@
 namespace Void
 {
     // VKDimensionalTree
+    // Distance Type: Euclidean
+    // Cosine: normalize all inputs
     //----------------------------------------------------------------------------------------------------
     template<typename _T>
     class VKDimensionalTree
