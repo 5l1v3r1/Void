@@ -30,15 +30,15 @@ namespace Void
     // VPerceptron
     // Hyperplane: w * x + b = 0
     // Separating: f(x) = sign(w * x + b) = y
-    // Error Distance: |w * xi + b| / ||w|| = -yi * (w * xi + b) / ||w|| where i ∈ Error Indices
-    // Loss Function: L(w, b) = -∑(yi * (w * xi + b)) where i ∈ Error Indices
+    // Error Distance: |w * x(i) + b| / ||w|| = -y(i) * (w * x(i) + b) / ||w|| where i ∈ Error Indices
+    // Loss Function: L(w, b) = -∑(y(i) * (w * x(i) + b)) where i ∈ Error Indices
     // Goal: (w, b) = arg(min(∑(L(w, b))))
     // Method: Stochastic Gradient Descent
-    //         ∂L/∂w = -∑(yi * xi)
-    //         ∂L/∂b = -∑(yi)
+    //         ∂L/∂w = -∑(y(i) * x(i))
+    //         ∂L/∂b = -∑(y(i))
     //         for a stochastic sample (adjust direction w and offset b)
-    //         w <- w + (Learning Rate) * yi * xi
-    //         b <- b + (Learning Rate) * yi
+    //         w <- w + (Learning Rate) * y(i) * x(i)
+    //         b <- b + (Learning Rate) * y(i)
     //----------------------------------------------------------------------------------------------------
     template<typename _T>
     class VPerceptron
