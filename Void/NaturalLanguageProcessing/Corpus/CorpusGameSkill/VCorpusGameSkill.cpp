@@ -38,7 +38,7 @@ namespace Void
         }
         
         VRandom random;
-        std::vector<int> indexes = random.MultipleUniqueRand(_count, 0, maxSize - 1);
+        std::vector<int> indexes = random.MultipleUniqueRand<int>(_count, 0, maxSize - 1);
         for (int index : indexes)
         {
             std::string prefix = mSkillComponents[VPartOfSpeech::Adjective][index / maxSuffix];
