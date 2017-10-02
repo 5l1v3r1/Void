@@ -8,6 +8,43 @@
 //----------------------------------------------------------------------------------------------------
 namespace Void
 {
+    // VSparseVector
+    //----------------------------------------------------------------------------------------------------
+    template<typename _T=float>
+    class VSparseVector : public std::map<unsigned long, _T>
+    {
+    public:
+        //----------------------------------------------------------------------------------------------------
+        VSparseVector()
+            :
+            std::map<unsigned long, _T>()
+        {
+        }
+        
+        VSparseVector(std::initializer_list<typename std::map<unsigned long, _T>::value_type> _list)
+            :
+            std::map<unsigned long, _T>(_list)
+        {
+        }
+        
+        //----------------------------------------------------------------------------------------------------
+        _T& operator()(const unsigned long& _column)
+        {
+            return std::map<unsigned long, _T>::operator[](_column);
+        }
+        
+        _T operator()(const unsigned long& _column) const
+        {
+            auto iterator = this->find(_column);
+            if (iterator != this->end())
+            {
+                return iterator->second;
+            }
+            return 0;
+        }
+        
+    };
+    
     // VSparseMatrix
     //----------------------------------------------------------------------------------------------------
     template<typename _T=float>
@@ -86,7 +123,7 @@ namespace Void
         //----------------------------------------------------------------------------------------------------
         unsigned long mRows;
         unsigned long mColumns;
-        std::map<int, std::map<int, _T>> mMatrix;
+        std::map<unsigned long, VSparseVector<_T>> mMatrix;
     };
     
     // Test
