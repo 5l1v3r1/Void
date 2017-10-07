@@ -1487,8 +1487,8 @@ namespace Void
         }
         
         // Means Matrix = (1 / Rows) * e * eT * Matrix
-        //              = [∑(xi0) / Rows, ∑(xi1) / Rows, ...]
-        //                [∑(xi0) / Rows, ...          , ...]
+        //              = [∑(x00) / Rows, ∑(x01) / Rows, ...]
+        //                [∑(x10) / Rows, ...          , ...]
         //                [...          , ...          , ...]
         // Difference Matrix = M - (Means Matrix)
         // Result = (1 / (Rows - 1)) * (Difference Matrix)T * (Difference Matrix)
@@ -1506,6 +1506,10 @@ namespace Void
             result = result.Transpose() * result / (this->Rows() - 1);
             return result;
         }
+        
+        // Within Class Scatter Matrix = (Covariance Matrix) * (Columns - 1)
+        //----------------------------------------------------------------------------------------------------
+        
         
     protected:
         //----------------------------------------------------------------------------------------------------
