@@ -11,11 +11,11 @@ namespace Void
 {
     // VLinearDiscriminantAnalysisType
     //----------------------------------------------------------------------------------------------------
-    enum class VLinearDiscriminantAnalysisType
-    {
-        BinaryClassifier = 0,
-        MultipleClassifier,
-    };
+    // enum class VLinearDiscriminantAnalysisType
+    // {
+    //     BinaryClassifier = 0,
+    //     MultipleClassifier,
+    // };
     
     // VLinearDiscriminantAnalysis
     //----------------------------------------------------------------------------------------------------
@@ -41,6 +41,7 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     // Degree: *
     // Model: y = W * xT
+    //        max(rows(W)) = (class number) - 1
     // Goal: max(J(W))
     //       J(W) = W * sb * WT / (W * sw * WT)
     //       sb = ∑(ni * (u(xi) - u(x))T * (u(xi) - u(x)))
@@ -105,13 +106,21 @@ namespace Void
                 withinClassScatterMatrix += iterator->second;
             }
             // Sb
-            iterator = means.begin();
-            VDynamicMatrix<_Feature> betweenClassScatter = iterator->second;
-            for (++iterator; iterator != means.end(); ++iterator)
+            if (scatterMatrices.size() == 2)
             {
-                betweenClassScatter -= iterator->second;
+                iterator = means.begin();
+                VDynamicMatrix<_Feature> betweenClassScatter = iterator->second;
+                for (++iterator; iterator != means.end(); ++iterator)
+                {
+                    betweenClassScatter -= iterator->second;
+                }
+                mWeights = withinClassScatterMatrix.Inverse() * (betweenClassScatter);
+                mWeights = mWeights.Transpose();
             }
-            VDynamicMatrix<_Feature> result = withinClassScatterMatrix.Inverse() * (betweenClassScatter);
+            else
+            {
+                
+            }
             
             ClearSamples();
         }
@@ -126,7 +135,7 @@ namespace Void
         
     protected:
         //----------------------------------------------------------------------------------------------------
-        std::vector<_Feature> mWeights;
+        VDynamicMatrix<_Feature> mWeights;
         std::map<_Label, VDynamicMatrix<_Feature>> mSamples;
     };
     
