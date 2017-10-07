@@ -1493,7 +1493,7 @@ namespace Void
         // Difference Matrix = M - (Means Matrix)
         // Result = (1 / (Rows - 1)) * (Difference Matrix)T * (Difference Matrix)
         //----------------------------------------------------------------------------------------------------
-        VDynamicMatrix CovarianceMatrixColumn() const
+        VDynamicMatrix ColumnCovarianceMatrix() const
         {
             if (this->Rows() <= 1 || this->Columns() == 0)
             {
@@ -1501,7 +1501,7 @@ namespace Void
             }
             
             VDynamicMatrix result = VDynamicMatrix(1, this->Rows(), 1) * (*this);
-            result /= this->Rows();
+            result *= 1.0 / this->Rows();
             result = (*this) - VDynamicMatrix(this->Rows(), 1, 1) * result;
             result = result.Transpose() * result / (this->Rows() - 1);
             return result;
@@ -1509,7 +1509,35 @@ namespace Void
         
         // Within Class Scatter Matrix = (Covariance Matrix) * (Columns - 1)
         //----------------------------------------------------------------------------------------------------
+        VDynamicMatrix WithinClassScatterMatrix() const
+        {
+            if (this->Rows() == 0 || this->Columns() == 0)
+            {
+                return VDynamicMatrix();
+            }
+            
+            VDynamicMatrix result = (*this) * VDynamicMatrix(this->Columns(), 1, 1);
+            result *= 1.0 / this->Columns();
+            result = (*this) - result * VDynamicMatrix(1, this->Columns(), 1);
+            result = result * result.Transpose();
+            return result;
+        }
         
+        //----------------------------------------------------------------------------------------------------
+        VDynamicMatrix RowMeans() const
+        {
+            VDynamicMatrix result = (*this) * VDynamicMatrix(this->Columns(), 1, 1);
+            result *= 1.0 / this->Columns();
+            return result;
+        }
+        
+        //----------------------------------------------------------------------------------------------------
+        VDynamicMatrix ColumnMeans() const
+        {
+            VDynamicMatrix result = VDynamicMatrix(1, this->Rows(), 1) * (*this);
+            result *= 1.0 /  this->Rows();
+            return result;
+        }
         
     protected:
         //----------------------------------------------------------------------------------------------------
