@@ -1,4 +1,4 @@
-#include "VDynamicMatrix.h"
+-#include "VDynamicMatrix.h"
 #include "../../Utility/Logger/VLogger.h"
 
 //----------------------------------------------------------------------------------------------------
@@ -64,7 +64,7 @@ namespace Void
         
         VDynamicMatrix<double> equations(3, 3, {1, 2, 3, 1, 2, 3, 1, 2, 3});
         auto solutionSet = equations.HomogeneousLinearMaximalIndependentSolutionSet();
-        auto nonhomogeneousSolutionSet = equations.NonhomogeneousLinearMaximalIndependentSolutionSet({1, 2, 2});
+        auto nonhomogeneousSolutionSet = equations.NonhomogeneousLinearMaximalIndependentSolutionSet({2, 2, 2});
         
         VDynamicMatrix<double> orthogonalization(3, 3, {1, 2, 2, 1, 0, 2, 0, 1, 1});
         auto orthonormalMatrix = orthogonalization.GramSchmidtOrthogonalization();

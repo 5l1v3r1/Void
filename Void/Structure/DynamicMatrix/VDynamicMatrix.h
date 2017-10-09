@@ -1309,17 +1309,25 @@ namespace Void
         }
         
         // this = U * Σ * VT
-        // U = the orthonormal basis in the co-domain
-        // Σ = the stretching amount from V to U (singular value)
-        // V = the orthonormal basis in the domain
+        // this * v = σ * u
+        // u ∈ U, U = the orthonormal basis in the co-domain
+        // σ ∈ Σ, Σ = the stretching amount from V to U (singular value of this * this*)
+        // v ∈ V, V = the orthonormal basis in the domain
         //----------------------------------------------------------------------------------------------------
         void SingularValueDecomposition(VDynamicMatrix& _u, VDynamicMatrix& _sigma, VDynamicMatrix& _v)
         {
-            VDynamicMatrix matrix = this->Transpose() * (*this);
-            matrix = matrix.QRIteration(500);
-            std::vector<_T> diagonalValues = matrix.DiagonalValues();
+            
             
             return;
+        }
+        
+        // this * v = λ * v
+        // this * V = V * Σ
+        // this = V * Σ * V^-1
+        //----------------------------------------------------------------------------------------------------
+        void EigenDecomposition(VDynamicMatrix& _eigenvalues, VDynamicMatrix& _eigenvectors) const
+        {
+            
         }
         
         // ||x||
@@ -1364,16 +1372,16 @@ namespace Void
         {
             std::vector<std::vector<_T>> result;
             VDynamicMatrix matrix = ReducedRowEchelonForm();
-            unsigned long columnFloor = 0;
             std::map<unsigned long, unsigned long> rankMap;
+            unsigned long column = 0;
             for (unsigned long row = 0; row < mRows; ++row)
             {
-                for (unsigned long column = columnFloor; column < mColumns; ++column)
+                for (; column < mColumns; ++column)
                 {
                     if (matrix(row, column) != 0)
                     {
                         rankMap[row] = column;
-                        columnFloor = column + 1;
+                        ++column;
                         break;
                     }
                     else
@@ -1404,16 +1412,16 @@ namespace Void
             }
             VDynamicMatrix augmentedMatrix = Copy().ConcatenateRight(constantMatrix);
             VDynamicMatrix matrix = augmentedMatrix.ReducedRowEchelonForm();
-            unsigned long columnFloor = 0;
             std::map<unsigned long, unsigned long> rankMap;
+            unsigned long column = 0;
             for (unsigned long row = 0; row < mRows; ++row)
             {
-                for (unsigned long column = columnFloor; column < mColumns; ++column)
+                for (; column < mColumns; ++column)
                 {
                     if (matrix(row, column) != 0)
-                    {
+                    {\
                         rankMap[row] = column;
-                        columnFloor = column + 1;
+                        ++column;
                         break;
                     }
                     else
@@ -1429,9 +1437,9 @@ namespace Void
                 }
             }
             std::vector<_T> specificSolution(mColumns, 0);
-            for (unsigned long row = 0; row < mRows; ++row)
+            for (auto rank : rankMap)
             {
-                specificSolution[rankMap[row]] = -matrix(row, mColumns);
+                specificSolution[rank.second] = matrix(rank.first, mColumns);
             }
             result.second = specificSolution;
             return result;
