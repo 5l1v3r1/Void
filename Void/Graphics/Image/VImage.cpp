@@ -42,6 +42,7 @@ namespace Void
         return 0;
     }
     
+    //----------------------------------------------------------------------------------------------------
     unsigned int VImage::Height() const
     {
         if (mValue)
@@ -51,15 +52,17 @@ namespace Void
         return 0;
     }
     
+    //----------------------------------------------------------------------------------------------------
     VColorFormat VImage::ColorFormat() const
     {
         if (mValue)
         {
             return mValue->colorFormat;
         }
-        return V_COLOR_FORMAT_NONE;
+        return VColorFormat::None;
     }
     
+    //----------------------------------------------------------------------------------------------------
     unsigned char* VImage::Data(size_t index)
     {
         if (mValue)
@@ -72,6 +75,7 @@ namespace Void
         return nullptr;
     }
     
+    //----------------------------------------------------------------------------------------------------
     const unsigned char* VImage::Data(size_t index) const
     {
         if (mValue)
@@ -84,6 +88,7 @@ namespace Void
         return nullptr;
     }
     
+    //----------------------------------------------------------------------------------------------------
     bool VImage::SetData(unsigned int _width, unsigned int _height, VColorFormat _format)
     {
         SetValue(new VImageData(_width, _height, _format));

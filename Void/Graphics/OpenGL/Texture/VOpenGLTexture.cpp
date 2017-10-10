@@ -10,13 +10,13 @@ namespace Void
     {
         switch (_format)
         {
-            case V_COLOR_FORMAT_NONE:
+            case VColorFormat::None:
                 break;
-            case V_COLOR_FORMAT_RGBA_256:
+            case VColorFormat::RGBA256:
                 return GL_RGBA;
-            case V_COLOR_FORMAT_RGB_256:
+            case VColorFormat::RGB256:
                 return GL_RGB;
-            case V_COLOR_FORMAT_GRAY_256:
+            case VColorFormat::Gray256:
                 return GL_ALPHA;
            default:
                 return 0;

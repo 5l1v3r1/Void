@@ -64,15 +64,15 @@ namespace Void
         //----------------------------------------------------------------------------------------------------
         VCamera Camera();
         bool SetCamera(VCamera& camera);
-        VColor<V_COLOR_FORMAT_RGBA_FLOAT>* Color();
-        bool SetColor(const VColor<V_COLOR_FORMAT_RGBA_FLOAT>& _color);
+        VColor<VColorFormat::Float>* Color();
+        bool SetColor(const VColor<VColorFormat::Float>& _color);
         VImage Image();
         bool SetImage(VImage& _image);
         
     protected:
         //----------------------------------------------------------------------------------------------------
         VCamera m_camera;
-        VSharePointer<VColor<V_COLOR_FORMAT_RGBA_FLOAT>> m_color;
+        VSharePointer<VColor<VColorFormat::Float>> m_color;
         VImage m_image;
     };
 }

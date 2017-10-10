@@ -30,11 +30,11 @@ namespace Void
                 unsigned char *buffer = nullptr;
                 if (bytesPerColor == 1)
                 {
-                    image.SetData(width, height, V_COLOR_FORMAT_GRAY_256);
+                    image.SetData(width, height, VColorFormat::Gray256);
                 }
                 else if (bytesPerColor == 3)
                 {
-                    image.SetData(width, height, V_COLOR_FORMAT_RGB_256);
+                    image.SetData(width, height, VColorFormat::RGB256);
                 }
                 else
                 {

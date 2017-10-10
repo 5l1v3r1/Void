@@ -23,7 +23,7 @@ namespace Void
         {
         }
         
-        inline VImageData(unsigned int _width, unsigned int _height, VColorFormat _format=V_COLOR_FORMAT_RGBA_256)
+        inline VImageData(unsigned int _width, unsigned int _height, VColorFormat _format=VColorFormat::RGBA256)
             :
             width(_width),
             height(_height),
@@ -32,22 +32,22 @@ namespace Void
             colorFormat = _format;
             switch (_format)
             {
-                case V_COLOR_FORMAT_NONE:
+                case VColorFormat::None:
                     break;
-                case V_COLOR_FORMAT_RGBA_FLOAT:
+                case VColorFormat::Float:
                     data.push_back(std::vector<unsigned char>(_width * _height * 16));
                     break;
-                case V_COLOR_FORMAT_RGBA_256:
-                case V_COLOR_FORMAT_BGRX_256:
+                case VColorFormat::RGBA256:
+                case VColorFormat::BGRX256:
                     data.push_back(std::vector<unsigned char>(_width * _height * 4));
                     break;
-                case V_COLOR_FORMAT_RGB_256:
+                case VColorFormat::RGB256:
                     data.push_back(std::vector<unsigned char>(_width * _height * 3));
                     break;
-                case V_COLOR_FORMAT_GRAY_256:
+                case VColorFormat::Gray256:
                     data.push_back(std::vector<unsigned char>(_width * _height * 1));
                     break;
-                case V_COLOR_FORMAT_GRAYALPHA_256:
+                case VColorFormat::GrayAlpha256:
                     data.push_back(std::vector<unsigned char>(_width * _height * 2));
                     break;
             }
@@ -85,7 +85,7 @@ namespace Void
         VColorFormat ColorFormat() const;
         unsigned char* Data(size_t index=0);
         const unsigned char* Data(size_t index=0) const;
-        bool SetData(unsigned int _width, unsigned int _height, VColorFormat _format=V_COLOR_FORMAT_RGBA_256);
+        bool SetData(unsigned int _width, unsigned int _height, VColorFormat _format=VColorFormat::RGBA256);
     };
     
     // Test

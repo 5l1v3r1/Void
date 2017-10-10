@@ -41,15 +41,15 @@ namespace Void
     
     // VColorFormat
     //----------------------------------------------------------------------------------------------------
-    enum VColorFormat
+    enum class VColorFormat
     {
-        V_COLOR_FORMAT_NONE = 0,
-        V_COLOR_FORMAT_RGBA_FLOAT = 1,
-        V_COLOR_FORMAT_RGBA_256 = 2,
-        V_COLOR_FORMAT_BGRX_256 = 3,
-        V_COLOR_FORMAT_RGB_256 = 4,
-        V_COLOR_FORMAT_GRAY_256 = 5,
-        V_COLOR_FORMAT_GRAYALPHA_256 = 6,
+        None = 0,
+        Float = 1,
+        RGBA256 = 2,
+        BGRX256 = 3,
+        RGB256 = 4,
+        Gray256 = 5,
+        GrayAlpha256 = 6,
     };
     
     // VColorData
@@ -60,28 +60,33 @@ namespace Void
     };
     
     template<>
-    struct VColorData<V_COLOR_FORMAT_RGBA_256> : VVector<unsigned char, 4>
+    struct VColorData<VColorFormat::RGBA256> : VVector<unsigned char, 4>
     {
     };
     
     template<>
-    struct VColorData<V_COLOR_FORMAT_BGRX_256> : VVector<unsigned char, 4>
+    struct VColorData<VColorFormat::BGRX256> : VVector<unsigned char, 4>
     {
     };
     
     template<>
-    struct VColorData<V_COLOR_FORMAT_RGB_256> : VVector<unsigned char, 3>
+    struct VColorData<VColorFormat::RGB256> : VVector<unsigned char, 3>
     {
     };
     
     template<>
-    struct VColorData<V_COLOR_FORMAT_GRAY_256> : VVector<unsigned char, 1>
+    struct VColorData<VColorFormat::Gray256> : VVector<unsigned char, 1>
+    {
+    };
+    
+    template<>
+    struct VColorData<VColorFormat::GrayAlpha256> : VVector<unsigned char, 2>
     {
     };
     
     // VColor
     //----------------------------------------------------------------------------------------------------
-    template <VColorFormat _F=V_COLOR_FORMAT_RGBA_FLOAT>
+    template <VColorFormat _F=VColorFormat::Float>
     struct VColor : VColorData<_F>
     {
     public:

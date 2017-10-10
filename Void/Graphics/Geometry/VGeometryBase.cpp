@@ -43,15 +43,15 @@ namespace Void
     }
     
     //----------------------------------------------------------------------------------------------------
-    VColor<V_COLOR_FORMAT_RGBA_FLOAT>* VGeometryBase::Color()
+    VColor<VColorFormat::Float>* VGeometryBase::Color()
     {
         return m_color ? &(*m_color) : nullptr;
     }
     
     //----------------------------------------------------------------------------------------------------
-    bool VGeometryBase::SetColor(const VColor<V_COLOR_FORMAT_RGBA_FLOAT>& _color)
+    bool VGeometryBase::SetColor(const VColor<VColorFormat::Float>& _color)
     {
-        m_color.SetValue(new VColor<V_COLOR_FORMAT_RGBA_FLOAT>(_color));
+        m_color.SetValue(new VColor<VColorFormat::Float>(_color));
         return true;
     }
     
