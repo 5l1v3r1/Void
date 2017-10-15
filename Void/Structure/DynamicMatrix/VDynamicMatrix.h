@@ -1419,7 +1419,7 @@ namespace Void
                 for (; column < mColumns; ++column)
                 {
                     if (matrix(row, column) != 0)
-                    {\
+                    {
                         rankMap[row] = column;
                         ++column;
                         break;
