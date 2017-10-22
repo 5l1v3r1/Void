@@ -30,11 +30,11 @@ namespace Void
     // VPerceptron
     // Hyperplane: w * x + b = 0
     // Separating: f(x) = sign(w * x + b) = y
-    // Error Distance: |w * x(i) + b| / ||w|| = -y(i) * (w * x(i) + b) / ||w|| where i ∈ Error Indices
-    // Loss Function: L(w, b) = -∑(y(i) * (w * x(i) + b)) where i ∈ Error Indices
-    //                ∂L/∂w = -∑(y(i) * x(i))
-    //                ∂L/∂b = -∑(y(i))
-    // Goal: (w, b) = arg(min(∑(L(w, b))))
+    // Loss Function (Error Distance): L(f(x), y) = |w * x(i) + b| / ||w|| = -y(i) * (w * x(i) + b) / ||w|| where i ∈ Error Indices
+    // Cost Function: J(w, b) = -∑(y(i) * (w * x(i) + b)) where i ∈ Error Indices
+    //                ∂J/∂w = -∑(y(i) * x(i))
+    //                ∂J/∂b = -∑(y(i))
+    // Goal: (w, b) = arg(min(J(w, b)))
     // Method: Stochastic Gradient Descent
     //         for a stochastic sample (adjust direction w and offset b)
     //         w <- w + (Learning Rate) * y(i) * x(i)
