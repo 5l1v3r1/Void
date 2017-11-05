@@ -63,7 +63,7 @@ namespace Void
             routes.push_back(std::map<_S, _S>());
             for (auto& state : m_states)
             {
-                probabilities[0][state] = log(m_startProbability[state]) + log(m_emissionProbability[state][_observations[0]]); // P(observation | state)
+                probabilities[0][state] = log(m_startProbability[state]) + log(m_emissionProbability[state][_observations[0]]); // P(state, observation)
                 routes[0][state] = state; // useless
             }
             // Rest observations
@@ -77,7 +77,7 @@ namespace Void
                     probabilities[i][state] = -std::numeric_limits<float>::max();
                     for(auto& lastState : m_states)
                     {
-                        float p = probabilities[i - 1][lastState] + log(m_transitionProbability[lastState][state]) + log(m_emissionProbability[state][_observations[i]]); // P(observation | lastState, state)
+                        float p = probabilities[i - 1][lastState] + log(m_transitionProbability[lastState][state]) + log(m_emissionProbability[state][_observations[i]]); // P(state, observation | lastState)
                         if(probabilities[i][state] < p)
                         {
                             probabilities[i][state] = p;
@@ -110,7 +110,6 @@ namespace Void
             //         probabilities[i][state] = exp(probabilities[i][state]);
             //     }
             // }
-            
             
             return result;
         }
