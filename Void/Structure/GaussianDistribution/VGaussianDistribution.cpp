@@ -33,7 +33,7 @@ namespace Void
     {
     }
     
-    // PDF: f(x) = (1 / √(2π)) * exp(-(x - mean)^2 / (2variance))
+    // PDF: f(x) = (1 / √(2π)) * exp(-(x - mean)^2 / (2 * variance))
     //----------------------------------------------------------------------------------------------------
     float VGaussianDistribution::ProbabilityDensityFunction(float _x)
     {
@@ -44,7 +44,7 @@ namespace Void
         return a * std::expf(-powf(c, 2) / b);
     }
     
-    // CDF: F(x) = P(a ≤ x) = ∫x-∞(f(a)da) = (1 / 2) * (1 + erf((x - mean) / sqrt(2variance)))
+    // CDF: F(x) = P(a ≤ x) = ∫x-∞(f(a)da) = (1 / 2) * (1 + erf((x - mean) / sqrt(2 * variance)))
     //----------------------------------------------------------------------------------------------------
     float VGaussianDistribution::CumulativeDensityFunction(float _x)
     {

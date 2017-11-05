@@ -8,7 +8,7 @@ namespace Void
     // VGaussianDistribution
     // Continuous
     // One-dimensional
-    // PDF: f(x) = (1 / √(2π * variance)) * exp(-(x - mean)^2 / (2variance))
+    // PDF: f(x) = (1 / √(2π * variance)) * exp(-(x - mean)^2 / (2 * variance))
     // ∫all(f(x)) = 1
     // P(a < x ≤ b) = ∫b~a(f(x)dx)
     // CDF: F(x) = P(a ≤ x) = ∫x-∞(f(a)da)
