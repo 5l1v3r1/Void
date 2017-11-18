@@ -8,5 +8,6 @@
 #include "AudioDevice/VAudioDevice.h"
 #include "AudioDevice/VAudioDeviceManager.h"
 #include "AudioStream/VAudioStream.h"
+#include "AudioFile/VAudioFile.h"
 
 #endif
