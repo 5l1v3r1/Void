@@ -32,6 +32,8 @@ namespace Void
 		virtual std::map<int, VAudioDevice> LoadDevice();
 		virtual int DefaultInputDeviceId();
 		virtual int DefaultOutputDeviceId();
+		virtual bool Open(VAudioStream& _stream);
+		virtual bool Start(VAudioStream& _stream);
 
 	protected:
 		//----------------------------------------------------------------------------------------------------

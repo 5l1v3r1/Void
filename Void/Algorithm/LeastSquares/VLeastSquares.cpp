@@ -179,7 +179,7 @@ namespace Void
         std::vector<std::pair<double, double>> simulatedData;
         for (int i = 0; i < 10000; ++i)
         {
-            float e = random.Rand(-1.f, 1.f);
+            float e = random.RealRand(-1.f, 1.f);
             simulatedData.push_back(std::pair<double, double>(i, 5 + 4 * i + e));
         }
         std::pair<double, double> ab = leastSquares.LinearEquationWithOneUnknown(simulatedData);
@@ -188,7 +188,7 @@ namespace Void
         simulatedData.clear();
         for (int i = 0; i < 10000; ++i)
         {
-            float e = random.Rand(-1.f, 1.f);
+            float e = random.RealRand(-1.f, 1.f);
             simulatedData.push_back(std::pair<double, double>(i, 2 + -2.5 * i + e));
         }
         ab = leastSquares.LinearEquationWithOneUnknown(simulatedData);
@@ -196,20 +196,20 @@ namespace Void
         
         // y = 100 - 3.5 * x + 2 * x^2
         simulatedData.clear();
-        for (float i = 0; i < 10; i += 0.02)
+        for (float i = 0; i < 10; i += 0.02f)
         {
-            float e = random.Rand(-1.f, 1.f);
+            float e = random.RealRand(-1.f, 1.f);
             simulatedData.push_back(std::pair<double, double>(i, 100 + -3.5 * i + 2 * i * i + e));
         }
         result = leastSquares.LinearEquationWithOneUnknown(simulatedData, 2);
         
         // y = 100 - 3.5 * x0 + 2 * x1
         std::vector<std::pair<std::vector<double>, double>> multiSimulatedData;
-        for (float i = -10; i < 10; i += 0.1)
+        for (float i = -10; i < 10; i += 0.1f)
         {
-            for (float j = -10; j < 10; j += 0.1)
+            for (float j = -10; j < 10; j += 0.1f)
             {
-                float e = random.Rand(-0.2f, 0.2f);
+                float e = random.RealRand(-0.2f, 0.2f);
                 multiSimulatedData.push_back(std::pair<std::vector<double>, double>({i, j}, 100 + -3.5 * i + 2 * j + e));
             }
         }
@@ -218,7 +218,7 @@ namespace Void
         // y = a + b * x
         std::vector<std::pair<double, double>> testData;
         std::vector<double> recordData = {0, 121, 211, 301, 378, 404, 467, 426, 463, 506, 507, 507, 498, 683, 755, 883, 1280, 1014, 926, 1025, 1107, 1091, 1345, 1441, 1401, 1389, 1483, 1557, 1680, 1679, 1740, 1716, 1649, 1634, 1807, 1846, 1941, 1027};
-        for (int i = 0; i < recordData.size(); ++i)
+        for (unsigned int i = 0; i < recordData.size(); ++i)
         {
             testData.push_back(std::pair<double, double>(i, recordData[i]));
         }

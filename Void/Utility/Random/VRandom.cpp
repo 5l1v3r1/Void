@@ -47,8 +47,8 @@ namespace Void
         mutipleResult = random2.MultipleUniqueRand(10, 5, 50);
         auto mutipleFloatResult = random2.MultipleRealRand(100, 5.f, 100.f);
         mutipleFloatResult = random2.MultipleRealRand(100, 5.f, 100.f);
-        auto mutipleNormalResult = random2.NormalMultipleRand(20, 0, 1);
-        mutipleNormalResult = random2.NormalMultipleRand(20, 0, 1);
+        auto mutipleNormalResult = random2.NormalMultipleRand<float>(20, 0, 1);
+        mutipleNormalResult = random2.NormalMultipleRand<float>(20, 0, 1);
         
         return;
     }

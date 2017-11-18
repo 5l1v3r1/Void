@@ -1,5 +1,5 @@
 #include "VAudioWindowsHandler.h"
-#if _VOID_USE_WINMM_
+#ifdef _VOID_USE_WINMM_
 #include "../../AudioFormat/VAudioFormat.h"
 #include "../../../Utility/Logger/VLogger.h"
 #include <vector>
@@ -54,6 +54,20 @@ namespace Void
 	{
 
 		return -1;
+	}
+
+	//----------------------------------------------------------------------------------------------------
+	bool VAudioWindowsHandler::Open(VAudioStream& _stream)
+	{
+
+		return false;
+	}
+
+	//----------------------------------------------------------------------------------------------------
+	bool VAudioWindowsHandler::Start(VAudioStream& _stream)
+	{
+
+		return false;
 	}
 
 	// Test

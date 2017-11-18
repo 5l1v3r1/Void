@@ -2,6 +2,7 @@
 #include "../../Utility/Logger/VLogger.h"
 #include <sstream>
 #include <iomanip>
+#include <thread>
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
@@ -10,10 +11,16 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     VTime VTime::Now()
     {
-         std::chrono::time_point<std::chrono::system_clock, std::chrono::milliseconds> timePoint = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::system_clock::now());
+        std::chrono::time_point<std::chrono::system_clock, std::chrono::milliseconds> timePoint = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::system_clock::now());
         std::time_t timestamp = timePoint.time_since_epoch().count();
         return VTime(timestamp);
     }
+
+	//----------------------------------------------------------------------------------------------------
+	void VTime::Sleep(unsigned long _milliseconds)
+	{
+		std::this_thread::sleep_for(std::chrono::milliseconds(_milliseconds));
+	}
     
     //----------------------------------------------------------------------------------------------------
     VTime::VTime()

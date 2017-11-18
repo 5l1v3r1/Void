@@ -12,7 +12,7 @@ namespace Void
     {
         #ifdef _VOID_USE_COREAUDIO_
         return VSharePointer<VAudioHandler>(new VAudioMacOSHandler());
-		#elif _VOID_USE_WINMM_
+		#elif defined _VOID_USE_WINMM_
 		return VSharePointer<VAudioHandler>(new VAudioWindowsHandler());
         #endif
         return nullptr;

@@ -1,7 +1,7 @@
 #include "VAudioStream.h"
 #include "../AudioDevice/VAudioDeviceManager.h"
 #include "../../Utility/Logger/VLogger.h"
-#include <unistd.h>
+#include "../../Utility/Time/VTime.h"
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
@@ -110,7 +110,7 @@ namespace Void
         VAudioStream stream;
         stream.Open(manager.DefaultOutputDevice());
         stream.Start();
-        sleep(1000);
+		VTime::Sleep(10000);
         
         return;
     }
