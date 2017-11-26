@@ -19,7 +19,7 @@ namespace Void
     };
     
     // VWAVAudioFormatData
-    // 2 + 2 + 4 + 4 + 2 + 2 + 2 = 18
+    // 2 + 2 + 4 + 4 + 2 + 2 + (2) = 16 + (2)
     //----------------------------------------------------------------------------------------------------
     struct VWAVAudioFormatData
     {
@@ -89,15 +89,17 @@ namespace Void
         
         //----------------------------------------------------------------------------------------------------
         bool ReadFromFile(const char* _fileName);
+        bool WriteToFile(const char* _fileName);
         
     protected:
         //----------------------------------------------------------------------------------------------------
         bool IsFourCC(char _value[4], char _first, char _second, char _third, char _fourth);
+        std::string BinaryString(int _value);
         
     protected:
         //----------------------------------------------------------------------------------------------------
         VWAVAudioFormatData mFormat;
-        std::vector<char> data;
+        std::vector<char> mData;
     };
     
     // Test

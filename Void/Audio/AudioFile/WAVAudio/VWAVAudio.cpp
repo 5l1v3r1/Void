@@ -84,8 +84,8 @@ namespace Void
                     }
                     else if (IsFourCC(chunk.fourCC, 'd', 'a', 't', 'a'))
                     {
-                        data.resize(chunk.size);
-                        fin.read((char*)data.data(), sizeof(chunk.size)); // Todo: stream mode
+                        mData.resize(chunk.size);
+                        fin.read((char*)mData.data(), chunk.size); // Todo: stream mode
                         // Done
                         fin.close();
                         return true;
@@ -102,9 +102,41 @@ namespace Void
     }
     
     //----------------------------------------------------------------------------------------------------
+    bool VWAVAudio::WriteToFile(const char* _fileName)
+    {
+        if (mData.size() == 0)
+        {
+            return false;
+        }
+        
+        std::ofstream fout(_fileName);
+        if (fout.is_open())
+        {
+            fout << "RIFF";
+            fout.write((char*)BinaryString(int(4 + 8 + 16 + 8 + mData.size())).data(), 4);
+            fout << "WAVE";
+            fout << "fmt\x20";
+            fout.write((char*)BinaryString(int(sizeof(VWAVAudioFormatData) - 2)).data(), 4);
+            fout.write((char*)&mFormat, sizeof(VWAVAudioFormatData) - 2);
+            fout << "data";
+            fout.write((char*)BinaryString(int(mData.size())).data(), 4);
+            fout.write((char*)mData.data(), mData.size());
+            fout.close();
+            return true;
+        }
+        return false;
+    }
+    
+    //----------------------------------------------------------------------------------------------------
     bool VWAVAudio::IsFourCC(char _value[4], char _first, char _second, char _third, char _fourth)
     {
         return _value[0] == _first && _value[1] == _second && _value[2] == _third && _value[3] == _fourth;
+    }
+    
+    //----------------------------------------------------------------------------------------------------
+    std::string VWAVAudio::BinaryString(int _value)
+    {
+        return std::string((char*)&_value, sizeof(_value));
     }
     
     // Test
@@ -113,6 +145,7 @@ namespace Void
     {
         VWAVAudio audio;
         audio.ReadFromFile("Test/Data/right.wav");
+        audio.WriteToFile("Test/Data/right_saved.wav");
         
         return;
     }
