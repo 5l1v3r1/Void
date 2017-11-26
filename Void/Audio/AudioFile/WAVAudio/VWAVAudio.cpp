@@ -33,51 +33,78 @@ namespace Void
                 fin.read((char*)&RIFFChunk, sizeof(VWAVAudioChunk));
                 if(!IsFourCC(RIFFChunk.fourCC, 'R', 'I', 'F', 'F')) { break; }
                 // WAVE
-                int formType;
+                char formType[4];
                 fin.read((char*)&formType, sizeof(formType));
                 if(!IsFourCC(formType, 'W', 'A', 'V', 'E')) { break; }
                 // Format
                 VWAVAudioChunk formatChunk;
                 fin.read((char*)&formatChunk, sizeof(VWAVAudioChunk));
                 if(!IsFourCC(formatChunk.fourCC, 'f', 'm', 't', '\x20')) { break; }
+                std::streampos rollback = fin.tellg();
                 fin.read((char*)&mFormat, formatChunk.size);
+                if (mFormat.formatTag == 1)
+                {
+                    if (formatChunk.size < 16)
+                    {
+                        break;
+                    }
+                }
+                else if (mFormat.formatTag == 0xFFFE)
+                {
+                    // Extensible
+                    if (formatChunk.size < 40 || mFormat.extraSize < 22)
+                    {
+                        break;
+                    }
+                    fin.seekg(2, std::ios::cur);
+                    fin.seekg(4, std::ios::cur);
+                    int guid1, guid2, guid3, guid4;
+                    fin.read((char*)&guid1, 4);
+                    fin.read((char*)&guid2, 4);
+                    fin.read((char*)&guid3, 4);
+                    fin.read((char*)&guid4, 4);
+                    if (guid1 != 0x00000001 || guid2 != 0x00100000 || guid3 != 0xAA000080 || guid4 != 0x719B3800)
+                    {
+                        break;
+                    }
+                }
+                fin.seekg(rollback + std::streamoff(formatChunk.size));
                 // List && Fact && Data
-                VWAVAudioChunk chunk;
-                fin.read((char*)&chunk, sizeof(VWAVAudioChunk));
-                if (IsFourCC(chunk.fourCC, 'L', 'I', 'S', 'T'))
+                while (!fin.eof())
                 {
-                    // int listType;
-                    // fin.read((char*)&listType, sizeof(listType));
-                    fin.seekg(chunk.size, std::ios::cur);
+                    VWAVAudioChunk chunk;
                     fin.read((char*)&chunk, sizeof(VWAVAudioChunk));
+                    if (IsFourCC(chunk.fourCC, 'L', 'I', 'S', 'T'))
+                    {
+                        fin.seekg(chunk.size, std::ios::cur);
+                    }
+                    else if (IsFourCC(chunk.fourCC, 'f', 'a', 'c', 't'))
+                    {
+                        fin.seekg(chunk.size, std::ios::cur);
+                    }
+                    else if (IsFourCC(chunk.fourCC, 'd', 'a', 't', 'a'))
+                    {
+                        data.resize(chunk.size);
+                        fin.read((char*)data.data(), sizeof(chunk.size)); // Todo: stream mode
+                        // Done
+                        fin.close();
+                        return true;
+                    }
+                    else
+                    {
+                        fin.seekg(chunk.size, std::ios::cur);
+                    }
                 }
-                if (IsFourCC(chunk.fourCC, 'f', 'a', 'c', 't'))
-                {
-                    
-                }
-                if (IsFourCC(chunk.fourCC, 'd', 'a', 't', 'a'))
-                {
-                    data.resize(chunk.size);
-                    fin.read((char*)data.data(), sizeof(chunk.size));
-                }
-                else
-                {
-                    return false;
-                }
-
-                fin.close();
-                return true;
             } while(false);
             fin.close();
         }
-
         return false;
     }
     
     //----------------------------------------------------------------------------------------------------
-    bool VWAVAudio::IsFourCC(int _value, char _first, char _second, char _third, char _fourth)
+    bool VWAVAudio::IsFourCC(char _value[4], char _first, char _second, char _third, char _fourth)
     {
-        return _value == (((int)_first) | (((int)_second) << 8) | (((int)_third) << 16) | (((int)_fourth) << 24));
+        return _value[0] == _first && _value[1] == _second && _value[2] == _third && _value[3] == _fourth;
     }
     
     // Test
@@ -85,6 +112,7 @@ namespace Void
     void VWAVAudioTest()
     {
         VWAVAudio audio;
+        audio.ReadFromFile("Test/Data/right.wav");
         
         return;
     }
