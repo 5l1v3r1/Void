@@ -10,5 +10,6 @@
 #include "Random/VRandom.h"
 #include "Type/VType.h"
 #include "Parser/VParser.h"
+#include "Math/VMath.h"
 
 #endif
