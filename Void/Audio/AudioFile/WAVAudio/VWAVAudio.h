@@ -2,7 +2,7 @@
 #ifndef _V_WAVAUDIO_H_
 #define _V_WAVAUDIO_H_
 
-#include "../../../Memory/SmartPointer/VSmartPointer.h"
+#include "../../AudioBase/VAudioBase.h"
 #include <vector>
 
 //----------------------------------------------------------------------------------------------------
@@ -19,7 +19,13 @@ namespace Void
     };
     
     // VWAVAudioFormatData
+    //----------------------------------------------------------------------------------------------------
     // 2 + 2 + 4 + 4 + 2 + 2 + (2) = 16 + (2)
+    //----------------------------------------------------------------------------------------------------
+    // FormatTag | 0x0001 | WAVE_FORMAT_PCM
+    //           | 0x0002 | WAVE_FORMAT_ADPCM
+    //           | 0x0003 | WAVE_FORMAT_IEEE_FLOAT
+    //           |    ... |
     //----------------------------------------------------------------------------------------------------
     struct VWAVAudioFormatData
     {
@@ -27,6 +33,19 @@ namespace Void
         VWAVAudioFormatData()
             :
             extraSize(0)
+        {
+        }
+        
+        //----------------------------------------------------------------------------------------------------
+        VWAVAudioFormatData(const VWAVAudioFormatData& _data)
+            :
+            formatTag(_data.formatTag),
+            channels(_data.channels),
+            samplesPerSec(_data.samplesPerSec),
+            bytesPerSec(_data.bytesPerSec),
+            blockAlign(_data.blockAlign),
+            bitsPerSample(_data.bitsPerSample),
+            extraSize(_data.extraSize)
         {
         }
         
@@ -79,11 +98,13 @@ namespace Void
     //            |            |--------------------------------------------------------------------------
     //            |            | Data
     //----------------------------------------------------------------------------------------------------
-    class VWAVAudio
+    class VWAVAudio : public VAudioBase
     {
     public:
         //----------------------------------------------------------------------------------------------------
         VWAVAudio();
+        VWAVAudio(VAudioBase& _audio);
+        VWAVAudio(VAudioBase&& _audio);
         VWAVAudio(const VWAVAudio& _audio);
         virtual ~VWAVAudio();
         
@@ -95,11 +116,12 @@ namespace Void
         //----------------------------------------------------------------------------------------------------
         bool IsFourCC(char _value[4], char _first, char _second, char _third, char _fourth);
         std::string BinaryString(int _value);
+        void RefreshFormat();
+        void RefreshWAVFormat();
         
     protected:
         //----------------------------------------------------------------------------------------------------
-        VWAVAudioFormatData mFormat;
-        std::vector<char> mData;
+        VWAVAudioFormatData mWAVFormat;
     };
     
     // Test

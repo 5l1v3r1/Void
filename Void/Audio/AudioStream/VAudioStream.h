@@ -3,7 +3,7 @@
 #define _V_AUDIOSTREAM_H_
 
 #include "../AudioDevice/VAudioDevice.h"
-#include "../AudioFormat/VAudioFormat.h"
+#include "../AudioBase/AudioFormat/VAudioFormat.h"
 #include "../AudioHandler/VAudioHandler.h"
 #include <functional>
 

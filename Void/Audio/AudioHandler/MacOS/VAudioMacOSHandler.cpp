@@ -1,14 +1,48 @@
 #include "VAudioMacOSHandler.h"
 #ifdef _VOID_USE_COREAUDIO_
 #include "../../../Utility/Logger/VLogger.h"
-#include <CoreAudio/CoreAudio.h>
-//#include <AudioToolbox/AudioToolbox.h>
 #include <vector>
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
 {
     // VAudioMacOSHandler
+    //----------------------------------------------------------------------------------------------------
+    OSStatus VAudioMacOSHandler::AudioIOProcCallback(AudioDeviceID _inDevice, const AudioTimeStamp* _inNow, const AudioBufferList* _inInputData, const AudioTimeStamp* _inInputTime, AudioBufferList* _outOutputData, const AudioTimeStamp* _inOutputTime, void* _inClientData)
+    {
+        VAudioStream *stream = (VAudioStream*)_inClientData;
+        
+        // Input
+        if (stream->IsInputEnabled())
+        {
+            
+        }
+        // Output
+        if (stream->IsOutputEnabled())
+        {
+            // AudioBuffer *outputBuffer = &_outOutputData->mBuffers[0];
+            // unsigned long frameCount = outputBuffer->mDataByteSize / (outputBuffer->mNumberChannels * sizeof(Float32)); // Float32 format
+        }
+        
+        return kAudioHardwareNoError;
+    }
+    
+    //----------------------------------------------------------------------------------------------------
+    OSStatus VAudioMacOSHandler::AudioRenderCallback(void* _inRefCon, AudioUnitRenderActionFlags* _ioActionFlags, const AudioTimeStamp* _inTimeStamp, UInt32 _inBusNumber, UInt32 _inNumberFrames, AudioBufferList* __nullable _ioData)
+    {
+        VAudioStream *stream = (VAudioStream*)_inRefCon;
+        
+        // Output
+        if (stream->IsOutputEnabled())
+        {
+            VAudioFormat format = stream->OutputFormat();
+            std::vector<char> data(format.bitsPerSample * format.channels / 8 * _inNumberFrames);
+            stream->OutputCallback(data.data(), _inNumberFrames);
+        }
+        
+        return kAudioHardwareNoError;
+    }
+    
     //----------------------------------------------------------------------------------------------------
     VAudioMacOSHandler::VAudioMacOSHandler()
     {
@@ -192,6 +226,182 @@ namespace Void
         }
         #endif
         return -1;
+    }
+    
+    //----------------------------------------------------------------------------------------------------
+    bool VAudioMacOSHandler::Open(VAudioStream& _stream)
+    {
+        #ifdef __MAC_10_0
+        // Component description
+        AudioComponentDescription description;
+        description.componentType = kAudioUnitType_Output;
+        description.componentSubType = kAudioUnitSubType_HALOutput;
+        description.componentManufacturer = kAudioUnitManufacturer_Apple;
+        description.componentFlags = 0;
+        description.componentFlagsMask = 0;
+        // Component
+        AudioComponent component = AudioComponentFindNext(nullptr, &description);
+        if (!component)
+        {
+            return false;
+        }
+        // Open
+        if (AudioComponentInstanceNew(component, &mAudioUnit) != kAudioHardwareNoError)
+        {
+            mAudioUnit = nullptr;
+            return false;
+        }
+        // Enable input && disable output if needed
+        if (_stream.IsInputEnabled())
+        {
+            UInt32 enableIO = 1;
+            if (AudioUnitSetProperty(mAudioUnit, kAudioOutputUnitProperty_EnableIO, kAudioUnitScope_Input, 1, &enableIO, sizeof(enableIO)) != kAudioHardwareNoError)
+            {
+                return false;
+            }
+        }
+        if (!_stream.IsOutputEnabled())
+        {
+            UInt32 enableIO = 1;
+            if (AudioUnitSetProperty(mAudioUnit, kAudioOutputUnitProperty_EnableIO, kAudioUnitScope_Output, 0, &enableIO, sizeof(enableIO)) != kAudioHardwareNoError)
+            {
+                return false;
+            }
+        }
+        // Set Device
+        AudioDeviceID deviceId = _stream.Device().deviceId;
+        if (_stream.IsInputEnabled())
+        {
+            if (AudioUnitSetProperty(mAudioUnit, kAudioOutputUnitProperty_CurrentDevice, kAudioUnitScope_Global, 1, &deviceId, sizeof(deviceId)) != kAudioHardwareNoError)
+            {
+                return false;
+            }
+        }
+        if (_stream.IsOutputEnabled())
+        {
+            if (AudioUnitSetProperty(mAudioUnit, kAudioOutputUnitProperty_CurrentDevice, kAudioUnitScope_Global, 0, &deviceId, sizeof(deviceId)) != kAudioHardwareNoError)
+            {
+                return false;
+            }
+        }
+        // Add listener for dropouts
+        // OSStatus status = AudioDeviceAddPropertyListener(deviceId, 0, _stream.IsOutputEnabled() ? false : true, kAudioDeviceProcessorOverload, nullptr, nullptr);
+        // if (status != kAudioHardwareNoError || status != kAudioHardwareIllegalOperationError)
+        // {
+        //     return false;
+        // }
+        // Add listener for stream start and stop
+        // if (AudioUnitAddPropertyListener(mAudioUnit, kAudioOutputUnitProperty_IsRunning, nullptr, nullptr) != kAudioHardwareNoError);
+        // {
+        //     return false;
+        // }
+        // Set input conversion
+        //
+        // Set output conversion quality
+        if (_stream.IsOutputEnabled())
+        {
+            UInt32 quality = kAudioConverterQuality_Max; // Option
+            if (AudioUnitSetProperty(mAudioUnit, kAudioUnitProperty_RenderQuality, kAudioUnitScope_Global, 0, &quality, sizeof(quality)) != kAudioHardwareNoError)
+            {
+                return false;
+            }
+        }
+        // Set format
+        AudioStreamBasicDescription targetFormat;
+        targetFormat.mFormatID = kAudioFormatLinearPCM;
+        targetFormat.mFormatFlags = kAudioFormatFlagsNativeFloatPacked;
+        targetFormat.mReserved = 0;
+        if (_stream.IsInputEnabled())
+        {
+            // AudioStreamBasicDescription currentFormat;
+            // UInt32 size = sizeof(AudioStreamBasicDescription);
+            // if (AudioUnitGetProperty(mAudioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 1, &currentFormat, &size) != kAudioHardwareNoError)
+            // {
+            //     return false;
+            // }
+            VAudioFormat format = _stream.InputFormat();
+            targetFormat.mSampleRate = format.samplesPerSecond;
+            targetFormat.mChannelsPerFrame = format.channels;
+            targetFormat.mBitsPerChannel = format.bitsPerSample;
+            targetFormat.mBytesPerFrame = targetFormat.mBitsPerChannel * targetFormat.mChannelsPerFrame / 8;
+            targetFormat.mFramesPerPacket = 1;
+            targetFormat.mBytesPerPacket = targetFormat.mBytesPerFrame * targetFormat.mFramesPerPacket;
+            if (AudioUnitSetProperty(mAudioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 1, &targetFormat, sizeof(targetFormat)) != kAudioHardwareNoError)
+            {
+                return false;
+            }
+        }
+        if (_stream.IsOutputEnabled())
+        {
+            VAudioFormat format = _stream.OutputFormat();
+            targetFormat.mSampleRate = format.samplesPerSecond;
+            targetFormat.mChannelsPerFrame = format.channels;
+            targetFormat.mBitsPerChannel = format.bitsPerSample;
+            targetFormat.mBytesPerFrame = targetFormat.mBitsPerChannel * targetFormat.mChannelsPerFrame / 8;
+            targetFormat.mFramesPerPacket = 1;
+            targetFormat.mBytesPerPacket = targetFormat.mBytesPerFrame * targetFormat.mFramesPerPacket;
+            if (AudioUnitSetProperty(mAudioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 0, &targetFormat, sizeof(targetFormat)) != kAudioHardwareNoError)
+            {
+                return false;
+            }
+        }
+        // Set frames per buffer and slice
+        //
+        // Render callback
+        if (_stream.IsInputEnabled())
+        {
+            AURenderCallbackStruct callbackStruct;
+            callbackStruct.inputProc = VAudioMacOSHandler::AudioRenderCallback;
+            callbackStruct.inputProcRefCon = &_stream;
+            if (AudioUnitSetProperty(mAudioUnit, kAudioOutputUnitProperty_SetInputCallback, kAudioUnitScope_Global, 1, &callbackStruct, sizeof(callbackStruct)) != kAudioHardwareNoError)
+            {
+                return false;
+            }
+        }
+        if (_stream.IsOutputEnabled())
+        {
+            AURenderCallbackStruct callbackStruct;
+            callbackStruct.inputProc = VAudioMacOSHandler::AudioRenderCallback;
+            callbackStruct.inputProcRefCon = &_stream;
+            if (AudioUnitSetProperty(mAudioUnit, kAudioUnitProperty_SetRenderCallback, kAudioUnitScope_Global, 0, &callbackStruct, sizeof(callbackStruct)) != kAudioHardwareNoError)
+            {
+                return false;
+            }
+        }
+        // Init
+        if (AudioUnitInitialize(mAudioUnit) != kAudioHardwareNoError)
+        {
+            return false;
+        }
+        
+        return true;
+        #endif
+        return false;
+    }
+    
+    //----------------------------------------------------------------------------------------------------
+    bool VAudioMacOSHandler::Start(VAudioStream& _stream)
+    {
+        if (_stream.Status() == VAudioStreamStatus::Opened)
+        {
+            if (_stream.IsInputEnabled())
+            {
+                if (AudioOutputUnitStart(mAudioUnit) != kAudioHardwareNoError)
+                {
+                    return false;
+                }
+            }
+            if (_stream.IsOutputEnabled())
+            {
+                if (AudioOutputUnitStart(mAudioUnit) != kAudioHardwareNoError)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        
+        return false;
     }
     
     // Test

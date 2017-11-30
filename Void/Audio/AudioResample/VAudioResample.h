@@ -1,40 +1,36 @@
 #pragma once
-#ifndef _V_BASEAUDIO_H_
-#define _V_BASEAUDIO_H_
+#ifndef _V_AUDIORESAMPLE_H_
+#define _V_AUDIORESAMPLE_H_
 
-#include "../../../Memory/SmartPointer/VSmartPointer.h"
-#include <vector>
+#include "../AudioBase/VAudioBase.h"
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
 {
-    // VAudioData
+    // VAudioResampleType
     //----------------------------------------------------------------------------------------------------
-    class VAudioData
+    enum class VAudioResampleType
     {
-    public:
-        //----------------------------------------------------------------------------------------------------
-
-    public:
-        //----------------------------------------------------------------------------------------------------
-        std::vector<char> mData;
+        Arbitrary = 0,
+        Linear,
     };
     
-    // VBaseAudio
+    // VAudioResample
     //----------------------------------------------------------------------------------------------------
-    class VBaseAudio : protected VSharePointer<VImageData>
+    class VAudioResample
     {
     public:
         //----------------------------------------------------------------------------------------------------
+        static VAudioBase Resample(VAudioBase const* _source, const VAudioFormat& _outputFormat);
         
-    public:
+    protected:
         //----------------------------------------------------------------------------------------------------
-
+        static double HanningWindowFilter(double _t, int _zeros, double _lowpassFrequency);
     };
     
     // Test
     //----------------------------------------------------------------------------------------------------
-    void VImageTest();
+    void VAudioResampleTest();
 }
 
 #endif
