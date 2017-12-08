@@ -22,8 +22,8 @@ namespace Void
         
         //----------------------------------------------------------------------------------------------------
         const VAudioFormat& Format() const;
-        VSharePointer<std::vector<char>>& Data();
-        const VSharePointer<std::vector<char>>& Data() const;
+        VSharePointer<std::vector<char>>& Samples();
+        const VSharePointer<std::vector<char>>& Samples() const;
         char* Block(const unsigned long& _originIndex, const unsigned long& _length=0);
         const char* Block(const unsigned long& _originIndex, const unsigned long& _length=0) const;
         
@@ -34,7 +34,7 @@ namespace Void
     protected:
         //----------------------------------------------------------------------------------------------------
         VAudioFormat mFormat;
-        VSharePointer<std::vector<char>> mData;
+        VSharePointer<std::vector<char>> mSamples;
     };
     
     // Test

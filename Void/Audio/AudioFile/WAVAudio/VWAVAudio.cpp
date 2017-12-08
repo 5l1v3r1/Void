@@ -109,8 +109,8 @@ namespace Void
                     }
                     else if (IsFourCC(chunk.fourCC, 'd', 'a', 't', 'a'))
                     {
-                        mData->resize(chunk.size);
-                        fin.read((char*)mData->data(), chunk.size); // Todo: stream mode
+                        mSamples->resize(chunk.size);
+                        fin.read((char*)mSamples->data(), chunk.size); // Todo: stream mode
                         // Done
                         fin.close();
                         return true;
@@ -129,7 +129,7 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     bool VWAVAudio::WriteToFile(const char* _fileName)
     {
-        if (mData->size() == 0)
+        if (mSamples->size() == 0)
         {
             return false;
         }
@@ -138,14 +138,14 @@ namespace Void
         if (fout.is_open())
         {
             fout << "RIFF";
-            fout.write((char*)BinaryString(int(4 + 8 + 16 + 8 + mData->size())).data(), 4);
+            fout.write((char*)BinaryString(int(4 + 8 + 16 + 8 + mSamples->size())).data(), 4);
             fout << "WAVE";
             fout << "fmt\x20";
             fout.write((char*)BinaryString(int(sizeof(VWAVAudioFormatData) - 2)).data(), 4);
             fout.write((char*)&mWAVFormat, sizeof(VWAVAudioFormatData) - 2);
             fout << "data";
-            fout.write((char*)BinaryString(int(mData->size())).data(), 4);
-            fout.write((char*)mData->data(), mData->size());
+            fout.write((char*)BinaryString(int(mSamples->size())).data(), 4);
+            fout.write((char*)mSamples->data(), mSamples->size());
             fout.close();
             return true;
         }
@@ -199,7 +199,7 @@ namespace Void
     void VWAVAudio::RefreshWAVFormat()
     {
         mWAVFormat.formatTag = 0;
-        switch (mFormat.format)
+        switch (mFormat.sampleFormat)
         {
             case VAudioSampleFormat::Int8:
             case VAudioSampleFormat::Int16:

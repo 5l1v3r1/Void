@@ -9,13 +9,14 @@ namespace Void
 {
     // VAudioResample
     //----------------------------------------------------------------------------------------------------
-    // base samples | input samples | ouput samples | full samples
-    //              |               |               |
+    //           | base samples | input samples | ouput samples | full samples |
+    // frequency |          GCD |               |               |          LCM |
+    //           |              |               |               |              |
     //----------------------------------------------------------------------------------------------------
     VAudioBase VAudioResample::Resample(VAudioBase const* _source, const VAudioFormat& _outputFormat)
     {
-        VAudioBase outputAudio(_outputFormat);
         VAudioFormat inputFormat = _source->Format();
+        VAudioBase outputAudio(_outputFormat);
         // float durations = _source->DurationSeconds();
         
         // Calculate weights (Hanning window)
@@ -57,30 +58,32 @@ namespace Void
         }
         
         // Process (Todo: int16_t)
-        outputAudio.Data()->resize(outputSampleCount * outputAudio.Format().BlockAlign(), 0);
-        int16_t *ouputData = (int16_t*)outputAudio.Data()->data();
+        VAudioFormattedDataCore<int16_t> formattedInputData;
+        formattedInputData.Initialize((char*)_source->Samples()->data(), 0, inputFormat.BlockAlign(), _source->BlockCount());
+        outputAudio.Samples()->resize(outputSampleCount * outputAudio.Format().BlockAlign(), 0);
+        VAudioFormattedDataCore<int16_t> formattedOuputData;
+        formattedOuputData.Initialize(outputAudio.Samples()->data(), 0, outputAudio.Format().BlockAlign(), outputAudio.BlockCount());
         for (unsigned long outputIndex = 0; outputIndex < outputSampleCount; ++outputIndex)
         {
             unsigned long baseIndex = outputIndex / outputBaseFrequency;
             unsigned long remainder = outputIndex - baseIndex * outputBaseFrequency;
             long inputIndex = baseIndex * inputBaseFrequency + indices[remainder];
             const std::vector<double>& weightArray = weights[remainder];
-            if (0 <= inputIndex && inputIndex + weightArray.size() <= _source->BlockCount())
+            if (0 <= inputIndex && inputIndex + weightArray.size() <= _source->BlockCount()) // Center
             {
-                const int16_t* formatedData = (const int16_t*)_source->Block(inputIndex, weightArray.size());
                 for (unsigned long weightIndex = 0; weightIndex < weightArray.size(); ++weightIndex)
                 {
-                    ouputData[outputIndex] += weightArray[weightIndex] * formatedData[weightIndex];
+                    formattedOuputData[outputIndex] += weightArray[weightIndex] * formattedInputData[inputIndex + weightIndex];
                 }
             }
-            else // Edge
+            else // Edges
             {
                 for (unsigned long weightIndex = 0; weightIndex < weightArray.size(); ++weightIndex)
                 {
-                    const int16_t* formatedData = (const int16_t*)_source->Block(inputIndex + weightIndex, 1);
-                    if (formatedData)
+                    const int16_t *inputSample = formattedInputData.Sample(inputIndex + weightIndex);
+                    if (inputSample)
                     {
-                        ouputData[outputIndex] += weightArray[weightIndex] * formatedData[1];
+                        formattedOuputData[outputIndex] += weightArray[weightIndex] * (*inputSample);
                     }
                 }
             }

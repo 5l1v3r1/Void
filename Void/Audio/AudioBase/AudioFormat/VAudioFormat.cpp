@@ -7,7 +7,7 @@ namespace Void
 	//----------------------------------------------------------------------------------------------------
 	VAudioFormat::VAudioFormat()
 		:
-        format(VAudioSampleFormat::Unknown),
+        sampleFormat(VAudioSampleFormat::Unknown),
 		channels(0),
 		samplesPerSecond(0),
 		bitsPerSample(0)
@@ -15,9 +15,9 @@ namespace Void
 	}
     
     //----------------------------------------------------------------------------------------------------
-    VAudioFormat::VAudioFormat(VAudioSampleFormat _format, int _channels, int _samplesPerSecond, int _bitsPerSample)
+    VAudioFormat::VAudioFormat(VAudioSampleFormat _sampleFormat, int _channels, int _samplesPerSecond, int _bitsPerSample)
         :
-        format(_format),
+        sampleFormat(_sampleFormat),
         channels(_channels),
         samplesPerSecond(_samplesPerSecond),
         bitsPerSample(_bitsPerSample)
@@ -28,7 +28,7 @@ namespace Void
 	//----------------------------------------------------------------------------------------------------
 	VAudioFormat::VAudioFormat(const VAudioFormat& _format)
 		:
-        format(_format.format),
+        sampleFormat(_format.sampleFormat),
 		channels(_format.channels),
 		samplesPerSecond(_format.samplesPerSecond),
 		bitsPerSample(_format.bitsPerSample)

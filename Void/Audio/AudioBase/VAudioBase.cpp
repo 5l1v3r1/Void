@@ -8,7 +8,7 @@ namespace Void
     VAudioBase::VAudioBase()
         :
         mFormat(),
-        mData(new std::vector<char>())
+        mSamples(new std::vector<char>())
     {
     }
     
@@ -16,7 +16,7 @@ namespace Void
     VAudioBase::VAudioBase(const VAudioFormat& _format)
         :
         mFormat(_format),
-        mData(new std::vector<char>())
+        mSamples(new std::vector<char>())
     {
     }
     
@@ -24,7 +24,7 @@ namespace Void
     VAudioBase::VAudioBase(const VAudioBase& _base)
         :
         mFormat(_base.mFormat),
-        mData(_base.mData)
+        mSamples(_base.mSamples)
     {
     }
     
@@ -40,27 +40,27 @@ namespace Void
     }
     
     //----------------------------------------------------------------------------------------------------
-    VSharePointer<std::vector<char>>& VAudioBase::Data()
+    VSharePointer<std::vector<char>>& VAudioBase::Samples()
     {
-        return mData;
+        return mSamples;
     }
     
     //----------------------------------------------------------------------------------------------------
-    const VSharePointer<std::vector<char>>& VAudioBase::Data() const
+    const VSharePointer<std::vector<char>>& VAudioBase::Samples() const
     {
-        return mData;
+        return mSamples;
     }
     
     //----------------------------------------------------------------------------------------------------
     char* VAudioBase::Block(const unsigned long& _originIndex, const unsigned long& _length)
     {
-        if (mData)
+        if (mSamples)
         {
             unsigned long byteBegin = _originIndex * mFormat.BlockAlign();
             unsigned long byteEnd = (_originIndex + _length) * mFormat.BlockAlign();
-            if (byteEnd <= mData->size())
+            if (byteEnd <= mSamples->size())
             {
-                return &(*mData)[byteBegin];
+                return &(*mSamples)[byteBegin];
             }
         }
         return nullptr;
@@ -69,13 +69,13 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     const char* VAudioBase::Block(const unsigned long& _originIndex, const unsigned long& _length) const
     {
-        if (mData)
+        if (mSamples)
         {
             unsigned long byteBegin = _originIndex * mFormat.BlockAlign();
             unsigned long byteEnd = (_originIndex + _length) * mFormat.BlockAlign();
-            if (byteEnd <= mData->size())
+            if (byteEnd <= mSamples->size())
             {
-                return &(*mData)[byteBegin];
+                return &(*mSamples)[byteBegin];
             }
         }
         return nullptr;
@@ -84,9 +84,9 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     unsigned long VAudioBase::BlockCount() const
     {
-        if (mData)
+        if (mSamples)
         {
-            return mData->size() / mFormat.BlockAlign();
+            return mSamples->size() / mFormat.BlockAlign();
         }
         return 0;
     }
@@ -94,7 +94,7 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     float VAudioBase::DurationSeconds() const
     {
-        if (mData)
+        if (mSamples)
         {
             return mFormat.DurationSeconds(BlockCount());
         }
