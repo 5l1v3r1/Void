@@ -11,6 +11,13 @@ namespace Void
 {
     // VRandom
     //----------------------------------------------------------------------------------------------------
+    //        |     Single |           Multiple |      Multiple & Unique |
+    //----------------------------------------------------------------------------------------------------
+    // Linear |       Rand |       MultipleRand |     MultipleUniqueRand |
+    //        |   RealRand |   MultipleRealRand | MultipleUniqueRealRand |
+    //----------------------------------------------------------------------------------------------------
+    // Normal | NormalRand | NormalMultipleRand |                        |
+    //----------------------------------------------------------------------------------------------------
     class VRandom
     {
     public:
@@ -114,6 +121,14 @@ namespace Void
                 it == replaceTable.end() ? replaceTable[rand] = _max - i : replaceTable[rand] = it->second;
             }
             return result;
+        }
+        
+        //----------------------------------------------------------------------------------------------------
+        template<typename _T>
+        _T NormalRand(_T _mean, _T _stddev)
+        {
+            std::normal_distribution<_T> distribution(_mean, _stddev);
+            return distribution(mEngine);
         }
         
         //----------------------------------------------------------------------------------------------------
