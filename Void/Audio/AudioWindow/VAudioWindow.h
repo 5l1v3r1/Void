@@ -3,6 +3,7 @@
 #define _V_AUDIOWINDOW_H_
 
 #include "../AudioBase/AudioFormat/VAudioFormat.h"
+#include "../../Utility/Random/VRandom.h"
 #include <vector>
 
 //----------------------------------------------------------------------------------------------------
@@ -39,7 +40,7 @@ namespace Void
         
     public:
         //----------------------------------------------------------------------------------------------------
-        bool Generate(VAudioWindowType _type=VAudioWindowType::Unknown, unsigned int _windowSize=0);
+        bool Generate(VAudioWindowType _type, unsigned int _windowSize);
         bool GenerateRectangular(unsigned int _windowSize);
         bool GenerateHamming(unsigned int _windowSize);
         bool GenerateHann(unsigned int _windowSize);
@@ -114,6 +115,15 @@ namespace Void
             unsigned long windowSize = mWeights.size();
             if (_window.size() == windowSize)
             {
+                if (_dither != 0)
+                {
+                    VRandom random;
+                    std::vector<float> ditherValues = random.NormalMultipleRand<float>(windowSize, 0 ,1);
+                    for (unsigned long i = 0; i < windowSize; ++i)
+                    {
+                        _window[i] += ditherValues[i] * _dither;
+                    }
+                }
                 float offset = 0;
                 if (_isRemoveDCOffset)
                 {
