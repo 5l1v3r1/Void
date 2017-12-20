@@ -27,6 +27,7 @@ namespace Void
         VDualNumber operator+(double _scalar);
         VDualNumber& operator+=(double _scalar);
         friend VDualNumber operator+(double _scalar, const VDualNumber& _number);
+        VDualNumber operator-() const;
         VDualNumber operator-(const VDualNumber& _number) const;
         VDualNumber& operator-=(const VDualNumber& _number);
         VDualNumber operator-(double _scalar);
@@ -48,7 +49,7 @@ namespace Void
         VDualNumber Cos();
         VDualNumber Pow(double _n);
         VDualNumber Exp();
-        VDualNumber Log();
+        VDualNumber Ln();
         
     public:
         //----------------------------------------------------------------------------------------------------

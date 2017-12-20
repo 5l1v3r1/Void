@@ -1,5 +1,6 @@
 #include "VDualNumber.h"
-#include "cmath"
+#include <cmath>
+#include <assert.h>
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
@@ -81,6 +82,12 @@ namespace Void
     VDualNumber operator+(double _scalar, const VDualNumber& _number)
     {
         return VDualNumber(_scalar + _number.real, _number.dual);
+    }
+    
+    //----------------------------------------------------------------------------------------------------
+    VDualNumber VDualNumber::operator-() const
+    {
+        return VDualNumber(-this->real, -this->dual);
     }
     
     //----------------------------------------------------------------------------------------------------
@@ -229,7 +236,7 @@ namespace Void
     }
     
     //----------------------------------------------------------------------------------------------------
-    VDualNumber VDualNumber::Log()
+    VDualNumber VDualNumber::Ln()
     {
         if (this->real <= 0) // Error
         {
@@ -262,6 +269,22 @@ namespace Void
         // y = (2x + 1)^2 / e^x
         var0 = VDualNumber(5, 1);
         result = (2 * var0 + 1).Pow(2) / var0.Exp();
+        
+        // y = ln(x)
+        var0 = VDualNumber(5, 1);
+        result = var0.Ln();
+        
+        // output = 1 / (1 + e^-(w * x + b))
+        // y = -ln((output^y * (1 - output)^(1 - y)))
+        // ∂y/∂b = -(y - 1 / (1 + e^-(w * x + b)))
+        double y = 0;
+        double x = 5;
+        VDualNumber w(1, 0);
+        VDualNumber b(-5, 1);
+        auto output = 1 / (1 + (-(w * x + b)).Exp());
+        result = -(output.Pow(y) * (1 - output).Pow(1 - y)).Ln();
+        double verification = -(y - 1 / (1 + std::exp(-(1 * x - 5))));
+        assert(result.dual == verification);
         
         return;
     }
