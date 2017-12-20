@@ -32,15 +32,15 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     // Linear: z = w * x + b
     // Mapping: output = σ(z) = sigmoid(z) = 1 / (1 + e^-z) = 1 / (1 + e^-(w * x + b)), 0 < output < 1
-    // Lost Function: L(y, ouput) = -ln((output^y * (1 - ouput)^(1 - y)))
-    //                            = -(y * ln(ouput) + (1 - y) * ln(1 - ouput))
-    //                            = -(y * (ln(ouput) - ln(1 - ouput)) + ln(1 - output))
-    //                            = -(y * ln(ouput / (1 - output)) + ln(1 - ouput))
+    // Lost Function: L(y, output) = -ln((output^y * (1 - output)^(1 - y)))
+    //                            = -(y * ln(output) + (1 - y) * ln(1 - output))
+    //                            = -(y * (ln(output) - ln(1 - output)) + ln(1 - output))
+    //                            = -(y * ln(output / (1 - output)) + ln(1 - output))
     //                            = -(y * -ln(e^-z) + ln(e^-z) - ln(1 + e^-z))
     //                            = -(y * z - z - ln(1 + e^-z))
     //                            = -((y - 1) * z - ln(1 + e^-z))
     //                            = -((y - 1) * (w * x + b) - ln(1 + e^-(w * x + b)))
-    // Cost Function: J(w, b) = ∑(L(y(i), ouput))
+    // Cost Function: J(w, b) = ∑(L(y(i), output))
     //                ∂J/∂w = -∑((y - 1) * x - 1 / (1 + e^-(w * x + b)) * (e^-(w * x + b)) * -x)
     //                      = -∑((y - 1 / (1 + e^-(w * x + b))) * x)
     //                ∂J/∂b = -∑(y - 1 / (1 + e^-(w * x + b)))

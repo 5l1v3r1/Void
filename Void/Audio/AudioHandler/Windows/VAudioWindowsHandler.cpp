@@ -33,8 +33,8 @@ namespace Void
 
 		// Output
 		WAVEOUTCAPS waveOutCaps;
-		int ouputCount = waveOutGetNumDevs();
-		for (int i = 0; i < ouputCount; ++i)
+		int outputCount = waveOutGetNumDevs();
+		for (int i = 0; i < outputCount; ++i)
 		{
 			waveOutGetDevCaps(i, &waveOutCaps, sizeof(WAVEINCAPS));
 		}

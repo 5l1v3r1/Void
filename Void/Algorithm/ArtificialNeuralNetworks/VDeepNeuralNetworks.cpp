@@ -1,4 +1,5 @@
 #include "VDeepNeuralNetworks.h"
+#include <cmath>
 
 //----------------------------------------------------------------------------------------------------
 namespace Void
@@ -47,7 +48,7 @@ namespace Void
             mHiddenLevels.push_back(lowerLevel);
         }
         
-        // Ouput
+        // Output
         mOutputs.clear();
         mOutputs.reserve(_outputLevel);
         for (unsigned long i = 0; i < _outputLevel; ++i)
@@ -66,7 +67,7 @@ namespace Void
     //----------------------------------------------------------------------------------------------------
     std::vector<double> VDeepNeuralNetworks::Stimulate(const std::vector<double>& _inputs)
     {
-        // Prepare
+        // Prepare (useless)
         ClearStimulus();
         
         // Process
@@ -84,15 +85,55 @@ namespace Void
             }
         }
         
-        // Ouput
-        std::vector<double> ouputs;
-        ouputs.reserve(mOutputs.size());
+        // Output
+        std::vector<double> outputs;
+        outputs.reserve(mOutputs.size());
         for (auto& neuron : mOutputs)
         {
-            ouputs.push_back(neuron->Stimulus());
+            outputs.push_back(neuron->Stimulus());
             neuron->Clear();
         }
-        return ouputs;
+        return outputs;
+    }
+    
+    // Cost = MSE = ∑((target - output)^2) / n
+    //----------------------------------------------------------------------------------------------------
+    // Output level: ∂Loss/∂Output = -2 * (target - output) / n = 2 * (output - target) / n
+    //               ∂Output/∂Neuron = (sigmoid)' = sigmoid * (1 - sigmoid) = output * (1 - output)
+    //               ∂Neuron/∂Weight = (weight * previousOutput)' = previousOutput
+    //----------------------------------------------------------------------------------------------------
+    // Previous level: ∂Loss/∂PreviousOutput = ∑(∂Loss/∂Output * ∂Output/∂Neuron * ∂Neuron/∂PreviousOutput)
+    //                 ∂PreviousOutput/∂PreviousNeuron = previousNeuron * (1 - previousNeuron)
+    //                 ∂PreviousNeuron/∂PreviousWeight = (previousWeight * previousPreviousOutput)' = previousPreviousOutput
+    //----------------------------------------------------------------------------------------------------
+    // Weight <- Weight - (Learning Rate) * ∂Loss/∂Weight
+    //----------------------------------------------------------------------------------------------------
+    bool VDeepNeuralNetworks::BPTrain(const std::vector<double>& _inputs, const std::vector<double>& _outputs)
+    {
+        if (_outputs.size() != mOutputs.size())
+        {
+            return false;
+        }
+        
+        // Loss
+        std::vector<double> fakeOutputs = Stimulate(_inputs);
+        double meanSquareError = 0;
+        for (unsigned long i = 0; i < _outputs.size(); ++i)
+        {
+            meanSquareError += std::pow(_outputs[i] - fakeOutputs[i], 2);
+        }
+        meanSquareError /= fakeOutputs.size();
+        // ∂Loss/∂Output
+        std::vector<double> outputDerivatives;
+        outputDerivatives.reserve(fakeOutputs.size());
+        for (unsigned long i = 0; i < _outputs.size(); ++i)
+        {
+            outputDerivatives.push_back(2.0 * (fakeOutputs[i] - _outputs[i]) / fakeOutputs.size());
+        }
+        // ∂Output/∂Neuron
+        
+        
+        return false;
     }
     
     //----------------------------------------------------------------------------------------------------
@@ -114,7 +155,6 @@ namespace Void
         if (_source && _target)
         {
             return _source->RemoveAxon(_target) && _target->RemoveDendrite(_source);
-            return true;
         }
         return false;
     }
@@ -134,7 +174,8 @@ namespace Void
     {
         VDeepNeuralNetworks networks;
         networks.Generate(3, {4, 5, 4}, 3);
-        auto ouputs = networks.Stimulate({1, 0, 1});
+        auto outputs = networks.Stimulate({1, 0, 1});
+        networks.BPTrain({1, 1, 1}, {0, 0, 0});
         
         return;
     }

@@ -391,27 +391,27 @@ namespace Void
     }
     
     //----------------------------------------------------------------------------------------------------
-    void VJSONParser::DumpValue(const VJSONValue& _input, std::string& _ouput)
+    void VJSONParser::DumpValue(const VJSONValue& _input, std::string& _output)
     {
         switch (_input.Type())
         {
             case VJSONValueType::Null:
-                DumpNull(_input, _ouput);
+                DumpNull(_input, _output);
                 break;
             case VJSONValueType::Boolean:
-                DumpBool(_input, _ouput);
+                DumpBool(_input, _output);
                 break;
             case VJSONValueType::Object:
-                DumpObject(_input, _ouput);
+                DumpObject(_input, _output);
                 break;
             case VJSONValueType::Array:
-                DumpArray(_input, _ouput);
+                DumpArray(_input, _output);
                 break;
             case VJSONValueType::Number:
-                DumpNumber(_input, _ouput);
+                DumpNumber(_input, _output);
                 break;
             case VJSONValueType::String:
-                DumpString(_input, _ouput);
+                DumpString(_input, _output);
                 break;
             default:
                 // Error
@@ -420,70 +420,70 @@ namespace Void
     }
     
     //----------------------------------------------------------------------------------------------------
-    void VJSONParser::DumpNull(const VJSONValue& _input, std::string& _ouput)
+    void VJSONParser::DumpNull(const VJSONValue& _input, std::string& _output)
     {
         if (_input.Null())
         {
-            _ouput += "null";
+            _output += "null";
         }
         // Throw
     }
     
     //----------------------------------------------------------------------------------------------------
-    void VJSONParser::DumpBool(const VJSONValue& _input, std::string& _ouput)
+    void VJSONParser::DumpBool(const VJSONValue& _input, std::string& _output)
     {
-        _ouput += _input.Boolean() ? "true" : "false";
+        _output += _input.Boolean() ? "true" : "false";
     }
     
     //----------------------------------------------------------------------------------------------------
-    void VJSONParser::DumpObject(const VJSONValue& _input, std::string& _ouput)
+    void VJSONParser::DumpObject(const VJSONValue& _input, std::string& _output)
     {
         const std::map<std::string, VJSONValue>& object = _input.Object();
-        _ouput += '{';
+        _output += '{';
         if (object.size())
         {
             for (auto pair : object)
             {
-                _ouput += '"' + EscapeString(pair.first) + '"';
-                _ouput += ':';
-                DumpValue(pair.second, _ouput);
-                _ouput += ',';
+                _output += '"' + EscapeString(pair.first) + '"';
+                _output += ':';
+                DumpValue(pair.second, _output);
+                _output += ',';
             }
-            _ouput.pop_back();
+            _output.pop_back();
         }
-        _ouput += '}';
+        _output += '}';
     }
     
     //----------------------------------------------------------------------------------------------------
-    void VJSONParser::DumpArray(const VJSONValue& _input, std::string& _ouput)
+    void VJSONParser::DumpArray(const VJSONValue& _input, std::string& _output)
     {
         const std::vector<VJSONValue>& array = _input.Array();
-        _ouput += '[';
+        _output += '[';
         if (array.size())
         {
             for (auto value : array)
             {
-                DumpValue(value, _ouput);
-                _ouput += ',';
+                DumpValue(value, _output);
+                _output += ',';
             }
-            _ouput.pop_back();
+            _output.pop_back();
         }
-        _ouput += ']';
+        _output += ']';
 
     }
     
     //----------------------------------------------------------------------------------------------------
-    void VJSONParser::DumpNumber(const VJSONValue& _input, std::string& _ouput)
+    void VJSONParser::DumpNumber(const VJSONValue& _input, std::string& _output)
     {
         std::stringstream ss;
         ss << std::setprecision(std::numeric_limits<long double>::digits10 + 1) << _input.Number();
-        _ouput += ss.str();
+        _output += ss.str();
     }
     
     //----------------------------------------------------------------------------------------------------
-    void VJSONParser::DumpString(const VJSONValue& _input, std::string& _ouput)
+    void VJSONParser::DumpString(const VJSONValue& _input, std::string& _output)
     {
-        _ouput += '"' + EscapeString(_input.String()) + '"';
+        _output += '"' + EscapeString(_input.String()) + '"';
     }
     
     //----------------------------------------------------------------------------------------------------

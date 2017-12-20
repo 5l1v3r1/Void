@@ -9,7 +9,7 @@ namespace Void
 {
     // VAudioResample
     //----------------------------------------------------------------------------------------------------
-    //           | base samples | input samples | ouput samples | full samples |
+    //           | base samples | input samples | output samples | full samples |
     // frequency |          GCD |               |               |          LCM |
     //           |              |               |               |              |
     //----------------------------------------------------------------------------------------------------
@@ -61,8 +61,8 @@ namespace Void
         VAudioFormattedDataCore<int16_t> formattedInputData;
         formattedInputData.Initialize((char*)_source->Samples()->data(), 0, inputFormat.BlockAlign(), _source->BlockCount());
         outputAudio.Samples()->resize(outputSampleCount * outputAudio.Format().BlockAlign(), 0);
-        VAudioFormattedDataCore<int16_t> formattedOuputData;
-        formattedOuputData.Initialize(outputAudio.Samples()->data(), 0, outputAudio.Format().BlockAlign(), outputAudio.BlockCount());
+        VAudioFormattedDataCore<int16_t> formattedOutputData;
+        formattedOutputData.Initialize(outputAudio.Samples()->data(), 0, outputAudio.Format().BlockAlign(), outputAudio.BlockCount());
         for (unsigned long outputIndex = 0; outputIndex < outputSampleCount; ++outputIndex)
         {
             unsigned long baseIndex = outputIndex / outputBaseFrequency;
@@ -73,7 +73,7 @@ namespace Void
             {
                 for (unsigned long weightIndex = 0; weightIndex < weightArray.size(); ++weightIndex)
                 {
-                    formattedOuputData[outputIndex] += weightArray[weightIndex] * formattedInputData[inputIndex + weightIndex];
+                    formattedOutputData[outputIndex] += weightArray[weightIndex] * formattedInputData[inputIndex + weightIndex];
                 }
             }
             else // Edges
@@ -83,7 +83,7 @@ namespace Void
                     const int16_t *inputSample = formattedInputData.Sample(inputIndex + weightIndex);
                     if (inputSample)
                     {
-                        formattedOuputData[outputIndex] += weightArray[weightIndex] * (*inputSample);
+                        formattedOutputData[outputIndex] += weightArray[weightIndex] * (*inputSample);
                     }
                 }
             }

@@ -53,16 +53,16 @@ namespace Void
         bool ParserArray(std::istream& _input, VJSONValue& _output);
         bool ParserNumber(std::istream& _input, VJSONValue& _output);
         bool ParserString(std::istream& _input, VJSONValue& _output);
-        bool ParserIdentifier(std::istream& _input, VJSONValue& _ouput);
+        bool ParserIdentifier(std::istream& _input, VJSONValue& _output);
         
         //----------------------------------------------------------------------------------------------------
-        void DumpValue(const VJSONValue& _input, std::string& _ouput);
-        void DumpNull(const VJSONValue& _input, std::string& _ouput);
-        void DumpBool(const VJSONValue& _input, std::string& _ouput);
-        void DumpObject(const VJSONValue& _input, std::string& _ouput);
-        void DumpArray(const VJSONValue& _input, std::string& _ouput);
-        void DumpNumber(const VJSONValue& _input, std::string& _ouput);
-        void DumpString(const VJSONValue& _input, std::string& _ouput);
+        void DumpValue(const VJSONValue& _input, std::string& _output);
+        void DumpNull(const VJSONValue& _input, std::string& _output);
+        void DumpBool(const VJSONValue& _input, std::string& _output);
+        void DumpObject(const VJSONValue& _input, std::string& _output);
+        void DumpArray(const VJSONValue& _input, std::string& _output);
+        void DumpNumber(const VJSONValue& _input, std::string& _output);
+        void DumpString(const VJSONValue& _input, std::string& _output);
         std::string EscapeString(const std::string& _input);
         
     protected:
