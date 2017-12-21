@@ -230,6 +230,12 @@ namespace Void
     }
     
     //----------------------------------------------------------------------------------------------------
+    VDualNumber VDualNumber::Pow(const VDualNumber& _number)
+    {
+        return VDualNumber(std::pow(this->real, _number.real), (_number.dual * std::log(this->real) + _number.real / this->real * this->dual) * std::pow(this->real, _number.real));
+    }
+    
+    //----------------------------------------------------------------------------------------------------
     VDualNumber VDualNumber::Exp()
     {
         return VDualNumber(std::exp(this->real), this->dual * std::exp(this->real));
@@ -277,14 +283,19 @@ namespace Void
         // output = 1 / (1 + e^-(w * x + b))
         // y = -ln((output^y * (1 - output)^(1 - y)))
         // ∂y/∂b = -(y - 1 / (1 + e^-(w * x + b)))
-        double y = 0;
-        double x = 5;
+        // ∂J/∂w = ((y - 1 / (1 + e^-(w * x + b))) * x)
+        VDualNumber y = 0;
+        VDualNumber x = 5;
         VDualNumber w(1, 0);
         VDualNumber b(-5, 1);
         auto output = 1 / (1 + (-(w * x + b)).Exp());
         result = -(output.Pow(y) * (1 - output).Pow(1 - y)).Ln();
-        double verification = -(y - 1 / (1 + std::exp(-(1 * x - 5))));
-        assert(result.dual == verification);
+        assert(result.dual == -(y.real - 1 / (1 + std::exp(-(1 * x.real - 5)))));
+        w = VDualNumber(1, 1);
+        b = VDualNumber(-5, 0);
+        output = 1 / (1 + (-(w * x + b)).Exp());
+        result = -(output.Pow(y) * (1 - output).Pow(1 - y)).Ln();
+        assert(result.dual == -(y.real - 1 / (1 + std::exp(-(1 * x.real - 5)))) * x.real);
         
         return;
     }
